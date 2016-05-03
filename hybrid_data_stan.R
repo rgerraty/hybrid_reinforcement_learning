@@ -23,7 +23,7 @@ for (i in 1:NS) {
 
 }
 
-standata = list(NS= NS, MT=MT, NT= NT, choice=choice, rew=rew )
+standata = list(NS= NS, NC=2, MT=MT, NT= NT, choice=choice, rew=rew )
 
 # run four chains in parallel
 
