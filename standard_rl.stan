@@ -60,8 +60,6 @@ model {
 	b_sd ~ cauchy (0,5);
   alpha ~ beta(a1,a2);
 	beta ~ normal(b_mean,b_sd);
-	print("Q=",Q)
-	print("alpha=",alpha)
   
 	for (s in 1:NS) {
 		for (t in 1:NT[s]) {
