@@ -1,4 +1,3 @@
-
 data {
 	int NS;
 	int MT;
@@ -7,30 +6,31 @@ data {
 
 	real<lower=-1,upper=1> rew[NS,MT];
 	int choice[NS,MT];
-
+  int unchoice[NS,MT];
 }
 
 parameters {
 
-  real<lower=0> a1;
-  real<lower=0> a2;
+  real<lower=1> a1;
+  real<lower=1> a2;
   real b_mean;
   real<lower=0> b_sd;
 	
-
 	real<lower=0,upper=1> alpha[NS];
-	real beta[NS];
-
+	vector[NS] beta;
+	
 }
 
 
 transformed parameters{
-  real<lower=0, upper=1> Q[NS,MT, NC]; 
+  real<lower=0, upper=1> Q[NS,MT,NC]; 
   real delta[NS,MT,NC];
+  Q<-rep_array(0.0,NS,MT,NC);
+  delta<-rep_array(0.0,NS,MT,NC);
   
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
-		  if(t==1){
+		  if(t == 1) {
 		    for (c in 1:NC){
 		      Q[s,t,c]<-0.5;
 		      delta[s,t,c]<-0;
@@ -38,7 +38,7 @@ transformed parameters{
 		  }
 		  else {
 		    for (c in 1:NC){
-		      Q[s,t,c]<-Q[s,t-1,c];
+		      Q[s,t,c]<-Q[s,t - 1,c];
 		      delta[s,t,c]<-0;
 		    }
 		  }
@@ -48,30 +48,26 @@ transformed parameters{
 		    Q[s,t,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
 		  }
 		}
-}
+  }
 }
 
 
 model {
   
-  a1 ~ normal(1,1);
-  a2 ~ normal(1,1);
+  a1 ~ normal(1,10);
+  a2 ~ normal(1,10);
 	b_mean ~ normal (0,10);
-	b_sd ~ cauchy (0,2.5);
-
+	b_sd ~ cauchy (0,5);
+  alpha ~ beta(a1,a2);
+	beta ~ normal(b_mean,b_sd);
+	print("Q=",Q)
+	print("alpha=",alpha)
   
 	for (s in 1:NS) {
-		alpha[s] ~ beta(a1,a2);
-		beta[s] ~ normal(b_mean,b_sd);
-		
 		for (t in 1:NT[s]) {
-		  if (choice[s,t]>0) {
-		    #abs(choice-3) is a hack to get unchosen from chosen;
-		    1 ~ bernoulli_logit(beta[s]*(Q[s,t,choice[s,t]]-Q[s,t,abs(choice[s,t]-3)]));
+		  if (choice[s,t] > 0) {
+		    1 ~ bernoulli_logit(beta[s]*(Q[s,t,choice[s,t]]-Q[s,t,unchoice[s,t]]));
 		  }
 		}
 	}
 }
-	
-		
-	
