@@ -1,3 +1,4 @@
+fit<-load('stanfit_rl')
 fit_extract<-extract(fit,permute=T)
 Qvals<-apply(fit_extract$Q,c(2,3,4),median)
 
