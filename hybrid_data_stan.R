@@ -32,3 +32,4 @@ standata = list(NS=NS, NC=2, MT=MT, NT= NT, choice=choice, unchoice=unchoice, re
 
 fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standata, iter = 1250, warmup = 250, chains = 4)
 
+save(fit,file='stanfit_rl')
