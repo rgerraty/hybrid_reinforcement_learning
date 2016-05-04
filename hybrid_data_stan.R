@@ -25,7 +25,9 @@ for (i in 1:NS) {
 
 #for skipping missed trials
 choice[is.na(choice)]<--1
+choice[choice==0]<--1
 unchoice[is.na(unchoice)]<--1
+unchoice[choice==0]<--1
 rew[is.na(rew)]<--1
 
 standata = list(NS=NS, NC=2, MT=MT, NT= NT, choice=choice, unchoice=unchoice, rew=rew )
