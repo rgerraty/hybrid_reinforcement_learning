@@ -54,10 +54,10 @@ transformed parameters{
 
 model {
   
-  a1 ~ normal(1,10);
-  a2 ~ normal(1,10);
-	b_mean ~ normal (0,10);
-	b_sd ~ cauchy (0,5);
+  a1 ~ normal(0,5);
+  a2 ~ normal(0,5);
+	b_mean ~ normal (0,5);
+	b_sd ~ cauchy (0,2.5);
   alpha ~ beta(a1,a2);
 	beta ~ normal(b_mean,b_sd);
   
