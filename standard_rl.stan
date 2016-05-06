@@ -3,10 +3,9 @@ data {
 	int MT;
 	int NC;
 	int NT[NS];
-
 	real<lower=-1,upper=1> rew[NS,MT];
 	int choice[NS,MT];
-  int unchoice[NS,MT];
+	int unchoice[NS,MT];
 }
 
 parameters {
@@ -15,9 +14,8 @@ parameters {
   real<lower=1> a2;
   real b_mean;
   real<lower=0> b_sd;
-	
-	real<lower=0,upper=1> alpha[NS];
-	vector[NS] beta;
+  real<lower=0,upper=1> alpha[NS];
+  vector[NS] beta;
 	
 }
 
@@ -56,10 +54,10 @@ model {
   
   a1 ~ normal(0,5);
   a2 ~ normal(0,5);
-	b_mean ~ normal (0,5);
-	b_sd ~ cauchy (0,2.5);
+  b_mean ~ normal (0,5);
+  b_sd ~ cauchy (0,2.5);
   alpha ~ beta(a1,a2);
-	beta ~ normal(b_mean,b_sd);
+  beta ~ normal(b_mean,b_sd);
   
 	for (s in 1:NS) {
 		for (t in 1:NT[s]) {
