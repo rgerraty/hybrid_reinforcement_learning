@@ -45,7 +45,7 @@ save(standard_fit,file='stanfit_rl')
 
 hybrid_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, unchoice=unchoice, rew=rew, old_val=old_val, old_choice=old_choice)
 
-hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standata, iter = 1250, warmup = 250, chains = 4)
+hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
 
 save(hybrid1_fit,file='stanfit_hybridrl')
 
