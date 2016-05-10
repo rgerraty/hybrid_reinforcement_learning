@@ -1,19 +1,23 @@
 data {
-	int NS;
-	int MT;
-	int NC;
-	int NT[NS];
-	real<lower=-1,upper=1> rew[NS,MT];
-	int choice[NS,MT];
-	int unchoice[NS,MT];
+	int NS;//number of subjects
+	int MT;//maximum number of trials
+	int NC;//number of choices (2)
+	int NT[NS];//number of trials per subject
+	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
+	int choice[NS,MT];//chosen option, -1 for missed
+	int unchoice[NS,MT];//unchosen option, -1 for missed
 }
 
 parameters {
-
+  //hyperpriors on alpha distribution
   real<lower=1> a1;
   real<lower=1> a2;
+  
+  //hyperpriors on beta distribution
   real b_mean;
   real<lower=0> b_sd;
+  
+  //subject-level alpha and betas
   real<lower=0,upper=1> alpha[NS];
   vector[NS] beta;
 	
@@ -21,8 +25,13 @@ parameters {
 
 
 transformed parameters{
+  //subject x trials x choice Q value matrix
   real<lower=0, upper=1> Q[NS,MT,NC]; 
+  
+  //prediction error matrix
   real delta[NS,MT,NC];
+  
+  //need to define because missing trials will recreate nan's otherwise
   Q<-rep_array(0.0,NS,MT,NC);
   delta<-rep_array(0.0,NS,MT,NC);
   
@@ -41,8 +50,10 @@ transformed parameters{
 		    }
 		  }
 		  if (rew[s,t] >= 0){
+		    //PE = reward-expected
 		    delta[s,t,choice[s,t]]<-rew[s,t]-Q[s,t,choice[s,t]];
 		    
+		    //update value with alpha-weighted PE
 		    Q[s,t,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
 		  }
 		}
@@ -52,13 +63,18 @@ transformed parameters{
 
 model {
   
+  //hyperpriors
   a1 ~ normal(0,5);
   a2 ~ normal(0,5);
   b_mean ~ normal (0,5);
   b_sd ~ cauchy (0,2.5);
+  
+  //distributions of subject effects
   alpha ~ beta(a1,a2);
   beta ~ normal(b_mean,b_sd);
   
+  
+  //data generating process
 	for (s in 1:NS) {
 		for (t in 1:NT[s]) {
 		  if (choice[s,t] > 0) {
