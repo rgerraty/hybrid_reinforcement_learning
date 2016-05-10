@@ -38,7 +38,17 @@ old_val[is.na(old_val)]<--1
 
 standard_standata = list(NS=NS, NC=2, MT=MT, NT= NT, choice=choice, unchoice=unchoice, rew=rew )
 
-satandard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standata, iter = 1250, warmup = 250, chains = 4)
+standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standata, iter = 1250, warmup = 250, chains = 4)
 
 save(standard_fit,file='stanfit_rl')
+
+
+hybrid_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, unchoice=unchoice, rew=rew, old_val=old_val, old_choice=old_choice)
+
+hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standata, iter = 1250, warmup = 250, chains = 4)
+
+save(hybrid1_fit,file='stanfit_hybridrl')
+
+
+
 
