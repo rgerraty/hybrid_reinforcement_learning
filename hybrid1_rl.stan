@@ -106,6 +106,12 @@ model {
 generated quantities {
   //generate covariance matrix for subject-level effects
   //from cholesky factorization of correlation matrix
+  matrix[K,K] Omega;
   matrix[K,K] Sigma;
-  Sigma<-quad_form_diag(multiply_lower_tri_self_transpose(Lcorr),b_sd);
+  
+  //get correlation matrix from cholesky
+  Omega<-multiply_lower_tri_self_transpose(Lcorr);
+  
+  //diag_matrix(b_sd)*Omega*diag_matrix(b_sd) to get covariance
+  Sigma<-quad_form_diag(Omega,b_sd);
 }
