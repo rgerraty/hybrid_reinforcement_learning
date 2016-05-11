@@ -1,5 +1,5 @@
 //reinforcement learning model with episodic value and familiarity bias
-//not working yet
+//not working yet 
 //next version will incorporate decay parameter
 
 data {
@@ -27,7 +27,9 @@ parameters {
   //subject-level alpha and betas
   real<lower=0,upper=1> alpha[NS];
   matrix[NS,K] beta;
-  corr_matrix[K] Omega;
+  
+  //cholesky factorization of correlation matrix
+  cholesky_factor_corr[K] Lcorr;
 	
 }
 
@@ -38,10 +40,6 @@ transformed parameters{
   
   //prediction error matrix
   real delta[NS,MT,NC];
-  
-  //covariance matrix for subject-level effects
-  matrix[K,K] Sigma;
-  Sigma<-quad_form_diag(Omega,b_sd);
   
   //need to define because missing trials will recreate nan's otherwise
   Q<-rep_array(0.0,NS,MT,NC);
@@ -81,13 +79,13 @@ model {
   a2 ~ normal(0,5);
   b_mean ~ normal (0,5);
   b_sd ~ cauchy (0,2.5);
-  Omega~lkj_corr(2);
+  Lcorr~lkj_corr_cholesky(2);
   
   //distributions of subject effects
   alpha ~ beta(a1,a2);
   
   for (s in 1:NS){
-    beta[s]~multi_normal(b_mean,Sigma);
+    beta[s]~multi_normal_cholesky(b_mean,diag_pre_multiply(b_sd,Lcorr));
   }
   
   
@@ -103,4 +101,11 @@ model {
 		}
 	}
 }
+}
+
+generated quantities {
+  //generate covariance matrix for subject-level effects
+  //from cholesky factorization of correlation matrix
+  matrix[K,K] Sigma;
+  Sigma<-quad_form_diag(multiply_lower_tri_self_transpose(Lcorr),b_sd);
 }
