@@ -11,8 +11,8 @@ data {
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
 	int unchoice[NS,MT];//unchosen option, -1 for missed
-	int<lower=-1, upper=1> old_choice[NS,MT];
-	real<lower=-1,upper=.5> old_val[NS,MT];
+	int<lower=-1, upper=1> old_choice[NS,MT];//1=old chosen;0=both new;-1=old unchosen
+	real<lower=-1,upper=.5> old_val[NS,MT];//positive=chosen val;0=both new;negitive=unchosen val
 }
 
 parameters {
@@ -91,16 +91,12 @@ model {
   
   //data generating process
 	for (s in 1:NS) {
-		for (t in 1:NT[s]) {
+	  for (t in 1:NT[s]) {
 		    if (choice[s,t] > 0) {
-		      if (old_val[s,t] > -1){
-		        1 ~ bernoulli_logit(beta[s,1]*(Q[s,t,choice[s,t]]-Q[s,t,unchoice[s,t]])+beta[s,2]*old_choice[s,t]+beta[s,3]*old_val[s,t]);
-		      } else{
-		        1 ~ bernoulli_logit(beta[s,1]*(Q[s,t,choice[s,t]]-Q[s,t,unchoice[s,t]]));
+		      1 ~ bernoulli_logit(beta[s,1]*(Q[s,t,choice[s,t]]-Q[s,t,unchoice[s,t]])+beta[s,2]*old_choice[s,t]+beta[s,3]*old_val[s,t]);
 		      }
-		}
-	}
-}
+    }
+  }
 }
 
 generated quantities {
