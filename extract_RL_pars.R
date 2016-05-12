@@ -41,11 +41,13 @@ for(i in 1:dim(Qvals_hybrid)[1]){
       Q_unchosen_hyb[j,i]<-NA
     }
   }
-}
+
+  }
 
 alpha_hyb<-apply(fit_extract$alpha,2,median)
 pe_hyb<-t(apply(fit_extract$delta,c(2,3),median))
 beta_hyb<-apply(fit_extract$beta,c(2,3),median)
 Sigma<-apply(fit_extract$Sigma,c(2,3),median)
+Omega<-apply(fit_extract$Omega,c(2,3),median)
 
 summary(fit_extract$b_mean)
