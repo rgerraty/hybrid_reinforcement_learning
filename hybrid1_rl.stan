@@ -1,5 +1,4 @@
 //reinforcement learning model with episodic value and familiarity bias
-//not working yet 
 //next version will incorporate decay parameter
 
 data {
