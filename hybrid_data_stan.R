@@ -32,8 +32,10 @@ choice[choice==0]<--1
 unchoice[is.na(unchoice)]<--1
 unchoice[choice==0]<--1
 rew[is.na(rew)]<--1
-old_choice[is.na(old_choice)]<--1
-old_val[is.na(old_val)]<--1
+old_choice[old_choice==0]<--1
+old_choice[is.na(old_choice)]<-0
+old_val=old_val*old_choice;
+old_val[is.na(old_val)]<-0
 
 
 standard_standata = list(NS=NS, NC=2, MT=MT, NT= NT, choice=choice, unchoice=unchoice, rew=rew )
