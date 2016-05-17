@@ -1,4 +1,5 @@
 #standard RL model
+library(rstan)
 fit<-load('stanfit_rl')
 fit_extract<-extract(stanfit_rl,permute=T)
 Qvals<-apply(fit_extract$Q,c(2,3,4),median)
