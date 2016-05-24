@@ -56,13 +56,13 @@ transformed parameters{
 		      Q[s,t,c]<-Q[s,t - 1,c];
 		      delta[s,t,c]<-0;
 		    }
-		  }
-		  if (rew[s,t] >= 0){
-		    //PE = reward-expected
-		    delta[s,t,choice[s,t]]<-rew[s,t]-Q[s,t,choice[s,t]];
-		    
-		    //update value with alpha-weighted PE
-		    Q[s,t,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		    if (rew[s,t] >= 0){
+		      //PE = reward-expected
+		      delta[s,t,choice[s,t]]<-rew[s,t]-Q[s,t,choice[s,t]];
+		      
+		      //update value with alpha-weighted PE
+		      Q[s,t,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		    }
 		  }
 		}
   }
