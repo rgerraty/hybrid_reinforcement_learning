@@ -92,7 +92,7 @@ model {
 	for (s in 1:NS) {
 	  for (t in 1:NT[s]) {
 		    if (choice[s,t] > 0) {
-		      red_choice ~ bernoulli_logit(beta[s,1]*(Q[s,t,2]-Q[s,t,1])+beta[s,2]*old_red[s,t]+beta[s,3]*old_red_val[s,t]);
+		      red_choice[s,t] ~ bernoulli_logit(beta[s,1]*(Q[s,t,2]-Q[s,t,1])+beta[s,2]*old_red[s,t]+beta[s,3]*old_red_val[s,t]);
 		      }
     }
   }
