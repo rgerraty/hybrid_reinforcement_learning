@@ -5,7 +5,7 @@ data {
 	int NT[NS];//number of trials per subject
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
-	int unchoice[NS,MT];//unchosen option, -1 for missed
+	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
 }
 
 parameters {
@@ -78,7 +78,7 @@ model {
 	for (s in 1:NS) {
 		for (t in 1:NT[s]) {
 		  if (choice[s,t] > 0) {
-		    1 ~ bernoulli_logit(beta[s]*(Q[s,t,choice[s,t]]-Q[s,t,unchoice[s,t]]));
+		    red_choice[s,t] ~ bernoulli_logit(beta[s]*(Q[s,t,2]-Q[s,t,1]));
 		  }
 		}
 	}
