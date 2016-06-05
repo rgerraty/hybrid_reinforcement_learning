@@ -37,25 +37,30 @@ transformed parameters{
   
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
+  	  
 		  if(t == 1) {
 		    for (c in 1:NC){
 		      Q[s,t,c]<-0.5;
 		      delta[s,t,c]<-0;
 		    }
 		  }
-		  else {
-		    for (c in 1:NC){
-		      Q[s,t,c]<-Q[s,t - 1,c];
-		      delta[s,t,c]<-0;
-		    }
 		    if (rew[s,t] >= 0){
 		      //PE = reward-expected
 		      delta[s,t,choice[s,t]]<-rew[s,t]-Q[s,t,choice[s,t]];
-		      
-		      //update value with alpha-weighted PE
-		      Q[s,t,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		      if (t<NT[s]){
+		        //update value with alpha-weighted PE
+		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		        //value of unchosen option is not updated
+		        Q[s,t+1,abs(choice[s,t]-3)]<-Q[s,t,abs(choice[s,t]-3)];
+		      }
+		    } else {
+		        for (c in 1:NC){
+		          if (t<NT[s]){
+		            Q[s,t+1,c]<-Q[s,t ,c];
+		          }
+		          delta[s,t,c]<-0;
+		        }
 		    }
-		  }
 		}
   }
 }

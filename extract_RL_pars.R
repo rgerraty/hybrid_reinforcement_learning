@@ -56,26 +56,27 @@ summary(fit_extract$b_mean)
 
 
 
+ 
 hist(beta_hyb[,4],xlab="Episodic Effect",main=NULL)
 hist(beta_hyb[,2],xlab="Incremental Effect",main=NULL)
 hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 hist(alpha_hyb,xlab="Learning Rate",main=NULL)
 
-plot(hybrid1_fit,pars=c("beta[1,1]","beta[2,1]",
-                        "beta[3,1]","beta[4,1]",
-                        "beta[5,1]","beta[6,1]",
-                        "beta[7,1]","beta[8,1]",
-                        "beta[9,1]","beta[10,1]",
-                        "beta[11,1]","beta[12,1]",
-                        "beta[13,1]","beta[14,1]",
-                        "beta[15,1]","beta[16,1]",
-                        "beta[17,1]","beta[18,1]",
-                        "beta[19,1]","beta[20,1]",
-                        "beta[21,1]","beta[22,1]",
-                        "beta[23,1]","beta[24,1]",
-                        "beta[25,1]","beta[26,1]",
-                        "beta[27,1]","beta[28,1]",
-                        "beta[29,1]","beta[30,1]","beta[31,1]"))
+plot(hybrid1_fit,pars=c("beta[1,2]","beta[2,2]",
+                        "beta[3,2]","beta[4,2]",
+                        "beta[5,2]","beta[6,2]",
+                        "beta[7,2]","beta[8,2]",
+                        "beta[9,2]","beta[10,2]",
+                        "beta[11,2]","beta[12,2]",
+                        "beta[13,2]","beta[14,2]",
+                        "beta[15,2]","beta[16,2]",
+                        "beta[17,2]","beta[18,2]",
+                        "beta[19,2]","beta[20,2]",
+                        "beta[21,2]","beta[22,2]",
+                        "beta[23,2]","beta[24,2]",
+                        "beta[25,2]","beta[26,2]",
+                        "beta[27,2]","beta[28,2]",
+                        "beta[29,2]","beta[30,2]","beta[31,2]"))
 
 plot(hybrid1_fit,pars=c("beta[1,3]","beta[2,3]",
                         "beta[3,3]","beta[4,3]",
