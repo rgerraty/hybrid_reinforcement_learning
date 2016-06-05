@@ -10,8 +10,8 @@ data {
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
-	int<lower=-1, upper=1> old_red[NS,MT];//1=old chosen;0=both new;-1=old unchosen
-	real<lower=-1,upper=.5> old_red_val[NS,MT];//positive=chosen val;0=both new;negitive=unchosen val
+	real<lower=-.5, upper=.5> old_red[NS,MT];//1=old chosen;0=both new;-1=old unchosen
+	real<lower=-.5,upper=.5> old_red_val[NS,MT];//positive=chosen val;0=both new;negitive=unchosen val
 }
 
 parameters {
@@ -92,7 +92,7 @@ model {
 	for (s in 1:NS) {
 	  for (t in 1:NT[s]) {
 		    if (choice[s,t] > 0) {
-		      red_choice[s,t] ~ bernoulli_logit(beta[s,1]*(Q[s,t,2]-Q[s,t,1])+beta[s,2]*old_red[s,t]+beta[s,3]*old_red_val[s,t]);
+		      red_choice[s,t] ~ bernoulli_logit(beta[s,1]+beta[s,2]*(Q[s,t,2]-Q[s,t,1])+beta[s,3]*old_red[s,t]+beta[s,4]*old_red_val[s,t]);
 		      }
     }
   }
