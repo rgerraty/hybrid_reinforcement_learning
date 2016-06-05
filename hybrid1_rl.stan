@@ -59,6 +59,7 @@ transformed parameters{
 		      if (t<NT[s]){
 		      //update value with alpha-weighted PE
 		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		      //value of unchosen option is not updated
 		        Q[s,t+1,abs(choice[s,t]-3)]<-Q[s,t,abs(choice[s,t]-3)];
 		      }
 		    } else {
