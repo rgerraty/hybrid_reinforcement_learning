@@ -77,6 +77,22 @@ plot(hybrid1_fit,pars=c("beta[1,1]","beta[2,1]",
                         "beta[27,1]","beta[28,1]",
                         "beta[29,1]","beta[30,1]","beta[31,1]"))
 
+plot(hybrid1_fit,pars=c("beta[1,3]","beta[2,3]",
+                        "beta[3,3]","beta[4,3]",
+                        "beta[5,3]","beta[6,3]",
+                        "beta[7,3]","beta[8,3]",
+                        "beta[9,3]","beta[10,3]",
+                        "beta[11,3]","beta[12,3]",
+                        "beta[13,3]","beta[14,3]",
+                        "beta[15,3]","beta[16,3]",
+                        "beta[17,3]","beta[18,3]",
+                        "beta[19,3]","beta[20,3]",
+                        "beta[21,3]","beta[22,3]",
+                        "beta[23,3]","beta[24,3]",
+                        "beta[25,3]","beta[26,3]",
+                        "beta[27,3]","beta[28,3]",
+                        "beta[29,3]","beta[30,3]","beta[31,3]"))
+
 plot(hybrid1_fit,pars=c("beta[1,4]","beta[2,4]",
                         "beta[3,4]","beta[4,4]",
                         "beta[5,4]","beta[6,4]",
