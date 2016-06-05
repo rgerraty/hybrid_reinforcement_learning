@@ -10,23 +10,25 @@ hybrid_data$DeckUnC<-abs(hybrid_data$DeckC-3)
 
 hybrid_data$OldObjC[hybrid_data$OldObjC==0]<--1
 hybrid_data$OldObjC[is.na(hybrid_data$OldObjC)]<-0
-hybrid_data$OldObjC<-hybrid_data$OldObjC/2
 
-hybrid_data$ObjPP_C=(hybrid_data$ObjPP)*hybrid_data$OldObjC
+hybrid_data$ObjPP_C=(hybrid_data$ObjPP-.5)*hybrid_data$OldObjC
 hybrid_data$ObjPP_C[is.na(hybrid_data$ObjPP)]<-0
 
-
+hybrid_data$OldObjC<-hybrid_data$OldObjC/2
 #Changing coding to p(Choose Red) 
 hybrid_data$ChooseRed<-(hybrid_data$DeckC==2)+0
 
-hybrid_data$LuckRed<-((hybrid_data$LuckyDeck==2)-(hybrid_data$LuckyDeck==1))/2
+hybrid_data$LuckRed<-((hybrid_data$LuckyDeck==2)-(hybrid_data$LuckyDeck==1))
 hybrid_data$LuckRed[is.na(hybrid_data$LuckRed)]<-0
 
-hybrid_data$OldRed<-((hybrid_data$OldDeck==2)-(hybrid_data$OldDeck==1))/2
+hybrid_data$OldRed<-((hybrid_data$OldDeck==2)-(hybrid_data$OldDeck==1))
 hybrid_data$OldRed[is.na(hybrid_data$OldRed)]<-0
 
-hybrid_data$OldValRed<-hybrid_data$OldRed*hybrid_data$ObjPP
+hybrid_data$OldValRed<-hybrid_data$OldRed*(hybrid_data$ObjPP-.5)
 hybrid_data$OldValRed[is.na(hybrid_data$OldValRed)]<-0
+
+hybrid_data$LuckRed<-hybrid_data$LuckRed/2
+hybrid_data$OldRed<-hybrid_data$OldRed/2
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
