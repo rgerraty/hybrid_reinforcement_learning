@@ -82,7 +82,7 @@ standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.
 save(standard_fit,file='stanfit_rl2')
 
 
-hybrid_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew, old_red_val=old_red_val, old_red=old_red)
+hybrid_standata = list(NS=NS, NC=2,K=4, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew, old_red_val=old_red_val, old_red=old_red)
 
 hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
 
