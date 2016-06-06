@@ -1,4 +1,5 @@
 //reinforcement learning model with episodic value and familiarity bias
+//Raphael Gerraty 2016, Columbia University
 //next version will incorporate decay parameter
 
 data {
@@ -7,10 +8,17 @@ data {
 	int NC;//number of choices (2)
 	int K;//number of coefficients for softmax
 	int NT[NS];//number of trials per subject
-	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
+	
+	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward history, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
+	
+	//outcome coded in terms of choosing red deck
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
+	
+	//effect of familiarity for previously seen objects
 	real<lower=-.5, upper=.5> old_red[NS,MT];//.5=red old;0=both new;-.5=blue old
+	
+	//difference in centered values for previously seen objects
 	real<lower=-.5,upper=.5> old_red_val[NS,MT];//(red old value-.5) - (blue old value-.5)
 }
 
@@ -47,7 +55,7 @@ transformed parameters{
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
   	  
-  	  //set initial values of Q and delta
+  	  //set initial values of Q and delta on first trial
 		  if(t == 1) {
 		    for (c in 1:NC){
 		      Q[s,t,c]<-0.5;
@@ -99,7 +107,7 @@ model {
   }
   
   
-  //data generating process
+  //data generating process (likelihood)
 	for (s in 1:NS) {
 	  for (t in 1:NT[s]) {
 		    if (choice[s,t] > 0) {
