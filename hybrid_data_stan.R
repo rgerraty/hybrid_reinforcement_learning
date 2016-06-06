@@ -82,7 +82,7 @@ red_choice[is.na(red_choice)]<--1
 
 #standard rl model fit heirarchically in Stan
 #no information about individual objects/episidoc value
-standard_standata = list(NS=NS, NC=2, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew )
+standard_standata = list(NS=NS, NC=2,K=2, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew )
 standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standard_standata, iter = 1250, warmup = 250, chains = 4)
 save(standard_fit,file='stanfit_rl2')
 
