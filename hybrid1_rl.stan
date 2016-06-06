@@ -10,8 +10,8 @@ data {
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
-	real<lower=-.5, upper=.5> old_red[NS,MT];//1=old chosen;0=both new;-1=old unchosen
-	real<lower=-.5,upper=.5> old_red_val[NS,MT];//positive=chosen val;0=both new;negitive=unchosen val
+	real<lower=-.5, upper=.5> old_red[NS,MT];//.5=red old;0=both new;-.5=blue old
+	real<lower=-.5,upper=.5> old_red_val[NS,MT];//(red old value-.5) - (blue old value-.5)
 }
 
 parameters {
@@ -27,7 +27,7 @@ parameters {
   real<lower=0,upper=1> alpha[NS];
   matrix[NS,K] beta;
   
-  //cholesky factorization of correlation matrix
+  //cholesky factorization of correlation matrix of subject-level estimates
   cholesky_factor_corr[K] Lcorr;
 	
 }
@@ -38,11 +38,11 @@ transformed parameters{
   real<lower=0, upper=1> Q[NS,MT,NC]; 
   
   //prediction error matrix
-  real delta[NS,MT,NC];
+  real delta[NS,MT];
   
   //need to define because missing trials will recreate nan's otherwise
   Q<-rep_array(0.0,NS,MT,NC);
-  delta<-rep_array(0.0,NS,MT,NC);
+  delta<-rep_array(0.0,NS,MT);
   
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
@@ -51,16 +51,16 @@ transformed parameters{
 		  if(t == 1) {
 		    for (c in 1:NC){
 		      Q[s,t,c]<-0.5;
-		      delta[s,t,c]<-0;
 		    }
+		    delta[s,t]<-0;
 		  }
 		    if (rew[s,t] >= 0){
 		      //PE = reward-expected
-		      delta[s,t,choice[s,t]]<-rew[s,t]-Q[s,t,choice[s,t]];
+		      delta[s,t]<-rew[s,t]-Q[s,t,choice[s,t]];
 		      
 		      if (t<NT[s]){
 		        //update value with alpha-weighted PE
-		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t,choice[s,t]];
+		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t];
 		        
 		        //value of unchosen option is not updated
 		        Q[s,t+1,abs(choice[s,t]-3)]<-Q[s,t,abs(choice[s,t]-3)];
@@ -68,12 +68,12 @@ transformed parameters{
 		      }
 		    } else {
 		        //if no response, keep Q value and set delta to 0
-		        for (c in 1:NC){
-		          if (t<NT[s]){
+		        if (t<NT[s]){
+		          for (c in 1:NC){
 		            Q[s,t+1,c]<-Q[s,t ,c];
 		          }
-		          delta[s,t,c]<-0;
 		        }
+		        delta[s,t]<-0;
 		    }
 		}
   }
