@@ -6,7 +6,7 @@ data {
 	int NS;//number of subjects
 	int MT;//maximum number of trials
 	int NC;//number of choices (2)
-	int K;//number of coefficients for softmax
+	int K;//number of coefficients for glm
 	int NT[NS];//number of trials per subject
 	
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward history, -1 for missed
