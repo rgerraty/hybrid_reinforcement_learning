@@ -27,6 +27,7 @@ hybrid_data$OldRed[is.na(hybrid_data$OldRed)]<-0
 hybrid_data$OldValRed<-hybrid_data$OldRed*(hybrid_data$ObjPP-.5)
 hybrid_data$OldValRed[is.na(hybrid_data$OldValRed)]<-0
 
+#.5/-.5 coding for interpreting regression coefficients
 hybrid_data$LuckRed<-hybrid_data$LuckRed/2
 hybrid_data$OldRed<-hybrid_data$OldRed/2
 
