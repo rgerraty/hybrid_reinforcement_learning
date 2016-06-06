@@ -108,13 +108,13 @@ model {
   
   
   //data generating process (likelihood)
-	for (s in 1:NS) {
-	  for (t in 1:NT[s]) {
-		    if (choice[s,t] > 0) {
-		      red_choice[s,t] ~ bernoulli_logit(beta[s,1]+beta[s,2]*(Q[s,t,2]-Q[s,t,1])+beta[s,3]*old_red[s,t]+beta[s,4]*old_red_val[s,t]);
-		      }
+  for (s in 1:NS) {
+    for (t in 1:NT[s]) {
+      if (choice[s,t] > 0) {
+        red_choice[s,t] ~ bernoulli_logit(beta[s,1]+beta[s,2]*(Q[s,t,2]-Q[s,t,1])+beta[s,3]*old_red[s,t]+beta[s,4]*old_red_val[s,t]);
+        }
+      }
     }
-  }
 }
 
 generated quantities {
