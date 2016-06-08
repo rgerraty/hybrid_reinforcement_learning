@@ -24,9 +24,9 @@ for(i in 1:dim(Qvals_hybrid)[1]){
   }
 
 }
+pe_hyb<-t(apply(fit_extract$delta,c(2,3),median))
 
 alpha_hyb<-apply(fit_extract$alpha,2,median)
-pe_hyb<-t(apply(fit_extract$delta,c(2,3),median))
 beta_hyb<-apply(fit_extract$beta,c(2,3),median)
 Sigma<-apply(fit_extract$Sigma,c(2,3),median)
 Omega<-apply(fit_extract$Omega,c(2,3),median)
@@ -36,13 +36,13 @@ Omega<-apply(fit_extract$Omega,c(2,3),median)
 summary(fit_extract$b_mean)
 pairs(hybrid1_fit,pars="b_mean",labels=c("Intercept","Inverse Temp","Familiarity Bias","Episodic Value"))
 
-
- 
+#plot median estimates of subject-level effects
 hist(beta_hyb[,4],xlab="Episodic Effect",main=NULL)
 hist(beta_hyb[,2],xlab="Incremental Effect",main=NULL)
 hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 hist(alpha_hyb,xlab="Learning Rate",main=NULL)
 
+#plot posterior uncertainty for subject-level estimates
 plot(hybrid1_fit,pars=c("beta[1,2]","beta[2,2]",
                         "beta[3,2]","beta[4,2]",
                         "beta[5,2]","beta[6,2]",
@@ -93,4 +93,21 @@ plot(hybrid1_fit,pars=c("beta[1,4]","beta[2,4]",
 
 
 
+#get Q vals and PEs for each trial for each subject
+library(reshape2)
 
+#function for 
+colNorm<-function(X){
+  c_means<-colMeans(X,na.rm=T)
+  c_means<-t(matrix(c_means,length(c_means),dim(X)[1]))
+  c_sds<-apply(X,2,sd,na.rm=T)
+  c_sds<-t(matrix(c_sds,length(c_sds),dim(X)[1]))
+  c_norm<-(X-c_means)/c_sds
+  return(c_norm)
+}
+
+#normalized Q vals and prediction errors for chosen
+Q_chosen_norm<-colNorm(Q_chosen_hyb)
+Q_unchosen_norm<-colNorm(Q_unchosen_hyb)
+Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
+PE_norm<-colNorm(pe_hyb)
