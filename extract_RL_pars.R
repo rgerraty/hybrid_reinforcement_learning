@@ -96,7 +96,7 @@ plot(hybrid1_fit,pars=c("beta[1,4]","beta[2,4]",
 #get Q vals and PEs for each trial for each subject
 library(reshape2)
 
-#function for 
+#function for z normalizing columns in a matrix
 colNorm<-function(X){
   c_means<-colMeans(X,na.rm=T)
   c_means<-t(matrix(c_means,length(c_means),dim(X)[1]))
@@ -111,3 +111,5 @@ Q_chosen_norm<-colNorm(Q_chosen_hyb)
 Q_unchosen_norm<-colNorm(Q_unchosen_hyb)
 Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
+
+
