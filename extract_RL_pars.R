@@ -106,10 +106,24 @@ colNorm<-function(X){
   return(c_norm)
 }
 
-#normalized Q vals and prediction errors for chosen
+#normalized Q vals and prediction errors
 Q_chosen_norm<-colNorm(Q_chosen_hyb)
 Q_unchosen_norm<-colNorm(Q_unchosen_hyb)
 Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
 
+melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_diff_norm)[,3],melt(PE_norm)[,3])
+names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_diff_norm","PE_norm")
 
+for(i in 1:dim(hybrid_data)[1]){
+  hybrid_data$Q_chosen_norm[i]<-
+    melted_vals$Q_chosen_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                                melted_vals$Trial==hybrid_data$Trial[i] ]
+  hybrid_data$Q_diff_norm[i]<-
+    melted_vals$Q_diff_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                               melted_vals$Trial==hybrid_data$Trial[i] ]
+  hybrid_data$PE_norm[i]<- 
+    melted_vals$PE_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                          melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  }
