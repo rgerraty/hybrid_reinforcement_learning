@@ -126,4 +126,6 @@ for(i in 1:dim(hybrid_data)[1]){
     melted_vals$PE_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
   
-  }
+}
+
+write.csv(x = hybrid_data,file = "~/Documents/hybrid_data.csv",row.names = F)
