@@ -30,7 +30,7 @@ set fmri(featwatcher_yn) 1
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "qchose_epval_pe"
+set fmri(outputdir) "XXOUTPUTXX"
 
 # TR(s)
 set fmri(tr) 3
@@ -260,37 +260,11 @@ set fmri(regstandard_nonlinear_warpres) 10
 set fmri(paradigm_hp) 100
 
 # Number of lower-level copes feeding into higher-level analysis
-set fmri(ncopeinputs) 5
+set fmri(ncopeinputs) XXNUMCOPESXX
 
-# Use lower-level cope 1 for higher-level analysis
-set fmri(copeinput.1) 1
+XXCOPESXX
 
-# Use lower-level cope 2 for higher-level analysis
-set fmri(copeinput.2) 1
-
-# Use lower-level cope 3 for higher-level analysis
-set fmri(copeinput.3) 1
-
-# Use lower-level cope 4 for higher-level analysis
-set fmri(copeinput.4) 1
-
-# Use lower-level cope 5 for higher-level analysis
-set fmri(copeinput.5) 1
-
-# 4D AVW data or FEAT directory (1)
-set feat_files(1) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r1/qchose_epval_pe.feat"
-
-# 4D AVW data or FEAT directory (2)
-set feat_files(2) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r2/qchose_epval_pe.feat"
-
-# 4D AVW data or FEAT directory (3)
-set feat_files(3) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r3/qchose_epval_pe.feat"
-
-# 4D AVW data or FEAT directory (4)
-set feat_files(4) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r4/qchose_epval_pe.feat"
-
-# 4D AVW data or FEAT directory (5)
-set feat_files(5) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r5/qchose_epval_pe.feat"
+XXINPUTSXX
 
 # Add confound EVs text file
 set fmri(confoundevs) 0
@@ -335,35 +309,9 @@ set fmri(ortho1.0) 0
 # Orthogonalise EV 1 wrt EV 1
 set fmri(ortho1.1) 0
 
-# Higher-level EV value for EV 1 and input 1
-set fmri(evg1.1) 1
+XXEVsXX
 
-# Higher-level EV value for EV 1 and input 2
-set fmri(evg2.1) 1
-
-# Higher-level EV value for EV 1 and input 3
-set fmri(evg3.1) 1
-
-# Higher-level EV value for EV 1 and input 4
-set fmri(evg4.1) 1
-
-# Higher-level EV value for EV 1 and input 5
-set fmri(evg5.1) 1
-
-# Group membership for input 1
-set fmri(groupmem.1) 1
-
-# Group membership for input 2
-set fmri(groupmem.2) 1
-
-# Group membership for input 3
-set fmri(groupmem.3) 1
-
-# Group membership for input 4
-set fmri(groupmem.4) 1
-
-# Group membership for input 5
-set fmri(groupmem.5) 1
+XXGROUPSXX
 
 # Contrast & F-tests mode
 # real : control real EVs
