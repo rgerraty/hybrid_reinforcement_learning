@@ -30,10 +30,10 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "XXOUTXX/qchose_epval_pe"
+set fmri(outputdir) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/qchose_epval_pe"
 
 # TR(s)
-set fmri(tr) XXTRXX
+set fmri(tr) 2.000000 
 
 # Total volumes
 set fmri(npts) XXVOLSXX
