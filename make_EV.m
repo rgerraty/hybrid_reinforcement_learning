@@ -1,23 +1,23 @@
-function [runs]=behavioral_colums_works(dels)
+function [runs]=make_EV(dels)
 
 %dels is seconds of deleted fmri volumes from beginning of scan
-%note that right now you need to be folder containing subjects' .mat files. may want to change this
+%note that right now you need to be in folder containing subjects .mat files. may want to change this
 
 addpath /home/rgerraty/scripts/MATLAB/
 
 [M,N]=csvreadh('/data/engine/rgerraty/hybrid_mri/behavior/hybrid_data.csv',',');
 
 
-%only need to load last run's file
-%[status,runs]=unix('ls Performance_?.mat | wc -l');
 [status,runs]=unix('ls Performance_?.mat | cut -c13');
 
+%how many runs
 runs=str2num(runs);
 
 [status,sub]=unix('pwd | cut -c43-44');
 sub=str2num(sub);
 
-%try loading last Performance file but quit if any discrepencies
+%only need last run .mat file which contains all performance ingo
+%try loading but quit if any discrepencies
 clear Performance PerformanceMem
 try
 	load(strcat('Performance_',num2str(runs(end)),'.mat'))
@@ -35,15 +35,17 @@ try
 	load Performance_Memory
 	submem=repmat(nan,size(Performance.time.startChoice));
 	%HITS
-	submem(sort(PerformanceMem.Cond.EncTrial(PerformanceMem.Resp.ObjRec<3 & PerformanceMem.Cond.OldNew==1)))=1;
+	submem(sort(PerformanceMem.Cond.EncTrial(PerformanceMem.Resp.ObjRec<3 ...
+		& PerformanceMem.Cond.OldNew==1)))=1;
 	%MISSES
-	submem(sort(PerformanceMem.Cond.EncTrial(PerformanceMem.Resp.ObjRec>3 & PerformanceMem.Cond.OldNew==1)))=0;
+	submem(sort(PerformanceMem.Cond.EncTrial(PerformanceMem.Resp.ObjRec>3 ...
+		& PerformanceMem.Cond.OldNew==1)))=0;
 catch
 	warning('Memory Data Missing!')
 	pwd
 end
 
-
+%loop through each run and make 3 column FSL EV files
 for i = 1:size(runs,1)
 	r=runs(i);
 	
@@ -63,39 +65,36 @@ for i = 1:size(runs,1)
 	%get weights for parametric regressors
 	FB_weight = Performance.pay.outcome(valid_trials & Performance.cond.Run==r)';
 
+	%RL model regressors
 	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,32);
 	choice_Qdiff_weight=N(N(:,1)==sub & N(:,2)==r,31);
 	choice_Qchose_weight=N(N(:,1)==sub & N(:,2)==r,30);
 
-    	%combine into FSL-style 3col regs
-    	choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
-	
-    	response_run = [response_time, response_duration, ones(size(response_time,1),1)];
-	
-    	FBpay_run = [FB_time, FB_duration, FB_weight];
-	
-    	FB_run = [FB_time, FB_duration, ones(size(FB_time,1),1)];
-	
-    	inval_run = [inval_time, inval_duration, ones(size(inval_time,1),1)];
+    %combine into FSL-style 3col regs
+    choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
+    response_run = [response_time, response_duration, ones(size(response_time,1),1)];
+    FBpay_run = [FB_time, FB_duration, FB_weight];
+    FB_run = [FB_time, FB_duration, ones(size(FB_time,1),1)];
+    inval_run = [inval_time, inval_duration, ones(size(inval_time,1),1)];
 	
 
 	%episodic EVs
 	if exist('PerformanceMem')
+		%parametric weights
 		oldnew_weight=~Performance.cond.oldnewobj(valid_trials & Performance.cond.Run==r);
-		oldnew_run=[choice_run(:,1:2) oldnew_weight'];
-		
 		oldval_weight=Performance.cond.priorpay(valid_trials & Performance.cond.Run==r);
-		oldval_weight=oldval_weight-.5;		
-		oldval_run=[choice_run(:,1:2) oldval_weight'];
-		
+		oldval_weight=oldval_weight-.5;	
 		submem_weight=submem(valid_trials & Performance.cond.Run==r);
+
+		%combine and remove missed trials
+		oldnew_run=[choice_run(:,1:2) oldnew_weight'];	
+		oldval_run=[choice_run(:,1:2) oldval_weight'];
 		submem_run=[choice_run(:,1:2) submem_weight'];
-		
 		oldnew_run(choice_time<0,:)=[];
 		oldval_run(choice_time<0 | isnan(oldval_run(:,3)),:)=[];
-		
 		submem_run(choice_time<0 | isnan(submem_run(:,3)),:)=[];
 
+		%write out EV txt files for episodic predictors
 		dlmwrite(strcat('EV_files/oldnew_run',num2str(r),'.txt'),oldnew_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/oldval_run',num2str(r),'.txt'),oldval_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/submem_run',num2str(r),'.txt'),submem_run, 'delimiter',' ');
@@ -112,17 +111,15 @@ for i = 1:size(runs,1)
 		inval_run=[0, 0, 0];
 	end
 		
-	
-	
-	
-	
-	%write
+
+	%write out txt files
 	dlmwrite(strcat('EV_files/choice_run',num2str(r),'.txt'), choice_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/response_run',num2str(r),'.txt'), response_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/FB_run',num2str(r),'.txt'), FB_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/FBpay_run',num2str(r),'.txt'),FBpay_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/inval_run',num2str(r),'.txt'),inval_run, 'delimiter',' ');
 
+	%if there is RL model output for subject/run make and write EV files 
 	if size(FB_pe_weight,1)>0
 		FB_pe_run = [FB_time, FB_duration, FB_pe_weight(valid_trials(Performance.cond.Run==r))];
 		choice_Qdiff_run=[choice_time, choice_duration, choice_Qdiff_weight(valid_trials(Performance.cond.Run==r))];
