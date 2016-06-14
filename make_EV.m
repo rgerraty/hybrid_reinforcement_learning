@@ -47,8 +47,7 @@ end
 
 runs=unique(Performance.cond.Run);
 %loop through each run and make 3 column FSL EV files
-for i = runs
-	r=runs(i);
+for r = runs
 	
 	%get EV onset times for each run
 	choice_time = Performance.time.startTrial(valid_trials & Performance.cond.Run==r)'-dels;
