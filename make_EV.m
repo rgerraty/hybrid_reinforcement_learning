@@ -100,7 +100,22 @@ for r = runs
 		dlmwrite(strcat('EV_files/oldval_run',num2str(r),'.txt'),oldval_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/submem_run',num2str(r),'.txt'),submem_run, 'delimiter',' ');
 	end
+
+	%if there is RL model output for subject/run make and write EV files 
+	if size(FB_pe_weight,1)>0
+		FB_pe_run = [FB_time, FB_duration, FB_pe_weight(valid_trials(Performance.cond.Run==r))];
+		choice_Qdiff_run=[choice_time, choice_duration, choice_Qdiff_weight(valid_trials(Performance.cond.Run==r))];
+		choice_Qchose_run=[choice_time, choice_duration, choice_Qchose_weight(valid_trials(Performance.cond.Run==r))];
 		
+		FB_pe_run(FB_time<0 | isnan(FB_pe_run(:,3)),:)=[];
+		choice_Qdiff_run(choice_time<0 | isnan(choice_Qdiff_run(:,3)),:)=[];
+		choice_Qchose_run(choice_time<0 | isnan(choice_Qchose_run(:,3)),:)=[];
+
+		dlmwrite(strcat('EV_files/FB_pe_run',num2str(r),'.txt'),FB_pe_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_Qdiff_run',num2str(r),'.txt'),choice_Qdiff_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_Qchose_run',num2str(r),'.txt'),choice_Qchose_run, 'delimiter',' ');
+	end
+
 	%remove trials from deleted volumes
 	choice_run(choice_time<0,:)=[];
 	response_run(response_time<0,:)=[];
@@ -119,21 +134,6 @@ for r = runs
 	dlmwrite(strcat('EV_files/FB_run',num2str(r),'.txt'), FB_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/FBpay_run',num2str(r),'.txt'),FBpay_run, 'delimiter',' ');
 	dlmwrite(strcat('EV_files/inval_run',num2str(r),'.txt'),inval_run, 'delimiter',' ');
-
-	%if there is RL model output for subject/run make and write EV files 
-	if size(FB_pe_weight,1)>0
-		FB_pe_run = [FB_time, FB_duration, FB_pe_weight(valid_trials(Performance.cond.Run==r))];
-		choice_Qdiff_run=[choice_time, choice_duration, choice_Qdiff_weight(valid_trials(Performance.cond.Run==r))];
-		choice_Qchose_run=[choice_time, choice_duration, choice_Qchose_weight(valid_trials(Performance.cond.Run==r))];
-		
-		FB_pe_run(FB_time<0,:)=[];
-		choice_Qdiff_run(choice_time<0,:)=[];
-		choice_Qchose_run(choice_time<0,:)=[];
-
-		dlmwrite(strcat('EV_files/FB_pe_run',num2str(r),'.txt'),FB_pe_run, 'delimiter',' ');
-		dlmwrite(strcat('EV_files/choice_Qdiff_run',num2str(r),'.txt'),choice_Qdiff_run, 'delimiter',' ');
-		dlmwrite(strcat('EV_files/choice_Qchose_run',num2str(r),'.txt'),choice_Qchose_run, 'delimiter',' ');
-	end
 end
 
 
