@@ -45,8 +45,9 @@ catch
 	pwd
 end
 
+runs=unique(Performance.cond.Run);
 %loop through each run and make 3 column FSL EV files
-for i = 1:size(runs,1)
+for i = runs
 	r=runs(i);
 	
 	%get EV onset times for each run
