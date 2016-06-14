@@ -46,6 +46,7 @@ catch
 end
 
 runs=unique(Performance.cond.Run);
+runs=runs(runs>0);
 %loop through each run and make 3 column FSL EV files
 for r = runs
 	
