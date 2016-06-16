@@ -133,7 +133,7 @@ for s in /data/engine/rgerraty/hybrid_mri/TCST0*/;
 done
 ```
 
-###Set up design matrix for sub-level fixed-effects estimates
+###Set up group design matrix for subject-level fixed-effects estimates
 ```{.matlab}
 [status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
