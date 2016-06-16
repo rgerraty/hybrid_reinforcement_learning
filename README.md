@@ -4,6 +4,91 @@
 ###Fit reinforcement learning models with episodic value
 The code in hybrid_data_stan.R prepares data and fits heirarchical bayesian models of reinforcement learning in Stan. The model with episodic value is written in hybrid1_rl.stan, with an example of a standard RL model in standard_rl.stan. Code in extract_RL_pars.R extracts statistics for alpha and Beta parameters, as well as Q values and prediction error timecourses for fMRI analysis.
 
+
+### Generate field map for B0 correction
+```{.bash}
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/B0_map;  
+do 
+	bo=$(ls $i/2*nii.gz);
+	echo $bo; 
+	bash /home/rgerraty/GitHub/NETPD/reversal_learning_pd/analysis/B0_unwarp.sh $bo; 
+done
+```
+
+### Run anatomical preprocessing
+```{.bash}
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/structural/;
+do 
+	if [ -d $i/bravo.anat ]
+		then
+		echo fsl_anat already run for $i
+	else
+		if [ ! -e $i/bravo.nii.gz ]
+			then
+			bravo=$(ls $i/co*nii.gz | head -n1)
+			mv $bravo $i/bravo.nii.gz
+		fi
+		fsl_anat -i $i/bravo.nii.gz
+	fi
+done
+```
+
+### B0 field correction for EPI scans
+```{.bash}
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/
+do
+
+	unwarp=$(ls $i/*_unwarp.nii.gz 2>/dev/null)
+	epi=$(ls $i/*nii.gz | grep -v unwarp)
+
+	if [[ -z $epi ]]
+		then 
+		echo no niftis in $i\!
+	elif [[ ! -z $unwarp ]]
+		then
+		echo B0 field already generated \in $i
+		echo delete before proceeding
+	else
+		dwell=$(echo $(dicom_hdr $i/dicoms/$(ls $i/dicoms/ | 
+			head -n 1) | 
+			grep 0043\ 102c | 
+			awk 'BEGIN{ FS="//" }; { print $3 }') /1000000 | 
+			bc -l) 
+
+		fmap=$(ls $i/../B0_map/fieldmap_rads.nii.gz)
+
+		fugue -i $epi --dwell=$dwell \
+		--loadfmap=$fmap \
+		-u $(dirname $epi)/$(basename $epi .nii.gz)_unwarp.nii.gz
+	fi
+done
+```
+### Get partially saturated first volume from every 4D epi volume as reference image
+```{.bash}
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
+do
+	if [ ! -e $(dirname $i)/example_func.nii.gz ]
+		then
+		fslroi $i $(dirname $i)/example_func.nii.gz 0 1
+		bet $(dirname $i)/example_func.nii.gz $(dirname $i)/example_func.nii.gz 
+	else
+		echo example_func.nii.gz already exists in $(dirname $i)
+	fi
+done
+```
+
+```
+
+###Run preprocessing (need to generate template .fsf file first)
+```{.bash}
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
+do
+	/home/rgerraty/GitHub/hybrid_reinforcement_learning/run_preproc.sh $i \
+	/home/rgerraty/GitHub/hybrid_reinforcement_learning/preproc_6mm_6del_100s_mc.fsf \
+	$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz
+done
+```
+
 ###Make 3 column EV files for GLM from raw behavioral output
 ```{.bash}
 for i in /data/engine/rgerraty/hybrid_mri/behavior/*output;
@@ -50,7 +135,7 @@ for s in /data/engine/rgerraty/hybrid_mri/TCST0*/;
 done
 ```
 
-###Set up design matrix sub-level fixed-effects estimates
+###Set up design matrix for sub-level fixed-effects estimates
 ```{.matlab}
 [status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
