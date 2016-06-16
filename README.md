@@ -137,6 +137,7 @@ done
 ```{.matlab}
 [status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
+subs2=[];
 
 j=1;
 i=1;
