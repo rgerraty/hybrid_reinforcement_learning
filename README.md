@@ -77,8 +77,6 @@ do
 done
 ```
 
-```
-
 ###Run preprocessing (need to generate template .fsf file first)
 ```{.bash}
 for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
