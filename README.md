@@ -1,7 +1,8 @@
 # hybrid_reinforcement_learning
 
 
-###Fit reinforcement learning models with episodic value 
+###Fit reinforcement learning models with episodic value
+The code in hybrid_data_stan.R prepares data and fits heirarchical bayesian models of reinforcement learning in Stan. The model with episodic value is written in hybrid1_rl.stan, with an example of a standard RL model in standard_rl.stan. Code in extract_RL_pars.R extracts statistics for $\alpha$ and $\Beta$ parameters, as well as Q values and prediction error timecourses for fMRI analysis.
 
 ###Make 3 column EV files for GLM from raw behavioral output
 ```{.bash}
