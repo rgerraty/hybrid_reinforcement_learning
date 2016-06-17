@@ -30,3 +30,23 @@ for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_
 	fi;
 done
 ```
+###Update 1st-level directories with registation files
+```{.bash}
+for s in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/;
+	do
+	if [ -d $s/hybrid_r1/qchose_epval_pe.feat/ ]
+	then
+	for r in $s/hybrid_r?/preproc_6mm_6del_100s_mc.feat/reg/; 
+		do 
+		if [ ! -e $r/../../qchose_epval_pe.feat/reg/example_func2standard.mat ]
+			then
+			echo $r
+			cp -R $r $r/../../qchose_epval_pe.feat/;
+			cp $s/structural/bravo.anat/T1_to_MNI_lin.mat $r/../../qchose_epval_pe.feat/reg/highres2standard.mat
+			cp $s/structural/bravo.anat/T1_to_MNI_nonlin_field.nii.gz $r/../../qchose_epval_pe.feat/reg/highres2standard_warp.nii.gz
+			cp $FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz $r/../../qchose_epval_pe.feat/reg/standard.nii.gz
+			updatefeatreg $r/../../qchose_epval_pe.feat/
+		fi
+	done
+	fi
+done
