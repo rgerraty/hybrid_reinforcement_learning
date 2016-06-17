@@ -11,10 +11,8 @@ rsync -az --exclude "TCST0*/*/dicoms/" --exclude "raw_comp" rgerraty@lovelace.ps
 ```{.bash}
 for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
 do
-	qsub \
-	/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_preproc_sub.sh $i \
-	/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/preproc_6mm_6del_100s_mc.fsf \
-	$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz
+	qsub -v arg1=$i, arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/preproc_6mm_6del_100s_mc.fsf, arg3=$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz
+	/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_preproc_sub.sh 
 done
 ```
 
@@ -26,7 +24,7 @@ for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_
 	r=$(echo $i | cut -c 54);
 	if [ -e /vega/psych/users/rtg2116/hybrid_mri/behavior/"$s"_output/EV_files/FB_pe_run"$r".txt ];
 		then 
-		qsub /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level.sh $i /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf;
+		qsub -v arg1=$i,arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level_sub.sh
 	else 
 		echo no RL behavioral files for $i ;
 	fi;
