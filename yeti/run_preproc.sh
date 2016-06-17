@@ -40,9 +40,9 @@ else
 
 	sed -e 's:xxTRxx:'$TR':g' -e 's:xxNVOLSxx:'$NVOLS':g' -e \
 	's:xxDIRxx:'$dir_name':g' -e 's:xxNIFTIxx:'$nifti':g' -e \
-	's:xxSTRUCxx:'$struc':g'<$fsf>tmp.fsf
-	feat tmp.fsf #run temp file
-	rm -rf tmp.fsf
+	's:xxSTRUCxx:'$struc':g'<$fsf>$(dirname $fullpath)/tmp.fsf
+	feat $(dirname $fullpath)/tmp.fsf#run temp file
+	rm -rf $(dirname $fullpath)/tmp.fsf
 fi
 
 
