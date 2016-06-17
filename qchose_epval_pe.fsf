@@ -273,8 +273,7 @@ set feat_files(1) "XXINXX"
 set fmri(confoundevs) 1
 
 # Confound EVs text file for analysis 1
-set confoundev_files(1) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s
-_mc.feat/mc/extended_confs_24par.txt"
+set confoundev_files(1) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s_mc.feat/mc/extended_confs_24par.txt"
 
 # EV 1 title
 set fmri(evtitle1) "choice"
