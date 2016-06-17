@@ -132,7 +132,7 @@ set fmri(prewhiten_yn) 1
 # Add motion parameters to model
 # 0 : No
 # 1 : Yes
-set fmri(motionevs) 2
+set fmri(motionevs) 0
 set fmri(motionevsbeta) ""
 set fmri(scriptevsbeta) ""
 
@@ -270,7 +270,11 @@ set fmri(ncopeinputs) 0
 set feat_files(1) "XXINXX"
 
 # Add confound EVs text file
-set fmri(confoundevs) 0
+set fmri(confoundevs) 1
+
+# Confound EVs text file for analysis 1
+set confoundev_files(1) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s
+_mc.feat/mc/extended_confs_24par.txt"
 
 # EV 1 title
 set fmri(evtitle1) "choice"
