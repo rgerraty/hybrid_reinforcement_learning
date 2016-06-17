@@ -23,7 +23,7 @@ else
 			fi
 			nvols=$(fslinfo $input | grep dim4 | grep -v pix | awk '{ print $2 }');
 			
-			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'</home/rgerraty/GitHub/hybrid_reinforcement_learning/qchose_epval_pe.fsf  >tmp.fsf;
+			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'</u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf  >tmp.fsf;
 
 			feat tmp.fsf;
 			rm -rf tmp.fsf;
