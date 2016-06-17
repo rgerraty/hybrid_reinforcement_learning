@@ -97,7 +97,7 @@ end
 ```
 
 ###Generated extended confounds from motion paramaters
-```{.bash
+```{.bash}
 for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc*feat/mc/; 
 	do 
 	cd $i; 
