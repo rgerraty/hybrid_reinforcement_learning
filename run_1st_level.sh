@@ -1,7 +1,7 @@
 #!/bin/bash
 
-input=$1
-fsf=$2
+input=$(readlink -e $1)
+fsf=$(readlink -e $2)
 
 if [ ! -e $input ];
 	then
