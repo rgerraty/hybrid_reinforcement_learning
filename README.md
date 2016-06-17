@@ -96,6 +96,17 @@ for i in /data/engine/rgerraty/hybrid_mri/behavior/*output;
 end
 ```
 
+###Generated extended confounds from motion paramaters
+```{.bash
+for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc*feat/mc/; 
+	do 
+	cd $i; 
+	pwd
+	mp_diffpow.sh prefiltered_func_data_mcf.par diff; 
+	paste prefiltered_func_data_mcf.par diff.dat>extended_confs_24par.txt;
+done
+```
+
 ###Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```{.bash}
 for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
