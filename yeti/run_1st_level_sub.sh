@@ -9,13 +9,13 @@
 #PBS -V
 
 # Set output and error directories
-#PBS -o localhost:/vega/psych/users/rtg2116/
-#PBS -e localhost:/vega/psych/users/rtg2116/
+#PBS -o localhost:/vega/psych/users/rtg2116/outputs
+#PBS -e localhost:/vega/psych/users/rtg2116/errors
 
 # Print "Hello World"
 export FSLPARALLEL=1
 
-/vega/psych/app/fsl/bin/bedpostx $arg1
+/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level.sh $arg1 $arg2
 
 # Sleep for 10 seconds
 
