@@ -30,7 +30,7 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/qchose_epval_pe"
+set fmri(outputdir) "/vega/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/qchose_epval_pe"
 
 # TR(s)
 set fmri(tr) 2.000000 
@@ -239,7 +239,7 @@ set fmri(regstandard_yn) 1
 set fmri(alternateReference_yn) 0
 
 # Standard image
-set fmri(regstandard) "/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain"
+set fmri(regstandard) "/vega/psych/app/fsl/data/standard/MNI152_T1_2mm_brain"
 
 # Search space for registration to standard space
 # 0   : No search
@@ -273,7 +273,7 @@ set feat_files(1) "XXINXX"
 set fmri(confoundevs) 1
 
 # Confound EVs text file for analysis 1
-set confoundev_files(1) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s
+set confoundev_files(1) "/vega/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s
 _mc.feat/mc/extended_confs_24par.txt"
 
 # EV 1 title
@@ -308,7 +308,7 @@ set fmri(tempfilt_yn1) 1
 set fmri(deriv_yn1) 1
 
 # Custom EV file (EV 1)
-set fmri(custom1) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXRUNXX.txt"
+set fmri(custom1) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXRUNXX.txt"
 
 # Orthogonalise EV 1 wrt EV 0
 set fmri(ortho1.0) 0
@@ -363,7 +363,7 @@ set fmri(tempfilt_yn2) 1
 set fmri(deriv_yn2) 1
 
 # Custom EV file (EV 2)
-set fmri(custom2) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXRUNXX.txt"
+set fmri(custom2) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXRUNXX.txt"
 
 # Orthogonalise EV 2 wrt EV 0
 set fmri(ortho2.0) 0
@@ -418,7 +418,7 @@ set fmri(tempfilt_yn3) 1
 set fmri(deriv_yn3) 1
 
 # Custom EV file (EV 3)
-set fmri(custom3) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_Qchose_runXXRUNXX.txt"
+set fmri(custom3) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_Qchose_runXXRUNXX.txt"
 
 # Orthogonalise EV 3 wrt EV 0
 set fmri(ortho3.0) 0
@@ -473,7 +473,7 @@ set fmri(tempfilt_yn4) 1
 set fmri(deriv_yn4) 1
 
 # Custom EV file (EV 4)
-set fmri(custom4) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/oldval_runXXRUNXX.txt"
+set fmri(custom4) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/oldval_runXXRUNXX.txt"
 
 # Orthogonalise EV 4 wrt EV 0
 set fmri(ortho4.0) 0
@@ -528,7 +528,7 @@ set fmri(tempfilt_yn5) 1
 set fmri(deriv_yn5) 1
 
 # Custom EV file (EV 5)
-set fmri(custom5) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_pe_runXXRUNXX.txt"
+set fmri(custom5) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_pe_runXXRUNXX.txt"
 
 # Orthogonalise EV 5 wrt EV 0
 set fmri(ortho5.0) 0
@@ -583,7 +583,7 @@ set fmri(tempfilt_yn6) 1
 set fmri(deriv_yn6) 1
 
 # Custom EV file (EV 6)
-set fmri(custom6) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
+set fmri(custom6) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
 
 # Orthogonalise EV 6 wrt EV 0
 set fmri(ortho6.0) 0

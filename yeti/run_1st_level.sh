@@ -1,7 +1,7 @@
 #!/bin/bash
 
-input=$1
-fsf=$2
+input=$(readlink -e $1)
+fsf=$(readlink -e $2)
 
 if [ ! -e $input ];
 	then
@@ -9,8 +9,8 @@ if [ ! -e $input ];
 else
 	output=$(dirname $1)/../$(basename $2 .fsf).feat
 	
-	sub=$(echo $input | cut -c 39-40 )
-	run=$(echo $input | cut -c 50)
+	sub=$(echo $input | cut -c 43-44 )
+	run=$(echo $input | cut -c 54)
 	
 
 		if [ -e $output/stats/res4d.nii.gz ];
