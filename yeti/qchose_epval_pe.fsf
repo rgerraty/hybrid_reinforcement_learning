@@ -163,7 +163,7 @@ set fmri(nftests_real) 0
 set fmri(constcol) 0
 
 # Carry out post-stats steps?
-set fmri(poststats_yn) 0
+set fmri(poststats_yn) 1
 
 # Pre-threshold masking?
 set fmri(threshmask) ""
@@ -233,7 +233,7 @@ set fmri(reghighres_search) 90
 set fmri(reghighres_dof) BBR
 
 # Registration to standard image?
-set fmri(regstandard_yn) 1
+set fmri(regstandard_yn) 0
 
 # Use alternate reference images?
 set fmri(alternateReference_yn) 0
