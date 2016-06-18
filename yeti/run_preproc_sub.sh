@@ -3,7 +3,7 @@
 # Directives
 #PBS -N image preprocessing
 #PBS -W group_list=yetipsych 
-#PBS -l nodes=2,walltime=75:00:00,mem=2048mb
+#PBS -l nodes=2,walltime=75:00:00,mem=4000mb
 #PBS -M rtg2116@columbia.edu
 #PBS -m abe
 #PBS -V
