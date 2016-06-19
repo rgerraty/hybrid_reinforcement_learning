@@ -50,6 +50,7 @@ for s in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/;
 	done
 	fi
 done
+```
 
 ### Sync local server with yeti
 ```{.bash}
