@@ -50,3 +50,10 @@ for s in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/;
 	done
 	fi
 done
+
+### Sync local server with yeti
+```{.bash}
+rsync -az --exclude "TCST0*/*/dicoms/" --exclude "raw_comp" /vega/psych/users/rtg2116/hybrid_mri/ rgerraty@lovelace.psych.columbia.edu:/data/engine/rgerraty/hybrid_mri/
+```
+
+
