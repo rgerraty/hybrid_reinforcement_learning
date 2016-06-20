@@ -2,15 +2,18 @@
 
 input=$(readlink -e $1)
 fsf=$(readlink -e $2)
+sub=$3
+run=$4
 
 if [ ! -e $input ];
 	then
 	echo $input does not exist!
+elif [ -z $run ];
+	then
+	echo Usage\:
+	echo run_1st_level.sh \<input nifti\> \<template fsf\> \<subject number\> \<run number\>
 else
 	output=$(dirname $1)/../$(basename $2 .fsf).feat
-	
-	sub=$(echo $input | cut -c 39-40 )
-	run=$(echo $input | cut -c 50)
 	
 
 		if [ -e $output/stats/res4d.nii.gz ];
