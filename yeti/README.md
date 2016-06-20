@@ -24,7 +24,7 @@ for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_
 	r=$(echo $i | cut -c 54);
 	if [ -e /vega/psych/users/rtg2116/hybrid_mri/behavior/"$s"_output/EV_files/FB_pe_run"$r".txt ];
 		then 
-		qsub -v arg1=$i,arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level_sub.sh
+		qsub -v arg1=$i,arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf, arg3=$s, arg4=$r /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level_sub.sh
 	else 
 		echo no RL behavioral files for $i ;
 	fi;
@@ -45,9 +45,9 @@ for s in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/;
 					echo $r
 					cp -R $r $r/../../qchose_epval_pe.feat/;
 					cp $s/structural/bravo.anat/T1_to_MNI_lin.mat $r/../../qchose_epval_pe.feat/reg/highres2standard.mat
-				cp $s/structural/bravo.anat/T1_to_MNI_nonlin_field.nii.gz $r/../../qchose_epval_pe.feat/reg/highres2standard_warp.nii.gz
-				cp $FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz $r/../../qchose_epval_pe.feat/reg/standard.nii.gz
-				updatefeatreg $r/../../qchose_epval_pe.feat/
+					cp $s/structural/bravo.anat/T1_to_MNI_nonlin_field.nii.gz $r/../../qchose_epval_pe.feat/reg/highres2standard_warp.nii.gz
+					cp $FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz $r/../../qchose_epval_pe.feat/reg/standard.nii.gz
+					updatefeatreg $r/../../qchose_epval_pe.feat/
 			fi
 		fi
 	done

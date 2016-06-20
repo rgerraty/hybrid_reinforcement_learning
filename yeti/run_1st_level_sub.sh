@@ -14,5 +14,5 @@
 
 export FSLPARALLEL=1
 
-bash /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level.sh $arg1 $arg2
+bash /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level.sh $arg1 $arg2 $arg3 $arg4
 
