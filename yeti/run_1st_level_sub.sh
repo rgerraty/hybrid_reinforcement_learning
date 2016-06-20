@@ -3,7 +3,7 @@
 # Directives
 #PBS -N 1st_level_GLM
 #PBS -W group_list=yetipsych 
-#PBS -l nodes=3,walltime=75:00:00,mem=4000mb
+#PBS -l nodes=3,walltime=00:75:00,mem=4000mb
 #PBS -M rtg2116@columbia.edu
 #PBS -m abe
 #PBS -V
