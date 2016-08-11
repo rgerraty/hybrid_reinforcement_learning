@@ -1,8 +1,8 @@
 #standard RL model
 library(rstan)
-
+library(lme4)
 #model with episodic value, no decay
-fit2<-load('stanfit_hybridrl')
+fit2<-load('~/Documents/Hybrid_RL/stanfit_hybridrl')
 fit_extract<-extract(hybrid1_fit,permute=T)
 Qvals_hybrid<-apply(fit_extract$Q,c(2,3,4),median)
 
@@ -34,12 +34,20 @@ Omega<-apply(fit_extract$Omega,c(2,3),median)
 
 #Summary for group level effects and covariance
 summary(fit_extract$b_mean)
-pairs(hybrid1_fit,pars="b_mean",labels=c("Intercept","Inverse Temp","Familiarity Bias","Episodic Value"))
+
+
+#pairs(hybrid1_fit,pars="b_mean",labels=c("Intercept","Inverse Temp","Familiarity Bias","Episodic Value"))
+
+
+hist(fit_extract$b_mean[,2],xlab="Average Incremental Beta",main=NULL)
+hist(fit_extract$b_mean[,4],xlab="Average Episodic Beta",main=NULL)
+hist(fit_extract$b_mean[,3],xlab="Average Familiarity Beta",main=NULL)
+hist(fit_extract$alpha,xlab="Average Alpha",main=NULL)
+hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 
 #plot median estimates of subject-level effects
 hist(beta_hyb[,4],xlab="Episodic Effect",main=NULL)
 hist(beta_hyb[,2],xlab="Incremental Effect",main=NULL)
-hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 hist(alpha_hyb,xlab="Learning Rate",main=NULL)
 
 #plot posterior uncertainty for subject-level estimates
@@ -128,4 +136,23 @@ for(i in 1:dim(hybrid_data)[1]){
   
 }
 
-write.csv(x = hybrid_data,file = "~/Documents/hybrid_data.csv",row.names = F)
+write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.names = F)
+
+#glmer likelihood approximation for comparison
+me_hybrid<-glmer(ChooseRed ~ LuckRed + OldRed + OldValRed + (LuckRed + OldRed + OldValRed | Sub),data=hybrid_data,family=binomial)
+
+#compare bayesian heirarchical fit in stan to MAP approximation, using standard RL
+fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
+standard_fit_extract<-extract(standard_fit,permute=T)
+
+maps<-read.csv('~/Documents/Hybrid_RL/indiv_fits_10StPts_MAP.csv',header=F)
+alpha<-apply(standard_fit_extract$alpha,2,median)
+beta<-apply(standard_fit_extract$beta,c(2,3),median)
+
+cor(beta[,2],maps$V3)
+cor(alpha,maps$V2)
+
+plot(alpha,maps$V2,
+     xlab="Stan Estimates (Alpha)",ylab="Indiv. Map Estimates (Alpha)")
+plot(beta[,2],maps$V3,
+     xlab="Stan Estimates (Beta)",ylab="Indiv. Map Estimates")
