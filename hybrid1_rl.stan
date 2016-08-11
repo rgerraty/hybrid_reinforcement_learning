@@ -1,6 +1,5 @@
 //reinforcement learning model with episodic value and familiarity bias
 //Raphael Gerraty 2016, Columbia University
-//next version will incorporate decay parameter
 
 data {
 	int NS;//number of subjects
