@@ -4,7 +4,7 @@ library(lme4)
 #model with episodic value, no decay
 fit2<-load('~/Documents/Hybrid_RL/stanfit_hybridrl')
 fit_extract<-extract(hybrid1_fit,permute=T)
-Qvals_hybrid<-apply(fit_extract$Q,c(2,3,4),median)
+Qvals_hybrid<-apply(fit_extract$Q,c(2,3,4),mean)
 
 
 #Separate Q value arrays for chosen and unchosen options
@@ -24,12 +24,12 @@ for(i in 1:dim(Qvals_hybrid)[1]){
   }
 
 }
-pe_hyb<-t(apply(fit_extract$delta,c(2,3),median))
+pe_hyb<-t(apply(fit_extract$delta,c(2,3),mean))
 
-alpha_hyb<-apply(fit_extract$alpha,2,median)
-beta_hyb<-apply(fit_extract$beta,c(2,3),median)
-Sigma<-apply(fit_extract$Sigma,c(2,3),median)
-Omega<-apply(fit_extract$Omega,c(2,3),median)
+alpha_hyb<-apply(fit_extract$alpha,2,mean)
+beta_hyb<-apply(fit_extract$beta,c(2,3),mean)
+Sigma<-apply(fit_extract$Sigma,c(2,3),mean)
+Omega<-apply(fit_extract$Omega,c(2,3),mean)
 
 
 #Summary for group level effects and covariance
@@ -45,10 +45,12 @@ hist(fit_extract$b_mean[,3],xlab="Average Familiarity Beta",main=NULL)
 hist(fit_extract$alpha,xlab="Average Alpha",main=NULL)
 hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 
-#plot median estimates of subject-level effects
+#plot mean estimates of subject-level effects
 hist(beta_hyb[,4],xlab="Episodic Effect",main=NULL)
 hist(beta_hyb[,2],xlab="Incremental Effect",main=NULL)
 hist(alpha_hyb,xlab="Learning Rate",main=NULL)
+
+plot(beta_hyb[,2],beta_hyb[,4])
 
 #plot posterior uncertainty for subject-level estimates
 plot(hybrid1_fit,pars=c("beta[1,2]","beta[2,2]",
@@ -119,9 +121,10 @@ Q_chosen_norm<-colNorm(Q_chosen_hyb)
 Q_unchosen_norm<-colNorm(Q_unchosen_hyb)
 Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
+Q_diff<-(Q_chosen_hyb-Q_unchosen_hyb)
 
-melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_diff_norm)[,3],melt(PE_norm)[,3])
-names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_diff_norm","PE_norm")
+melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],melt(Q_diff)[,3],melt(pe_hyb)[,3])
+names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_diff_norm","PE_norm","Q_chosen","Q_diff","PE")
 
 for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_chosen_norm[i]<-
@@ -133,7 +136,15 @@ for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$PE_norm[i]<- 
     melted_vals$PE_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
-  
+  hybrid_data$Q_chosen[i]<- 
+    melted_vals$Q_chosen[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                           melted_vals$Trial==hybrid_data$Trial[i] ]
+  hybrid_data$Q_diff[i]<- 
+    melted_vals$Q_diff[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                          melted_vals$Trial==hybrid_data$Trial[i] ]
+  hybrid_data$PE[i]<- 
+    melted_vals$PE[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                          melted_vals$Trial==hybrid_data$Trial[i] ]
 }
 
 write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.names = F)
@@ -141,13 +152,19 @@ write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.nam
 #glmer likelihood approximation for comparison
 me_hybrid<-glmer(ChooseRed ~ LuckRed + OldRed + OldValRed + (LuckRed + OldRed + OldValRed | Sub),data=hybrid_data,family=binomial)
 
+
 #compare bayesian heirarchical fit in stan to MAP approximation, using standard RL
 fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
 standard_fit_extract<-extract(standard_fit,permute=T)
+cor(ranef(me_hybrid)$Sub$OldValRed,ranef(me_hybrid)$Sub$LuckRed)
+cor(ranef(me_hybrid)$Sub$OldValRed,beta_hyb[,4])
+
+plot(ranef(me_hybrid)$Sub$OldValRed,beta_hyb[,4])
+
 
 maps<-read.csv('~/Documents/Hybrid_RL/indiv_fits_10StPts_MAP.csv',header=F)
-alpha<-apply(standard_fit_extract$alpha,2,median)
-beta<-apply(standard_fit_extract$beta,c(2,3),median)
+alpha<-apply(standard_fit_extract$alpha,2,mean)
+beta<-apply(standard_fit_extract$beta,c(2,3),mean)
 
 cor(beta[,2],maps$V3)
 cor(alpha,maps$V2)
