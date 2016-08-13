@@ -49,7 +49,7 @@ runs=unique(Performance.cond.Run);
 runs=runs(runs>0);
 %loop through each run and make 3 column FSL EV files
 for r = runs
-	
+	try
 	%get EV onset times for each run
 	choice_time = Performance.time.startTrial(valid_trials & Performance.cond.Run==r)'-dels;
 	response_time = Performance.time.startChoice(valid_trials & Performance.cond.Run==r)'-dels;
@@ -221,6 +221,9 @@ for r = runs
     dlmwrite(strcat('EV_files/FBpay_oldc_run',num2str(r),'.txt'),FBpay_oldc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/FBpay_newc_run',num2str(r),'.txt'),FBpay_newc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/FBpay_noc_run',num2str(r),'.txt'),FBpay_noc, 'delimiter',' ');
+catch
+	warning('something wrong loading data')
+end
 end
 
 
