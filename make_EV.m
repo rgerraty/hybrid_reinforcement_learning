@@ -73,8 +73,11 @@ for r = runs
 
 	%index old vs new choice
 	old_choice=(N(N(:,1)==sub & N(:,2)==r,15))==.5;
+	old_choice=old_choice(valid_trials(Performance.cond.Run==r));
 	new_choice=(N(N(:,1)==sub & N(:,2)==r,15))==-.5;
+	new_choice=new_choice(valid_trials(Performance.cond.Run==r));
 	no_choice=(N(N(:,1)==sub & N(:,2)==r,15))==0;
+	no_choice=no_choice(valid_trials(Performance.cond.Run==r));
 
     %combine into FSL-style 3col regs
     choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
@@ -93,7 +96,7 @@ for r = runs
 
     FBpay_oldc=FBpay_run(old_choice,:);
     FBpay_newc=FBpay_run(new_choice,:);
-    FBPay_noc=FBpay_run(no_choice,:);
+    FBpay_noc=FBpay_run(no_choice,:);
 	
 
 	%episodic EVs
@@ -144,7 +147,7 @@ for r = runs
 		
 		FB_pe_run(FB_pe_run(:,1)<0 | isnan(FB_pe_run(:,3)),:)=[];
 		choice_Qdiff_run(choice_Qdiff_run(:,1)<0 | isnan(choice_Qdiff_run(:,3)),:)=[];
-		choice_Qchose_run(choice_Qchoose_run(:,1)<0 | isnan(choice_Qchose_run(:,3)),:)=[];
+		choice_Qchose_run(choice_Qchose_run(:,1)<0 | isnan(choice_Qchose_run(:,3)),:)=[];
 		FB_pe_oldc(FB_pe_oldc(:,1)<0 | isnan(FB_pe_oldc(:,3)),:)=[];
 		FB_pe_newc(FB_pe_newc(:,1)<0 | isnan(FB_pe_newc(:,3)),:)=[];
 		FB_pe_noc(FB_pe_noc(:,1)<0 | isnan(FB_pe_noc(:,3)),:)=[];
@@ -174,7 +177,6 @@ for r = runs
 
 	end
 
-	%LEFT OFF HERE. ALSO NEED TO GO BACK AND FIX TIMINGS FOR old choice files
 	%remove trials from deleted volumes
 	choice_run(choice_run(:,1)<0,:)=[];
 	response_run(response_run(:,1)<0,:)=[];
@@ -192,7 +194,7 @@ for r = runs
 
     FBpay_oldc(FBpay_oldc(:,1)<0,:)=[];
     FBpay_newc(FBpay_newc(:,1)<0,:)=[];
-    FBPay_noc(FBpay_noc(:,1)<0,:)=[];
+    FBpay_noc(FBpay_noc(:,1)<0,:)=[];
 
 
 	
