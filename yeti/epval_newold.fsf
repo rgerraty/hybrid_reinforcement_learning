@@ -271,7 +271,7 @@ set fmri(regstandard_nonlinear_warpres) 10
 set fmri(paradigm_hp) 100
 
 # Total voxels
-set fmri(totalVoxels) XXVOLXX
+set fmri(totalVoxels) XXVOLSXX
 
 
 # Number of lower-level copes feeding into higher-level analysis
