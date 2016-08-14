@@ -91,9 +91,10 @@ done
 ```{.bash}
 for i in /data/engine/rgerraty/hybrid_mri/behavior/*output;
 	do
+	cd $i
 	pwd
 	matlab -nosplash -nojvm -r "addpath /home/rgerraty/GitHub/hybrid_reinforcement_learning/;make_EV(12);quit"
-end
+done
 ```
 
 ###Generated extended confounds from motion paramaters
