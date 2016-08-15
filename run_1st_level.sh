@@ -26,7 +26,7 @@ else
 			fi
 			nvols=$(fslinfo $input | grep dim4 | grep -v pix | awk '{ print $2 }');
 			
-			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'<$fsf  >tmp.fsf;
+			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'<$fsf>tmp.fsf;
 
 			feat tmp.fsf;
 			rm -rf tmp.fsf;
