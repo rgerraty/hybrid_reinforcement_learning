@@ -18,13 +18,14 @@ done
 
 ###Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```{.bash}
+fsf=epvalue_newold.fsf
 for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
 	s=$(echo $i | cut -c43-44); 
 	r=$(echo $i | cut -c 54);
 	if [ -e /vega/psych/users/rtg2116/hybrid_mri/behavior/"$s"_output/EV_files/FB_pe_run"$r".txt ];
 		then 
-		qsub -v arg1=$i,arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/qchose_epval_pe.fsf,arg3=$s,arg4=$r /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level_sub.sh
+		qsub -v arg1=$i,arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/$fsf,arg3=$s,arg4=$r /u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/run_1st_level_sub.sh
 	else 
 		echo no RL behavioral files for $i ;
 	fi;

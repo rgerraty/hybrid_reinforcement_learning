@@ -110,13 +110,14 @@ done
 
 ###Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```{.bash}
+fsf=epvalue_newold.fsf
 for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
 	s=$(echo $i | cut -c39-40); 
 	r=$(echo $i | cut -c 50);
 	if [ -e /data/engine/rgerraty/hybrid_mri/behavior/"$s"_output/EV_files/FB_pe_run"$r".txt ];
 		then 
-		bash /home/rgerraty/GitHub/hybrid_reinforcement_learning/run_1st_level.sh $i /home/rgerraty/GitHub/hybrid_reinforcement_learning/qchose_epval_pe.fsf;
+		bash /home/rgerraty/GitHub/hybrid_reinforcement_learning/run_1st_level.sh $i /home/rgerraty/GitHub/hybrid_reinforcement_learning/$fsf;
 	else 
 		echo no RL behavioral files for $i ;
 	fi;
