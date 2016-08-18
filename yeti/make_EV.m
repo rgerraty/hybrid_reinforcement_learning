@@ -3,7 +3,7 @@ function [runs]=make_EV(dels)
 %dels is seconds of deleted fmri volumes from beginning of scan
 %note that right now you need to be in folder containing subjects .mat files. may want to change this
 
-addpath /home/rgerraty/scripts/MATLAB/
+addpath ~
 
 [M,N]=csvreadh('/vega/psych/users/rtg2116/hybrid_mri/behavior/hybrid_data.csv',',');
 
