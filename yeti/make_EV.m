@@ -5,7 +5,7 @@ function [runs]=make_EV(dels)
 
 addpath /home/rgerraty/scripts/MATLAB/
 
-[M,N]=csvreadh('/data/engine/rgerraty/hybrid_mri/behavior/hybrid_data.csv',',');
+[M,N]=csvreadh('/vega/psych/users/rtg2116/hybrid_mri/behavior/hybrid_data.csv',',');
 
 
 [status,runs]=unix('ls Performance_?.mat | cut -c13');
