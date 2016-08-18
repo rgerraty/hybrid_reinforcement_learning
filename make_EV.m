@@ -165,7 +165,7 @@ for r = runs
 		choice_Qchose_newc(choice_Qchose_newc(:,1)<0 | isnan(choice_Qchose_newc(:,3)),:)=[];
 		choice_Qchose_noc(choice_Qchose_noc(:,1)<0 | isnan(choice_Qchose_noc(:,3)),:)=[];
 		FB_pe_optdeck(FB_pe_optdeck(:,1)<0 | isnan(FB_pe_optdeck(:,3)),:)=[];
-		FB_pe_noptdeck=(FB_pe_noptdeck(:,1)<0 | isnan(FB_pe_noptdeck(:,3)),:)=[];
+		FB_pe_noptdeck(FB_pe_noptdeck(:,1)<0 | isnan(FB_pe_noptdeck(:,3)),:)=[];
 		choice_Qdiff_optdeck(choice_Qdiff_optdeck(:,1)<0 | isnan(choice_Qdiff_optdeck(:,3)),:)=[];
 		choice_Qdiff_noptdeck(choice_Qdiff_noptdeck(:,1)<0 | isnan(choice_Qdiff_noptdeck(:,3)),:)=[];
 
