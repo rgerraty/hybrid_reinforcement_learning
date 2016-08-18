@@ -13,7 +13,7 @@ addpath ~
 %how many runs
 runs=str2num(runs);
 
-[status,sub]=unix('pwd | cut -c43-44');
+[status,sub]=unix('pwd | cut -c47-48');
 sub=str2num(sub);
 
 %only need last run .mat file which contains all performance ingo
