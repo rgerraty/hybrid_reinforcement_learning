@@ -145,9 +145,9 @@ for r = runs
 		choice_Qchose_oldc=choice_Qchose_run(old_choice,:);
 		choice_Qchose_newc=choice_Qchose_run(new_choice,:);
 		choice_Qchose_noc=choice_Qchose_run(no_choice,:);
-		FB_pe_optdeck=FB_pe_run(opt_deck,:);
+		FB_pe_optdeck=FB_pe_run(logical(opt_deck),:);
 		FB_pe_noptdeck=FB_pe_run(~opt_deck,:);
-		choice_Qdiff_optdeck=choice_Qdiff_run(opt_deck,:);
+		choice_Qdiff_optdeck=choice_Qdiff_run(logical(opt_deck),:);
 		choice_Qdiff_noptdeck=choice_Qdiff_run(~opt_deck,:);
 
 
