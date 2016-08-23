@@ -67,9 +67,10 @@ for r = runs
 	FB_weight = Performance.pay.outcome(valid_trials & Performance.cond.Run==r)';
 
 	%RL model regressors
-	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,35);
-	choice_Qdiff_weight=N(N(:,1)==sub & N(:,2)==r,34);
-	choice_Qchose_weight=N(N(:,1)==sub & N(:,2)==r,33);
+	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,37);
+	choice_Qdiff_weight=N(N(:,1)==sub & N(:,2)==r,36);
+	choice_Qchose_weight=N(N(:,1)==sub & N(:,2)==r,34);
+	choice_Qunchose_weight=N(N(:,1)==sub & N(:,2)==r,35);
 
 	%index old vs new choice
 	old_choice=(N(N(:,1)==sub & N(:,2)==r,15))==.5;
@@ -135,6 +136,7 @@ for r = runs
 		FB_pe_run = [FB_time, FB_duration, FB_pe_weight(valid_trials(Performance.cond.Run==r))];
 		choice_Qdiff_run=[choice_time, choice_duration, choice_Qdiff_weight(valid_trials(Performance.cond.Run==r))];
 		choice_Qchose_run=[choice_time, choice_duration, choice_Qchose_weight(valid_trials(Performance.cond.Run==r))];
+		choice_Qunchose_run=[choice_time, choice_duration, choice_Qunchose_weight(valid_trials(Performance.cond.Run==r))];
 
 		FB_pe_oldc=FB_pe_run(old_choice,:);
 		FB_pe_newc=FB_pe_run(new_choice,:);
@@ -145,6 +147,9 @@ for r = runs
 		choice_Qchose_oldc=choice_Qchose_run(old_choice,:);
 		choice_Qchose_newc=choice_Qchose_run(new_choice,:);
 		choice_Qchose_noc=choice_Qchose_run(no_choice,:);
+		choice_Qunchose_oldc=choice_Qunchose_run(old_choice,:);
+		choice_Qunchose_newc=choice_Qunchose_run(new_choice,:);
+		choice_Qunchose_noc=choice_Qunchose_run(no_choice,:);
 		FB_pe_optdeck=FB_pe_run(logical(opt_deck),:);
 		FB_pe_noptdeck=FB_pe_run(~opt_deck,:);
 		choice_Qdiff_optdeck=choice_Qdiff_run(logical(opt_deck),:);
@@ -155,6 +160,7 @@ for r = runs
 		FB_pe_run(FB_pe_run(:,1)<0 | isnan(FB_pe_run(:,3)),:)=[];
 		choice_Qdiff_run(choice_Qdiff_run(:,1)<0 | isnan(choice_Qdiff_run(:,3)),:)=[];
 		choice_Qchose_run(choice_Qchose_run(:,1)<0 | isnan(choice_Qchose_run(:,3)),:)=[];
+		choice_Qunchose_run(choice_Qunchose_run(:,1)<0 | isnan(choice_Qunchose_run(:,3)),:)=[];
 		FB_pe_oldc(FB_pe_oldc(:,1)<0 | isnan(FB_pe_oldc(:,3)),:)=[];
 		FB_pe_newc(FB_pe_newc(:,1)<0 | isnan(FB_pe_newc(:,3)),:)=[];
 		FB_pe_noc(FB_pe_noc(:,1)<0 | isnan(FB_pe_noc(:,3)),:)=[];
@@ -164,6 +170,9 @@ for r = runs
 		choice_Qchose_oldc(choice_Qchose_oldc(:,1)<0 | isnan(choice_Qchose_oldc(:,3)),:)=[];
 		choice_Qchose_newc(choice_Qchose_newc(:,1)<0 | isnan(choice_Qchose_newc(:,3)),:)=[];
 		choice_Qchose_noc(choice_Qchose_noc(:,1)<0 | isnan(choice_Qchose_noc(:,3)),:)=[];
+		choice_Qunchose_oldc(choice_Qunchose_oldc(:,1)<0 | isnan(choice_Qunchose_oldc(:,3)),:)=[];
+		choice_Qunchose_newc(choice_Qunchose_newc(:,1)<0 | isnan(choice_Qunchose_newc(:,3)),:)=[];
+		choice_Qunchose_noc(choice_Qunchose_noc(:,1)<0 | isnan(choice_Qunchose_noc(:,3)),:)=[];
 		FB_pe_optdeck(FB_pe_optdeck(:,1)<0 | isnan(FB_pe_optdeck(:,3)),:)=[];
 		FB_pe_noptdeck(FB_pe_noptdeck(:,1)<0 | isnan(FB_pe_noptdeck(:,3)),:)=[];
 		choice_Qdiff_optdeck(choice_Qdiff_optdeck(:,1)<0 | isnan(choice_Qdiff_optdeck(:,3)),:)=[];
@@ -173,6 +182,7 @@ for r = runs
 		dlmwrite(strcat('EV_files/FB_pe_run',num2str(r),'.txt'),FB_pe_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qdiff_run',num2str(r),'.txt'),choice_Qdiff_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qchose_run',num2str(r),'.txt'),choice_Qchose_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_Qunchose_run',num2str(r),'.txt'),choice_Qunchose_run, 'delimiter',' ');
 		
 		dlmwrite(strcat('EV_files/FB_pe_oldc_run',num2str(r),'.txt'),FB_pe_oldc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_newc_run',num2str(r),'.txt'),FB_pe_newc, 'delimiter',' ');
@@ -185,6 +195,10 @@ for r = runs
 		dlmwrite(strcat('EV_files/choice_Qchose_oldc_run',num2str(r),'.txt'),choice_Qchose_oldc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qchose_newc_run',num2str(r),'.txt'),choice_Qchose_newc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qchose_noc_run',num2str(r),'.txt'),choice_Qchose_noc, 'delimiter',' ');
+
+		dlmwrite(strcat('EV_files/choice_Qunchose_oldc_run',num2str(r),'.txt'),choice_Qunchose_oldc, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_Qunchose_newc_run',num2str(r),'.txt'),choice_Qunchose_newc, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_Qunchose_noc_run',num2str(r),'.txt'),choice_Qunchose_noc, 'delimiter',' ');
 
 		dlmwrite(strcat('EV_files/FB_pe_optdeck_run',num2str(r),'.txt'),FB_pe_optdeck, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_noptdeck_run',num2str(r),'.txt'),FB_pe_noptdeck, 'delimiter',' ');
