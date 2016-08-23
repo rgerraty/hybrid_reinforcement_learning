@@ -123,13 +123,18 @@ Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
 Q_diff<-(Q_chosen_hyb-Q_unchosen_hyb)
 
-melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],melt(Q_diff)[,3],melt(pe_hyb)[,3])
-names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_diff_norm","PE_norm","Q_chosen","Q_diff","PE")
+melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_unchosen_norm)[,3],melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],melt(Q_unchosen_hyb)[,3],melt(Q_diff)[,3],melt(pe_hyb)[,3])
+names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_unchosen_norm","Q_diff_norm","PE_norm","Q_chosen","Q_unchosen","Q_diff","PE")
 
 for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_chosen_norm[i]<-
     melted_vals$Q_chosen_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                                 melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Q_unchosen_norm[i]<-
+    melted_vals$Q_unchosen_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                                melted_vals$Trial==hybrid_data$Trial[i] ]
+  
   hybrid_data$Q_diff_norm[i]<-
     melted_vals$Q_diff_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                                melted_vals$Trial==hybrid_data$Trial[i] ]
@@ -139,6 +144,11 @@ for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_chosen[i]<- 
     melted_vals$Q_chosen[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                            melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Q_unchosen[i]<- 
+    melted_vals$Q_unchosen[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                           melted_vals$Trial==hybrid_data$Trial[i] ]
+  
   hybrid_data$Q_diff[i]<- 
     melted_vals$Q_diff[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
