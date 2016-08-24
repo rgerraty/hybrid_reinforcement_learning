@@ -1,5 +1,7 @@
 hybrid_data<-read.delim('~/Downloads/CardGame.txt')
 
+#fix subject 13 runs
+hybrid_data$Run[hybrid_data$Sub==13 & hybrid_data$Trial<121 & hybrid_data$Trial>60]<-2
 
 library(rstan)
 rstan_options(auto_write = TRUE)
