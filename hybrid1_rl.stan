@@ -112,7 +112,10 @@ model {
       if (choice[s,t] > 0) {
         
         //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff)
-        red_choice[s,t] ~ bernoulli_logit(beta[s,1]+beta[s,2]*(Q[s,t,2]-Q[s,t,1])+beta[s,3]*old_red[s,t]+beta[s,4]*old_red_val[s,t]);
+        red_choice[s,t] ~ bernoulli_logit(beta[s,1] + 
+          beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
+          beta[s,3]*old_red[s,t]+
+          beta[s,4]*old_red_val[s,t]);
         
         }
       }

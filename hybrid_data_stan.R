@@ -37,6 +37,12 @@ hybrid_data$OldValRed[is.na(hybrid_data$OldValRed)]<-0
 hybrid_data$LuckRed<-hybrid_data$LuckRed/2
 hybrid_data$OldRed<-hybrid_data$OldRed/2
 
+#pre vs post reversal
+hybrid_data$pre_post_rev<- (hybrid_data$RevT>mean(hybrid_data$RevT))-.5
+
+
+hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>mean(hybrid_data$EncRevT,na.rm=T))-.5
+
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
