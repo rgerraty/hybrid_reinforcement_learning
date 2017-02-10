@@ -3,6 +3,7 @@ library(rstan)
 library(lme4)
 #model with episodic value, no decay
 fit2<-load('~/Documents/Hybrid_RL/stanfit_hybridrl')
+
 fit_extract<-extract(hybrid1_fit,permute=T)
 Qvals_hybrid<-apply(fit_extract$Q,c(2,3,4),mean)
 
@@ -10,16 +11,22 @@ Qvals_hybrid<-apply(fit_extract$Q,c(2,3,4),mean)
 #Separate Q value arrays for chosen and unchosen options
 Q_chosen_hyb<-matrix(0,dim(Qvals_hybrid)[2],dim(Qvals_hybrid)[1])
 Q_unchosen_hyb<-Q_chosen_hyb
+Q_red<-Q_chosen_hyb
+Q_blue<-Q_chosen_hyb
 
 for(i in 1:dim(Qvals_hybrid)[1]){
   for(j in 1:dim(Qvals_hybrid)[2]){
     if(choice[i,j]>0){
       Q_chosen_hyb[j,i]<-Qvals_hybrid[i,j,choice[i,j]]
       Q_unchosen_hyb[j,i]<-Qvals_hybrid[i,j,unchoice[i,j]]
+      Q_red[j,i]<-Qvals_hybrid[i,j,2]
+      Q_blue[j,i]<-Qvals_hybrid[i,j,1]
     } 
       else{
       Q_chosen_hyb[j,i]<-NA
       Q_unchosen_hyb[j,i]<-NA
+      Q_red[j,i]<-NA
+      Q_blue[j,i]<-NA
     }
   }
 
@@ -123,8 +130,13 @@ Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
 Q_diff<-(Q_chosen_hyb-Q_unchosen_hyb)
 
-melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_unchosen_norm)[,3],melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],melt(Q_unchosen_hyb)[,3],melt(Q_diff)[,3],melt(pe_hyb)[,3])
-names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_unchosen_norm","Q_diff_norm","PE_norm","Q_chosen","Q_unchosen","Q_diff","PE")
+melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_unchosen_norm)[,3],
+                   melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],
+                   melt(Q_unchosen_hyb)[,3],melt(Q_diff)[,3],
+                   melt(Q_red)[,3],melt(Q_blue)[,3],melt(pe_hyb)[,3])
+names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_unchosen_norm",
+                      "Q_diff_norm","PE_norm","Q_chosen","Q_unchosen",
+                      "Q_diff","Q_red","Q_blue","PE")
 
 for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_chosen_norm[i]<-
@@ -152,6 +164,15 @@ for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_diff[i]<- 
     melted_vals$Q_diff[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Q_red[i]<- 
+    melted_vals$Q_red[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                         melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Q_blue[i]<- 
+    melted_vals$Q_blue[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
+                        melted_vals$Trial==hybrid_data$Trial[i] ]
+  
   hybrid_data$PE[i]<- 
     melted_vals$PE[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
@@ -162,7 +183,7 @@ write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.nam
 #glmer likelihood approximation for comparison
 me_hybrid<-glmer(ChooseRed ~ LuckRed + OldRed + OldValRed + (LuckRed + OldRed + OldValRed | Sub),data=hybrid_data,family=binomial)
 
-
+me_hybrid
 #compare bayesian heirarchical fit in stan to MAP approximation, using standard RL
 fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
 standard_fit_extract<-extract(standard_fit,permute=T)
@@ -183,3 +204,5 @@ plot(alpha,maps$V2,
      xlab="Stan Estimates (Alpha)",ylab="Indiv. Map Estimates (Alpha)")
 plot(beta[,2],maps$V3,
      xlab="Stan Estimates (Beta)",ylab="Indiv. Map Estimates")
+
+
