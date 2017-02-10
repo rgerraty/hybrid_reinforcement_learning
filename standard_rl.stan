@@ -7,6 +7,7 @@ data {
 	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
+	real<lower=-.5, upper=.5> red_choice_prev[NS,MT];//.5=chose red last, -.5=chose blue last, 0=missed last
 }
 
 parameters {
@@ -36,8 +37,8 @@ transformed parameters{
   real delta[NS,MT];
   
   //need to define because missing trials will recreate nan's otherwise
-  Q<-rep_array(0.0,NS,MT,NC);
-  delta<-rep_array(0.0,NS,MT);
+  Q=rep_array(0.0,NS,MT,NC);
+  delta=rep_array(0.0,NS,MT);
   
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
@@ -45,30 +46,30 @@ transformed parameters{
   	  //set initial values of Q and delta on first trial
 		  if(t == 1) {
 		    for (c in 1:NC){
-		      Q[s,t,c]<-0.5;
+		      Q[s,t,c]=0.5;
 		    }
-		    delta[s,t]<-0;
+		    delta[s,t]=0;
 		  }
 		    if (rew[s,t] >= 0){
 		      //PE = reward-expected
-		      delta[s,t]<-rew[s,t]-Q[s,t,choice[s,t]];
+		      delta[s,t]=rew[s,t]-Q[s,t,choice[s,t]];
 		      
 		      if (t<NT[s]){
 		        //update value with alpha-weighted PE
-		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t];
+		        Q[s,t+1,choice[s,t]]= Q[s,t,choice[s,t]] + alpha[s]*delta[s,t];
 		        
 		        //value of unchosen option is not updated
-		        Q[s,t+1,abs(choice[s,t]-3)]<-Q[s,t,abs(choice[s,t]-3)];
+		        Q[s,t+1,abs(choice[s,t]-3)]=Q[s,t,abs(choice[s,t]-3)];
 		        
 		      }
 		    } else {
 		        //if no response, keep Q value and set delta to 0
 		        if (t<NT[s]){
 		          for (c in 1:NC){
-		            Q[s,t+1,c]<-Q[s,t ,c];
+		            Q[s,t+1,c]=Q[s,t ,c];
 		          }
 		        }
-		        delta[s,t]<-0;
+		        delta[s,t]=0;
 		    }
 		}
   }
@@ -95,7 +96,9 @@ model {
 	for (s in 1:NS) {
 		for (t in 1:NT[s]) {
 		  if (choice[s,t] > 0) {
-		    red_choice[s,t] ~ bernoulli_logit(beta[s,1]+beta[s,2]*(Q[s,t,2]-Q[s,t,1]));
+		    red_choice[s,t] ~ bernoulli_logit(beta[s,1]+
+		      beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
+		      beta[s,3]*red_choice_prev[s,t]);
 		  }
 		}
 	}
@@ -108,8 +111,8 @@ generated quantities {
   matrix[K,K] Sigma;
   
   //get correlation matrix from cholesky
-  Omega<-multiply_lower_tri_self_transpose(Lcorr);
+  Omega=multiply_lower_tri_self_transpose(Lcorr);
   
   //diag_matrix(b_sd)*Omega*diag_matrix(b_sd) to get covariance
-  Sigma<-quad_form_diag(Omega,b_sd);
+  Sigma=quad_form_diag(Omega,b_sd);
 }
