@@ -12,14 +12,14 @@ options(mc.cores = parallel::detectCores())
 #abs(choice-3) is a hack to get unchosen from chosen [1,2];
 hybrid_data$DeckUnC<-abs(hybrid_data$DeckC-3)
 
-hybrid_data$OldObjC[hybrid_data$OldObjC==0]<--1
-hybrid_data$OldObjC[is.na(hybrid_data$OldObjC)]<-0
+#hybrid_data$OldObjC[hybrid_data$OldObjC==0]<--1
+#hybrid_data$OldObjC[is.na(hybrid_data$OldObjC)]<-0
 
 hybrid_data$ObjPP_C=(hybrid_data$ObjPP-.5)*hybrid_data$OldObjC
 hybrid_data$ObjPP_C[is.na(hybrid_data$ObjPP)]<-0
 
 #.5/-.5 coding for interpreting regression coefficients
-hybrid_data$OldObjC<-hybrid_data$OldObjC/2
+#hybrid_data$OldObjC<-hybrid_data$OldObjC/2
 
 #Now changed coding to p(Choose Red) because the first model weirds people out and doesn't work in lme4
 hybrid_data$ChooseRed<-(hybrid_data$DeckC==2)+0
@@ -43,6 +43,12 @@ hybrid_data$pre_post_rev<- (hybrid_data$RevT>mean(hybrid_data$RevT))-.5
 
 hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>mean(hybrid_data$EncRevT,na.rm=T))-.5
 
+
+lagpad <- function(x, k=1) {
+  c(rep(NA, k), x)[1 : length(x)] 
+}
+
+
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
@@ -56,6 +62,8 @@ old_choice = array(0.0,c(NS,MT));
 old_choice_val = array(0.0,c(NS,MT));
 old_red = array(0.0,c(NS,MT));
 old_red_val = array(0.0,c(NS,MT));
+red_choice_prev = array(0.0,c(NS,MT));
+
 
 #convert data to subjects by trials format for Stan
 for (i in 1:NS) {
@@ -74,6 +82,7 @@ for (i in 1:NS) {
   red_choice[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$ChooseRed;
   old_red[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$OldRed;
   old_red_val[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$OldValRed;
+  red_choice_prev[i,1:NT[i]] = lagpad(subset(hybrid_data,Sub==subs[i])$ChooseRed)-.5
 }
 
 #for skipping missed trials
@@ -83,19 +92,19 @@ unchoice[is.na(unchoice)]<--1
 unchoice[choice==0]<--1
 rew[is.na(rew)]<--1
 red_choice[is.na(red_choice)]<--1
-
+red_choice_prev[is.na(red_choice_prev)]<-0
 
 
 
 
 #standard rl model fit heirarchically in Stan
 #no information about individual objects/episidoc value
-standard_standata = list(NS=NS, NC=2,K=2, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew )
+standard_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev,rew=rew )
 standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standard_standata, iter = 1250, warmup = 250, chains = 4)
 save(standard_fit,file='stanfit_rl2')
 
 #"hybrid" RL model fit heirarchically in Stan
-hybrid_standata = list(NS=NS, NC=2,K=4, MT=MT, NT= NT, choice=choice, red_choice=red_choice, rew=rew, old_red_val=old_red_val, old_red=old_red)
+hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev, rew=rew, old_red_val=old_red_val, old_red=old_red)
 hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid1_fit,file='stanfit_hybridrl')
 
