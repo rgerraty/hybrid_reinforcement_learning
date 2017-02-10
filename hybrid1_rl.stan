@@ -14,6 +14,9 @@ data {
 	//outcome coded in terms of choosing red deck
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
 	
+	//effect of having chosen red deck on last trial- "stay/switch"
+	real<lower=-.5, upper=.5> red_choice_prev[NS,MT];//.5=chose red last,-.5=chose blue last,0=missed last
+	
 	//effect of familiarity for previously seen objects
 	real<lower=-.5, upper=.5> old_red[NS,MT];//.5=red old;0=both new;-.5=blue old
 	
@@ -48,8 +51,8 @@ transformed parameters{
   real delta[NS,MT];
   
   //need to define because missing trials will recreate nan's otherwise
-  Q<-rep_array(0.0,NS,MT,NC);
-  delta<-rep_array(0.0,NS,MT);
+  Q=rep_array(0.0,NS,MT,NC);
+  delta=rep_array(0.0,NS,MT);
   
   for (s in 1:NS) {
   	for (t in 1:NT[s]) {
@@ -57,30 +60,30 @@ transformed parameters{
   	  //set initial values of Q and delta on first trial
 		  if(t == 1) {
 		    for (c in 1:NC){
-		      Q[s,t,c]<-0.5;
+		      Q[s,t,c]=0.5;
 		    }
-		    delta[s,t]<-0;
+		    delta[s,t]=0;
 		  }
 		    if (rew[s,t] >= 0){
 		      //PE = reward-expected
-		      delta[s,t]<-rew[s,t]-Q[s,t,choice[s,t]];
+		      delta[s,t]=rew[s,t]-Q[s,t,choice[s,t]];
 		      
 		      if (t<NT[s]){
 		        //update value with alpha-weighted PE
-		        Q[s,t+1,choice[s,t]]<- Q[s,t,choice[s,t]] + alpha[s]*delta[s,t];
+		        Q[s,t+1,choice[s,t]]= Q[s,t,choice[s,t]] + alpha[s]*delta[s,t];
 		        
 		        //value of unchosen option is not updated
-		        Q[s,t+1,abs(choice[s,t]-3)]<-Q[s,t,abs(choice[s,t]-3)];
+		        Q[s,t+1,abs(choice[s,t]-3)]=Q[s,t,abs(choice[s,t]-3)];
 		        
 		      }
 		    } else {
 		        //if no response, keep Q value and set delta to 0
 		        if (t<NT[s]){
 		          for (c in 1:NC){
-		            Q[s,t+1,c]<-Q[s,t ,c];
+		            Q[s,t+1,c]=Q[s,t ,c];
 		          }
 		        }
-		        delta[s,t]<-0;
+		        delta[s,t]=0;
 		    }
 		}
   }
@@ -111,12 +114,12 @@ model {
     for (t in 1:NT[s]) {
       if (choice[s,t] > 0) {
         
-        //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff)
+        //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff...)
         red_choice[s,t] ~ bernoulli_logit(beta[s,1] + 
           beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
           beta[s,3]*old_red[s,t]+
-          beta[s,4]*old_red_val[s,t]);
-        
+          beta[s,4]*old_red_val[s,t]+
+          beta[s,5]*red_choice_prev[s,t]);
         }
       }
     }
@@ -127,10 +130,30 @@ generated quantities {
   //from cholesky factorization of correlation matrix
   matrix[K,K] Omega;
   matrix[K,K] Sigma;
+  real lik_rat[NS,MT];
+  
+  lik_rat=rep_array(0.0,NS,MT);
   
   //get correlation matrix from cholesky
-  Omega<-multiply_lower_tri_self_transpose(Lcorr);
+  Omega=multiply_lower_tri_self_transpose(Lcorr);
   
   //diag_matrix(b_sd)*Omega*diag_matrix(b_sd) to get covariance
-  Sigma<-quad_form_diag(Omega,b_sd);
+  Sigma=quad_form_diag(Omega,b_sd);
+  
+  for (s in 1:NS) {
+    for (t in 1:NT[s]) {
+      if (choice[s,t] > 0) {
+        
+        //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff...)
+       lik_rat[s,t] = (inv_logit(beta[s,1] + 
+          beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
+          beta[s,3]*old_red[s,t]+
+          beta[s,5]*red_choice_prev[s,t]))/
+          (inv_logit(beta[s,1] + 
+          beta[s,3]*old_red[s,t]+
+          beta[s,4]*old_red_val[s,t]+
+          beta[s,5]*red_choice_prev[s,t]));
+        }
+      }
+    }
 }
