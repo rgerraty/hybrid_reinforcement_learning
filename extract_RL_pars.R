@@ -32,6 +32,13 @@ for(i in 1:dim(Qvals_hybrid)[1]){
 
 }
 pe_hyb<-t(apply(fit_extract$delta,c(2,3),mean))
+lik_rat_hyb<-t(apply(fit_extract$lik_rat,c(2,3),mean))
+
+library(lattice)
+lik_rat_hyb_melt<-melt(lik_rat_hyb)
+names(lik_rat_hyb_melt)<-c("Trial","Subject","IncrementalEpisodicRatio")
+xyplot(IncrementalEpisodicRatio ~ Trial | Subject,data=lik_rat_hyb_melt,type='l')
+
 
 alpha_hyb<-apply(fit_extract$alpha,2,mean)
 beta_hyb<-apply(fit_extract$beta,c(2,3),mean)
@@ -49,6 +56,7 @@ summary(fit_extract$b_mean)
 hist(fit_extract$b_mean[,2],xlab="Average Incremental Beta",main=NULL)
 hist(fit_extract$b_mean[,4],xlab="Average Episodic Beta",main=NULL)
 hist(fit_extract$b_mean[,3],xlab="Average Familiarity Beta",main=NULL)
+hist(fit_extract$b_mean[,5],xlab="Average Stay Beta",main=NULL)
 hist(fit_extract$alpha,xlab="Average Alpha",main=NULL)
 hist(fit_extract$Omega[,4,2],xlab="Episodic-Incremental Correlation",main=NULL)
 
