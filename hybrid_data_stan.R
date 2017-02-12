@@ -106,7 +106,7 @@ save(standard_fit,file='stanfit_rl2')
 #"hybrid" RL model fit heirarchically in Stan
 hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev, rew=rew, old_red_val=old_red_val, old_red=old_red)
 hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
-save(hybrid1_fit,file='stanfit_hybridrl')
+save(hybrid1_fit,file='~/Documents/Hybrid_RL/stanfit_hybridrl')
 
 
 
