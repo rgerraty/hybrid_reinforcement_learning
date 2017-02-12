@@ -32,12 +32,31 @@ for(i in 1:dim(Qvals_hybrid)[1]){
 
 }
 pe_hyb<-t(apply(fit_extract$delta,c(2,3),mean))
-lik_rat_hyb<-t(apply(fit_extract$lik_rat,c(2,3),mean))
+
+
+lik_inc_hyb<-t(apply(fit_extract$lik_inc,c(2,3),mean))
+lik_ep_hyb<-t(apply(fit_extract$lik_ep,c(2,3),mean))
 
 library(lattice)
-lik_rat_hyb_melt<-melt(lik_rat_hyb)
-names(lik_rat_hyb_melt)<-c("Trial","Subject","IncrementalEpisodicRatio")
-xyplot(IncrementalEpisodicRatio ~ Trial | Subject,data=lik_rat_hyb_melt,type='l')
+lik_hyb_melt<-melt(lik_inc_hyb)
+names(lik_hyb_melt)<-c("Trial","Subject","Incrementalp")
+lik_hyb_melt$Episodicp<-melt(lik_ep_hyb)$value
+lik_hyb_melt$IE_rat<-melt(lik_inc_hyb/lik_ep_hyb)$value
+
+xyplot(Incrementalp ~ Trial | Subject,data=lik_hyb_melt,type='l')
+xyplot(Episodicp ~ Trial | Subject,data=lik_hyb_melt,type='l')
+xyplot(IE_rat ~ Trial | Subject,data=lik_hyb_melt,type='l')
+
+plot(tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
+plot(tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
+plot(tapply(lik_hyb_melt$IE_rat,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
+
+acf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
+acf(tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
+acf(tapply(lik_hyb_melt$IE_rat,lik_rat_hyb_melt$Trial,mean,na.rm=1))
+
+ccf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1),
+    tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
 
 
 alpha_hyb<-apply(fit_extract$alpha,2,mean)
