@@ -130,9 +130,11 @@ generated quantities {
   //from cholesky factorization of correlation matrix
   matrix[K,K] Omega;
   matrix[K,K] Sigma;
-  real lik_rat[NS,MT];
-  
-  lik_rat=rep_array(0.0,NS,MT);
+  real lik_inc[NS,MT];
+  real lik_ep[NS,MT];
+
+  lik_inc=rep_array(0.0,NS,MT);
+  lik_ep=rep_array(0.0,NS,MT);
   
   //get correlation matrix from cholesky
   Omega=multiply_lower_tri_self_transpose(Lcorr);
@@ -145,11 +147,12 @@ generated quantities {
       if (choice[s,t] > 0) {
         
         //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff...)
-       lik_rat[s,t] = (inv_logit(beta[s,1] + 
+       lik_inc[s,t] = (inv_logit(beta[s,1] + 
           beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
           beta[s,3]*old_red[s,t]+
-          beta[s,5]*red_choice_prev[s,t]))/
-          (inv_logit(beta[s,1] + 
+          beta[s,5]*red_choice_prev[s,t]));
+        
+        lik_ep[s,t] = (inv_logit(beta[s,1] + 
           beta[s,3]*old_red[s,t]+
           beta[s,4]*old_red_val[s,t]+
           beta[s,5]*red_choice_prev[s,t]));
