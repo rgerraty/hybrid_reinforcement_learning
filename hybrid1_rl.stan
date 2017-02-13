@@ -147,15 +147,15 @@ generated quantities {
       if (choice[s,t] > 0) {
         
         //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff...)
-       lik_inc[s,t] = (inv_logit(beta[s,1] + 
+       lik_inc[s,t] = inv_logit(beta[s,1] + 
           beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
-          beta[s,3]*old_red[s,t]+
-          beta[s,5]*red_choice_prev[s,t]));
+          //beta[s,3]*old_red[s,t]+
+          beta[s,5]*red_choice_prev[s,t]);
         
-        lik_ep[s,t] = (inv_logit(beta[s,1] + 
+        lik_ep[s,t] = inv_logit(beta[s,1] + 
           beta[s,3]*old_red[s,t]+
-          beta[s,4]*old_red_val[s,t]+
-          beta[s,5]*red_choice_prev[s,t]));
+          beta[s,4]*old_red_val[s,t]);//+
+          //beta[s,5]*red_choice_prev[s,t]));
         }
       }
     }
