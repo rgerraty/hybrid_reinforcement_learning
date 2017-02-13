@@ -35,7 +35,9 @@ pe_hyb<-t(apply(fit_extract$delta,c(2,3),mean))
 
 
 lik_inc_hyb<-t(apply(fit_extract$lik_inc,c(2,3),mean))
+lik_inc_hyb[lik_inc_hyb==0]<-NA
 lik_ep_hyb<-t(apply(fit_extract$lik_ep,c(2,3),mean))
+lik_ep_hyb[lik_ep_hyb==0]<-NA
 
 library(lattice)
 lik_hyb_melt<-melt(lik_inc_hyb)
@@ -59,7 +61,38 @@ acf(tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
 acf(tapply(lik_hyb_melt$IE_rat,lik_rat_hyb_melt$Trial,mean,na.rm=1))
 
 ccf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1),
-    tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
+    tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1),
+    type="correlation", main="Incremental and Episodic Cross-correlation",
+    ylab="CCF")
+
+lag<-21#10*log10(N/m)
+subs<-unique(lik_hyb_melt$Subject)
+a<-matrix(0,lag*2+1,length(subs))
+for(i in seq(1,length(subs),1)){
+  a[,i]<-ccf(lik_hyb_melt$Incrementalp[lik_hyb_melt$Subject==subs[i]],
+             lik_hyb_melt$Episodicp[lik_hyb_melt$Subject==subs[i]],
+             na.action=na.pass,lag.max=lag)$acf
+}
+
+crossc_dat<-melt(a)
+names(crossc_dat)<-c("Lag","Subject","CCF")
+crossc_dat$Lag<-crossc_dat$Lag-lag-1
+
+stat_sum_single <- function(fun, geom="point",color="black", ...) {
+  stat_summary(fun.y=fun, colour=color, geom=geom, size = 2, ...)
+}
+
+hi_ci<-function(.){
+  mean(.)+2*(sd(.)/sqrt(length(.)))
+}
+lo_ci<-function(.){
+  mean(.)-2*(sd(.)/sqrt(length(.)))
+}
+ggplot(data=crossc_dat,aes(x=Lag,y=CCF))+ 
+  stat_summary(fun.ymin=lo_ci,fun.ymax=hi_ci,
+               geom="ribbon",position=position_dodge(.4),
+               color = NA, size=.5,fill="darkorchid4",alpha=.5)+
+  theme_classic()+stat_sum_single(mean,geom="line")+geom_vline(xintercept=0)
 
 
 alpha_hyb<-apply(fit_extract$alpha,2,mean)
