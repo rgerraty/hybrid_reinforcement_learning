@@ -47,9 +47,12 @@ xyplot(Incrementalp ~ Trial | Subject,data=lik_hyb_melt,type='l')
 xyplot(Episodicp ~ Trial | Subject,data=lik_hyb_melt,type='l')
 xyplot(IE_rat ~ Trial | Subject,data=lik_hyb_melt,type='l')
 
-plot(tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
-plot(tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
-plot(tapply(lik_hyb_melt$IE_rat,lik_hyb_melt$Trial,mean,na.rm=1),type='l')
+plot(tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Trial,mean,na.rm=1),
+     type='l',col='green',ylab="Likelihood",xlab="Trial")
+lines(tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Trial,mean,na.rm=1),
+      col='purple')
+plot(tapply(lik_hyb_melt$IE_rat,lik_hyb_melt$Trial,mean,na.rm=1),type='l',
+     ylab="Incremental-Episodic Ratio",xlab="Trial")
 
 acf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
 acf(tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
