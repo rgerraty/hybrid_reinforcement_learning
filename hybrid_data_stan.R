@@ -101,13 +101,16 @@ red_choice_prev[is.na(red_choice_prev)]<-0
 #no information about individual objects/episidoc value
 standard_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev,rew=rew )
 standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standard_standata, iter = 1250, warmup = 250, chains = 4)
-save(standard_fit,file='stanfit_rl2')
+save(standard_fit,file='~/Documents/Hybrid_RL/stanfit_rl')
+log_lik1<-extract_log_lik(standard_fit)
+looc1<-loo(log_lik1)
 
 #"hybrid" RL model fit heirarchically in Stan
 hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev, rew=rew, old_red_val=old_red_val, old_red=old_red)
 hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid1_fit,file='~/Documents/Hybrid_RL/stanfit_hybridrl')
-
+log_lik2<-extract_log_lik(hybrid1_fit)
+looc2<-loo(log_lik2)
 
 
 
