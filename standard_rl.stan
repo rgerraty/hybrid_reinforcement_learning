@@ -10,6 +10,11 @@ data {
 	real<lower=-.5, upper=.5> red_choice_prev[NS,MT];//.5=chose red last, -.5=chose blue last, 0=missed last
 }
 
+transformed data{
+  int N;
+  N = sum (NT);
+}
+
 parameters {
   //hyperpriors on alpha distribution
   real<lower=1> a1;
@@ -109,10 +114,27 @@ generated quantities {
   //from cholesky factorization of correlation matrix
   matrix[K,K] Omega;
   matrix[K,K] Sigma;
+  real log_lik[N];
+  int n;
+  
+  log_lik=rep_array(0.5,N);
   
   //get correlation matrix from cholesky
   Omega=multiply_lower_tri_self_transpose(Lcorr);
   
   //diag_matrix(b_sd)*Omega*diag_matrix(b_sd) to get covariance
   Sigma=quad_form_diag(Omega,b_sd);
+  
+  n = 1;
+  for (s in 1:NS) {
+    for (t in 1:NT[s]) {
+      if (choice[s,t] > 0) {
+         log_lik[n]=bernoulli_logit_lpmf(red_choice[s,t] | 
+        beta[s,1] + 
+        beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
+        beta[s,3]*red_choice_prev[s,t]);
+      }
+      n = n+1;
+    }
+  }
 }
