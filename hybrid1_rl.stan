@@ -142,12 +142,9 @@ generated quantities {
   real log_lik[N];
   int n;
   
-
-  lik_inc=rep_array(0.0,NS,MT);
-  lik_ep=rep_array(0.0,NS,MT);
-  log_lik_inc=rep_array(0.0,NS,MT);
-  log_lik_ep=rep_array(0.0,NS,MT);
-  log_lik=rep_array(0.5,N);
+  log_lik_inc=rep_array(0,NS,MT);
+  log_lik_ep=rep_array(0,NS,MT);
+  log_lik=rep_array(-.693147,N);
   
   //get correlation matrix from cholesky
   Omega=multiply_lower_tri_self_transpose(Lcorr);
