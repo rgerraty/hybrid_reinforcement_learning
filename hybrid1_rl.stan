@@ -24,6 +24,11 @@ data {
 	real<lower=-.5,upper=.5> old_red_val[NS,MT];//(red old value-.5) - (blue old value-.5)
 }
 
+transformed data{
+  int N;
+  N = sum (NT);
+}
+
 parameters {
   //hyperpriors on alpha distribution
   real<lower=1> a1;
@@ -132,9 +137,17 @@ generated quantities {
   matrix[K,K] Sigma;
   real lik_inc[NS,MT];
   real lik_ep[NS,MT];
+  real log_lik_inc[NS,MT];
+  real log_lik_ep[NS,MT];
+  real log_lik[N];
+  int n;
+  
 
   lik_inc=rep_array(0.0,NS,MT);
   lik_ep=rep_array(0.0,NS,MT);
+  log_lik_inc=rep_array(0.0,NS,MT);
+  log_lik_ep=rep_array(0.0,NS,MT);
+  log_lik=rep_array(0.5,N);
   
   //get correlation matrix from cholesky
   Omega=multiply_lower_tri_self_transpose(Lcorr);
@@ -142,21 +155,28 @@ generated quantities {
   //diag_matrix(b_sd)*Omega*diag_matrix(b_sd) to get covariance
   Sigma=quad_form_diag(Omega,b_sd);
   
+  n = 1;
   for (s in 1:NS) {
     for (t in 1:NT[s]) {
       if (choice[s,t] > 0) {
         
-        //p(choose Red)=logistic(b0+b1*Qdiff+b2*Old+b3*OldValDiff...)
-       lik_inc[s,t] = inv_logit(beta[s,1] + 
-          beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
-          //beta[s,3]*old_red[s,t]+
-          beta[s,5]*red_choice_prev[s,t]);
+        log_lik_ep[s,t] = bernoulli_logit_lpmf(red_choice[s,t] | 
+        beta[s,3]*old_red[s,t]+
+        beta[s,4]*old_red_val[s,t]);
         
-        lik_ep[s,t] = inv_logit(beta[s,1] + 
-          beta[s,3]*old_red[s,t]+
-          beta[s,4]*old_red_val[s,t]);//+
-          //beta[s,5]*red_choice_prev[s,t]));
+        log_lik_inc[s,t] = bernoulli_logit_lpmf(red_choice[s,t] |  
+        beta[s,1] +
+        beta[s,2]*(Q[s,t,2]-Q[s,t,1]));
+          
+        log_lik[n]= bernoulli_logit_lpmf(red_choice[s,t] | 
+        beta[s,1] + 
+        beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
+        beta[s,3]*old_red[s,t]+
+        beta[s,4]*old_red_val[s,t]+
+        beta[s,5]*red_choice_prev[s,t]);
+        
         }
+        n = n + 1; 
       }
     }
 }
