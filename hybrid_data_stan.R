@@ -4,6 +4,7 @@ hybrid_data<-read.delim('~/Downloads/CardGame.txt')
 hybrid_data$Run[hybrid_data$Sub==13 & hybrid_data$Trial<121 & hybrid_data$Trial>60]<-2
 
 library(rstan)
+library(loo)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
@@ -104,6 +105,7 @@ standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.
 save(standard_fit,file='~/Documents/Hybrid_RL/stanfit_rl')
 log_lik1<-extract_log_lik(standard_fit)
 looc1<-loo(log_lik1)
+waic1<-waic(log_lik1)
 
 #"hybrid" RL model fit heirarchically in Stan
 hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, choice=choice, red_choice=red_choice, red_choice_prev=red_choice_prev, rew=rew, old_red_val=old_red_val, old_red=old_red)
@@ -111,6 +113,6 @@ hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.st
 save(hybrid1_fit,file='~/Documents/Hybrid_RL/stanfit_hybridrl')
 log_lik2<-extract_log_lik(hybrid1_fit)
 looc2<-loo(log_lik2)
-
+waic2<-waic(log_lik2)
 
 
