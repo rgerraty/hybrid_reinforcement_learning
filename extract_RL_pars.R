@@ -1,6 +1,9 @@
 #standard RL model
 library(rstan)
+library(loo)
 library(lme4)
+fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
+
 #model with episodic value, no decay
 fit2<-load('~/Documents/Hybrid_RL/stanfit_hybridrl')
 
@@ -34,20 +37,25 @@ for(i in 1:dim(Qvals_hybrid)[1]){
 pe_hyb<-t(apply(fit_extract$delta,c(2,3),mean))
 
 
-lik_inc_hyb<-t(apply(fit_extract$lik_inc,c(2,3),mean))
+lik_inc_hyb<-t(apply(fit_extract$log_lik_inc,c(2,3),mean))
 lik_inc_hyb[lik_inc_hyb==0]<-NA
-lik_ep_hyb<-t(apply(fit_extract$lik_ep,c(2,3),mean))
+lik_ep_hyb<-t(apply(fit_extract$log_lik_ep,c(2,3),mean))
 lik_ep_hyb[lik_ep_hyb==0]<-NA
 
 library(lattice)
+library(reshape2)
 lik_hyb_melt<-melt(lik_inc_hyb)
 names(lik_hyb_melt)<-c("Trial","Subject","Incrementalp")
-lik_hyb_melt$Episodicp<-melt(lik_ep_hyb)$value
-lik_hyb_melt$IE_rat<-melt(lik_inc_hyb/lik_ep_hyb)$value
+lik_hyb_melt$Incrementalp<-exp(lik_hyb_melt$Incrementalp)
+lik_hyb_melt$Episodicp<-exp(melt(lik_ep_hyb)$value)
+lik_hyb_melt$IE_rat<-melt(exp(lik_inc_hyb-lik_ep_hyb))$value
 
-xyplot(Incrementalp ~ Trial | Subject,data=lik_hyb_melt,type='l')
-xyplot(Episodicp ~ Trial | Subject,data=lik_hyb_melt,type='l')
-xyplot(IE_rat ~ Trial | Subject,data=lik_hyb_melt,type='l')
+print(xyplot(Incrementalp ~ Trial | Subject,data=lik_hyb_melt,type='l'),
+      split=c(1,1,3,1),more=TRUE)
+print(xyplot(Episodicp ~ Trial | Subject,data=lik_hyb_melt,type='l'),
+      split=c(2,1,3,1),more=TRUE)
+print(xyplot(IE_rat ~ Trial | Subject,data=lik_hyb_melt,type='l'),
+      split=c(3,1,3,1))
 
 plot(tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Trial,mean,na.rm=1),
      type='l',col='green',ylab="Likelihood",xlab="Trial")
@@ -56,21 +64,19 @@ lines(tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Trial,mean,na.rm=1),
 plot(tapply(lik_hyb_melt$IE_rat,lik_hyb_melt$Trial,mean,na.rm=1),type='l',
      ylab="Incremental-Episodic Ratio",xlab="Trial")
 
-acf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
-acf(tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1))
-acf(tapply(lik_hyb_melt$IE_rat,lik_rat_hyb_melt$Trial,mean,na.rm=1))
-
-ccf(tapply(lik_hyb_melt$Incrementalp,lik_rat_hyb_melt$Trial,mean,na.rm=1),
-    tapply(lik_hyb_melt$Episodicp,lik_rat_hyb_melt$Trial,mean,na.rm=1),
-    type="correlation", main="Incremental and Episodic Cross-correlation",
-    ylab="CCF")
-
-lag<-21#10*log10(N/m)
+lag<-21
 subs<-unique(lik_hyb_melt$Subject)
 a<-matrix(0,lag*2+1,length(subs))
+b<-matrix(0,lag+1,length(subs));c<-b;d<-b;
 for(i in seq(1,length(subs),1)){
   a[,i]<-ccf(lik_hyb_melt$Incrementalp[lik_hyb_melt$Subject==subs[i]],
              lik_hyb_melt$Episodicp[lik_hyb_melt$Subject==subs[i]],
+             na.action=na.pass,lag.max=lag)$acf
+  b[,i]<-acf(lik_hyb_melt$Incrementalp[lik_hyb_melt$Subject==subs[i]],
+             na.action=na.pass,lag.max=lag)$acf
+  c[,i]<-acf(lik_hyb_melt$Episodicp[lik_hyb_melt$Subject==subs[i]],
+             na.action=na.pass,lag.max=lag)$acf
+  d[,i]<-acf(lik_hyb_melt$IE_rat[lik_hyb_melt$Subject==subs[i]],
              na.action=na.pass,lag.max=lag)$acf
 }
 
@@ -78,21 +84,51 @@ crossc_dat<-melt(a)
 names(crossc_dat)<-c("Lag","Subject","CCF")
 crossc_dat$Lag<-crossc_dat$Lag-lag-1
 
-stat_sum_single <- function(fun, geom="point",color="black", ...) {
-  stat_summary(fun.y=fun, colour=color, geom=geom, size = 2, ...)
-}
+autoc_dat<-melt(b)
+names(autoc_dat)<-c("Lag","Subject","Incremental_ACF")
+autoc_dat$Lag<-autoc_dat$Lag-1
+autoc_dat$Episodic_ACF<-melt(c)$value
+autoc_dat$IE_Ratio_ACF<-melt(d)$value
 
 hi_ci<-function(.){
-  mean(.)+2*(sd(.)/sqrt(length(.)))
+  mean(.)+(sd(.)/sqrt(length(.)))
 }
 lo_ci<-function(.){
-  mean(.)-2*(sd(.)/sqrt(length(.)))
+  mean(.)-(sd(.)/sqrt(length(.)))
 }
+
+g1<-ggplot(data=autoc_dat,aes(x=Lag,y=Incremental_ACF,subset=Lag>0))+ 
+  stat_summary(fun.ymin=lo_ci,fun.ymax=hi_ci,
+               geom="ribbon",position=position_dodge(.4),
+               color = NA, size=.5,fill="orange",alpha=.5)+
+  theme_classic()+stat_summary(fun.y=mean,geom="line",size=1)+
+    xlim(c(1,lag+1))+ylim(-.3,.8)#+geom_vline(xintercept=0)
+
+g2<-ggplot(data=autoc_dat,aes(x=Lag,y=Episodic_ACF,subset=Lag>0))+ 
+  stat_summary(fun.ymin=lo_ci,fun.ymax=hi_ci,
+               geom="ribbon",position=position_dodge(.4),
+               color = NA, size=.5,fill="green",alpha=.5)+
+  theme_classic()+stat_summary(fun.y=mean,geom="line",size=1)+
+    xlim(c(1,lag+1))+ylim(-.3,.8)#+geom_vline(xintercept=0)
+
+g3<-ggplot(data=autoc_dat,aes(x=Lag,y=IE_Ratio_ACF,subset=Lag>0))+ 
+  stat_summary(fun.ymin=lo_ci,fun.ymax=hi_ci,
+               geom="ribbon",position=position_dodge(.4),
+               color = NA, size=.5,fill="violet",alpha=.5)+
+  theme_classic()+stat_summary(fun.y=mean,geom="line",size=1)+
+  xlim(c(1,lag+1))+ylim(-.3,.8)#+geom_vline(xintercept=0)
+
+library(gridExtra)
+grid.arrange(g1,g2,g3,nrow=1)
+
 ggplot(data=crossc_dat,aes(x=Lag,y=CCF))+ 
   stat_summary(fun.ymin=lo_ci,fun.ymax=hi_ci,
                geom="ribbon",position=position_dodge(.4),
                color = NA, size=.5,fill="darkorchid4",alpha=.5)+
-  theme_classic()+stat_sum_single(mean,geom="line")+geom_vline(xintercept=0)
+  theme_classic()+stat_summary(fun.y=mean,geom="line",size=1)+
+  geom_vline(xintercept=0)+ylab("Incremental-Episodic Cross-Correlation")
+
+
 
 
 alpha_hyb<-apply(fit_extract$alpha,2,mean)
