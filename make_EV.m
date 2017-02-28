@@ -118,7 +118,7 @@ for r = runs
     choice_newc=choice_run(new_choice,:);
     choice_noc=choice_run(no_choice,:);
     choice_oldt=choice_run(logical(old_trial),:);
-    choic_enct=choice_run(logical(enc_trial),:);
+    choice_enct=choice_run(logical(enc_trial),:);
 
     FB_oldc=FB_run(old_choice,:);
     FB_newc=FB_run(new_choice,:);
