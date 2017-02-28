@@ -7,13 +7,29 @@ addpath ~
 
 [M,N]=csvreadh('/vega/psych/users/rtg2116/hybrid_mri/behavior/hybrid_data.csv',',');
 
+Qdiff_ind=find(not(cellfun('isempty', strfind(M,'"Q_diff"'))));
+Q_chose_ind=find(not(cellfun('isempty', strfind(M,'"Q_chosen"'))));
+Q_unchose_ind=find(not(cellfun('isempty', strfind(M,'"Q_unchosen"'))));
+PE_ind=find(not(cellfun('isempty', strfind(M,'"PE"'))));
+
+oldt_ind=find(not(cellfun('isempty', strfind(M,'"OldT"'))));
+enct_ind=find(not(cellfun('isempty', strfind(M,'"encT"'))));
+oldc_ind=find(not(cellfun('isempty', strfind(M,'"OldObjC"'))));
+opt_ind=find(not(cellfun('isempty', strfind(M,'"LuckyDeckC"'))));
+
+
+Inc_lik_ind=find(not(cellfun('isempty', strfind(M,'"Inc_lik_norm"'))));
+Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm"'))));
+Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm_enc"'))));
+
+
 
 [status,runs]=unix('ls Performance_?.mat | cut -c13');
 
 %how many runs
 runs=str2num(runs);
 
-[status,sub]=unix('pwd | cut -c47-48');
+[status,sub]=unix('pwd | cut -c43-44');
 sub=str2num(sub);
 
 %only need last run .mat file which contains all performance ingo
@@ -67,20 +83,28 @@ for r = runs
 	FB_weight = Performance.pay.outcome(valid_trials & Performance.cond.Run==r)';
 
 	%RL model regressors
-	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,37);
-	choice_Qdiff_weight=N(N(:,1)==sub & N(:,2)==r,36);
-	choice_Qchose_weight=N(N(:,1)==sub & N(:,2)==r,34);
-	choice_Qunchose_weight=N(N(:,1)==sub & N(:,2)==r,35);
+	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,PE_ind);
+	choice_Qdiff_weight=N(N(:,1)==sub & N(:,2)==r,Qdiff_ind);
+	choice_Qchose_weight=N(N(:,1)==sub & N(:,2)==r,Q_chose_ind);
+	choice_Qunchose_weight=N(N(:,1)==sub & N(:,2)==r,Q_unchose_ind);
+	choice_inclik_weight=N(N(:,1)==sub & N(:,2)==r,Inc_lik_ind);
+	choice_eplik_weight=N(N(:,1)==sub & N(:,2)==r,Ep_lik_ind);
+	choice_eplik_enc_weight=N(N(:,1)==sub & N(:,2)==r,Ep_lik_enc_ind);
+
 
 	%index old vs new choice
-	old_choice=(N(N(:,1)==sub & N(:,2)==r,15))==.5;
+	old_choice=(N(N(:,1)==sub & N(:,2)==r,oldc_ind))==1;
 	old_choice=old_choice(valid_trials(Performance.cond.Run==r));
-	new_choice=(N(N(:,1)==sub & N(:,2)==r,15))==-.5;
+	new_choice=(N(N(:,1)==sub & N(:,2)==r,oldc_ind))==0;
 	new_choice=new_choice(valid_trials(Performance.cond.Run==r));
-	no_choice=(N(N(:,1)==sub & N(:,2)==r,15))==0;
+	no_choice=(N(N(:,1)==sub & N(:,2)==r,oldt_ind))==0;
 	no_choice=no_choice(valid_trials(Performance.cond.Run==r));
-	opt_deck=N(N(:,1)==sub & N(:,2)==r,14);
+	opt_deck=N(N(:,1)==sub & N(:,2)==r,opt_ind);
 	opt_deck=opt_deck(valid_trials(Performance.cond.Run==r));
+	old_trial=N(N(:,1)==sub & N(:,2)==r,oldt_ind);
+	old_trial=old_trial(valid_trials(Performance.cond.Run==r));
+	enc_trial=N(N(:,1)==sub & N(:,2)==r,enct_ind);
+	enc_trial=enc_trial(valid_trials(Performance.cond.Run==r));
 
     %combine into FSL-style 3col regs
     choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
@@ -92,10 +116,14 @@ for r = runs
     choice_oldc=choice_run(old_choice,:);
     choice_newc=choice_run(new_choice,:);
     choice_noc=choice_run(no_choice,:);
+    choice_oldt=choice_run(logical(old_trial),:);
+    choic_enct=choice_run(logical(enc_trial),:);
 
     FB_oldc=FB_run(old_choice,:);
     FB_newc=FB_run(new_choice,:);
     FB_noc=FB_run(no_choice,:);
+    FB_oldt=FB_run(logical(old_trial),:);
+    FB_enct=FB_run(logical(enc_trial),:);
 
     FBpay_oldc=FBpay_run(old_choice,:);
     FBpay_newc=FBpay_run(new_choice,:);
@@ -112,6 +140,7 @@ for r = runs
 
 		%combine and remove missed trials
 		oldnew_run=[choice_run(:,1:2) oldnew_weight'];	
+
 		oldval_run=[choice_run(:,1:2) oldval_weight'];
 		submem_run=[choice_run(:,1:2) submem_weight'];
 		oldval_oldc=oldval_run(old_choice,:);
@@ -137,6 +166,10 @@ for r = runs
 		choice_Qdiff_run=[choice_time, choice_duration, choice_Qdiff_weight(valid_trials(Performance.cond.Run==r))];
 		choice_Qchose_run=[choice_time, choice_duration, choice_Qchose_weight(valid_trials(Performance.cond.Run==r))];
 		choice_Qunchose_run=[choice_time, choice_duration, choice_Qunchose_weight(valid_trials(Performance.cond.Run==r))];
+		choice_inclik_run=[choice_time, choice_duration, choice_inclik_weight(valid_trials(Performance.cond.Run==r))];
+		choice_eplik_run=[choice_time, choice_duration, choice_eplik_weight(valid_trials(Performance.cond.Run==r))];
+		choice_eplik_enc_run=[choice_time, choice_duration, choice_eplik_enc_weight(valid_trials(Performance.cond.Run==r))];
+
 
 		FB_pe_oldc=FB_pe_run(old_choice,:);
 		FB_pe_newc=FB_pe_run(new_choice,:);
@@ -161,6 +194,10 @@ for r = runs
 		choice_Qdiff_run(choice_Qdiff_run(:,1)<0 | isnan(choice_Qdiff_run(:,3)),:)=[];
 		choice_Qchose_run(choice_Qchose_run(:,1)<0 | isnan(choice_Qchose_run(:,3)),:)=[];
 		choice_Qunchose_run(choice_Qunchose_run(:,1)<0 | isnan(choice_Qunchose_run(:,3)),:)=[];
+		choice_inclik_run(choice_inclik_run(:,1)<0 | isnan(choice_inclik_run(:,3)),:)=[];
+		choice_eplik_run(choice_eplik_run(:,1)<0 | isnan(choice_eplik_run(:,3)),:)=[];
+		choice_eplik_enc_run(choice_eplik_enc_run(:,1)<0 | isnan(choice_eplik_enc_run(:,3)),:)=[];
+
 		FB_pe_oldc(FB_pe_oldc(:,1)<0 | isnan(FB_pe_oldc(:,3)),:)=[];
 		FB_pe_newc(FB_pe_newc(:,1)<0 | isnan(FB_pe_newc(:,3)),:)=[];
 		FB_pe_noc(FB_pe_noc(:,1)<0 | isnan(FB_pe_noc(:,3)),:)=[];
@@ -183,7 +220,10 @@ for r = runs
 		dlmwrite(strcat('EV_files/choice_Qdiff_run',num2str(r),'.txt'),choice_Qdiff_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qchose_run',num2str(r),'.txt'),choice_Qchose_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_Qunchose_run',num2str(r),'.txt'),choice_Qunchose_run, 'delimiter',' ');
-		
+		dlmwrite(strcat('EV_files/choice_inclik_run',num2str(r),'.txt'),choice_inclik_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_eplik_run',num2str(r),'.txt'),choice_eplik_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_eplik_enc_run',num2str(r),'.txt'),choice_eplik_enc_run, 'delimiter',' ');
+
 		dlmwrite(strcat('EV_files/FB_pe_oldc_run',num2str(r),'.txt'),FB_pe_oldc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_newc_run',num2str(r),'.txt'),FB_pe_newc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_noc_run',num2str(r),'.txt'),FB_pe_noc, 'delimiter',' ');
@@ -218,6 +258,9 @@ for r = runs
 	choice_oldc(choice_oldc(:,1)<0,:)=[];
     choice_newc(choice_newc(:,1)<0,:)=[];
     choice_noc(choice_noc(:,1)<0,:)=[];
+    choice_oldt(choice_oldt(:,1)<0,:)=[];
+    choice_enct(choice_enct(:,1)<0,:)=[];
+  
 
     FB_oldc(FB_oldc(:,1)<0,:)=[];
     FB_newc(FB_newc(:,1)<0,:)=[];
@@ -244,6 +287,9 @@ for r = runs
 	dlmwrite(strcat('EV_files/choice_oldc_run',num2str(r),'.txt'), choice_oldc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/choice_newc_run',num2str(r),'.txt'), choice_newc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/choice_noc_run',num2str(r),'.txt'), choice_noc, 'delimiter',' ');
+    dlmwrite(strcat('EV_files/choice_oldt_run',num2str(r),'.txt'), choice_oldt, 'delimiter',' ');
+    dlmwrite(strcat('EV_files/choice_enct_run',num2str(r),'.txt'), choice_enct, 'delimiter',' ');
+
 
     dlmwrite(strcat('EV_files/FB_oldc_run',num2str(r),'.txt'), FB_oldc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/FB_newc_run',num2str(r),'.txt'), FB_newc, 'delimiter',' ');
@@ -256,8 +302,3 @@ catch
 	warning('something wrong loading data')
 end
 end
-
-
-end
-
-
