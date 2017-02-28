@@ -154,6 +154,8 @@ done
 [status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
 subs2=[];
+design_mat=[];
+con_mat=[];
 feat='qchose_epval_pe.feat'
 
 j=1;
