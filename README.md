@@ -154,12 +154,13 @@ done
 [status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
 subs2=[];
+feat='qchose_epval_pe.feat'
 
 j=1;
 i=1;
 for s=1:size(subs,1)
 
-	[status,runs]=system(['ls -d ',subs{s},'/hybrid_r?/qchose_epval_pe.feat']);
+	[status,runs]=system(['ls -d ',subs{s},'/hybrid_r?/',feat]);
 	runs=strread(runs,'%s');
 	if status==0
 		for r=1:size(runs,1)
