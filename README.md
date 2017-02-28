@@ -174,5 +174,13 @@ end
 con_mat=eye(size(design_mat,2));
 dlmwrite('/data/engine/rgerraty/hybrid_mri/group_analyses/n31_fe_design.mat',design_mat, ' ')
 dlmwrite('/data/engine/rgerraty/hybrid_mri/group_analyses/n31_fe_con.mat',con_mat, ' ')
-dlmwrite('/data/engine/rgerraty/hybrid_mri/group_analyses/n31_subs.txt',subs2,'')   
+
+for i=1:size(subs2,1)
+	if i==1
+		system(['echo ',subs2{i} ' > /data/engine/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
+	else
+		system(['echo ',subs2{i} ' >> /data/engine/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
+	end
+end
+
 ```
