@@ -4,7 +4,6 @@
 #PBS -N 1st_level_GLM
 #PBS -W group_list=yetipsych 
 #PBS -l nodes=1,walltime=00:100:00,mem=6000mb
-#PBS -M rtg2116@columbia.edu
 #PBS -m abe
 #PBS -V
 
