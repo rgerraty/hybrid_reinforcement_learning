@@ -22,6 +22,7 @@ opt_ind=find(not(cellfun('isempty', strfind(M,'"LuckyDeckC"'))));
 Inc_lik_ind=find(not(cellfun('isempty', strfind(M,'"Inc_lik_norm"'))));
 Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm"'))));
 Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm_enc"'))));
+IE_rat_ind=find(not(cellfun('isempty', strfind(M,'"Lik_rat_norm"'))));
 
 
 
@@ -91,7 +92,7 @@ for r = runs
 	choice_inclik_weight=N(N(:,1)==sub & N(:,2)==r,Inc_lik_ind);
 	choice_eplik_weight=N(N(:,1)==sub & N(:,2)==r,Ep_lik_ind);
 	choice_eplik_enc_weight=N(N(:,1)==sub & N(:,2)==r,Ep_lik_enc_ind);
-
+	choice_ierat_weight=N(N(:,1)==sub & N(:,2)==r,IE_rat_ind);
 
 	%index old vs new choice
 	old_choice=(N(N(:,1)==sub & N(:,2)==r,oldc_ind))==1;
@@ -170,6 +171,7 @@ for r = runs
 		choice_inclik_run=[choice_time, choice_duration, choice_inclik_weight(valid_trials(Performance.cond.Run==r))];
 		choice_eplik_run=[choice_time, choice_duration, choice_eplik_weight(valid_trials(Performance.cond.Run==r))];
 		choice_eplik_enc_run=[choice_time, choice_duration, choice_eplik_enc_weight(valid_trials(Performance.cond.Run==r))];
+		choice_ierat_run=[choice_time, choice_duration, choice_ierat_weight(valid_trials(Performance.cond.Run==r))];
 
 
 		FB_pe_oldc=FB_pe_run(old_choice,:);
@@ -198,6 +200,7 @@ for r = runs
 		choice_inclik_run(choice_inclik_run(:,1)<0 | isnan(choice_inclik_run(:,3)),:)=[];
 		choice_eplik_run(choice_eplik_run(:,1)<0 | isnan(choice_eplik_run(:,3)),:)=[];
 		choice_eplik_enc_run(choice_eplik_enc_run(:,1)<0 | isnan(choice_eplik_enc_run(:,3)),:)=[];
+		choice_ierat_run(choice_ierat_run(:,1)<0 | isnan(choice_ierat_run(:,3)),:)=[];
 
 		FB_pe_oldc(FB_pe_oldc(:,1)<0 | isnan(FB_pe_oldc(:,3)),:)=[];
 		FB_pe_newc(FB_pe_newc(:,1)<0 | isnan(FB_pe_newc(:,3)),:)=[];
@@ -224,6 +227,8 @@ for r = runs
 		dlmwrite(strcat('EV_files/choice_inclik_run',num2str(r),'.txt'),choice_inclik_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_eplik_run',num2str(r),'.txt'),choice_eplik_run, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/choice_eplik_enc_run',num2str(r),'.txt'),choice_eplik_enc_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/choice_ierat_run',num2str(r),'.txt'),choice_ierat_run, 'delimiter',' ');
+
 
 		dlmwrite(strcat('EV_files/FB_pe_oldc_run',num2str(r),'.txt'),FB_pe_oldc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_newc_run',num2str(r),'.txt'),FB_pe_newc, 'delimiter',' ');
