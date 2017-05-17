@@ -104,7 +104,7 @@ standard_standata = list(NS=NS, NC=2,K=3, MT=MT, NT= NT, choice=choice, red_choi
 standard_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/standard_rl.stan', data = standard_standata, iter = 1250, warmup = 250, chains = 4)
 save(standard_fit,file='~/Documents/Hybrid_RL/stanfit_rl')
 log_lik1<-extract_log_lik(standard_fit)
-looc1<-loo(log_lik1)
+looc1<-loo(log_lik1,cores=2)
 waic1<-waic(log_lik1)
 
 #"hybrid" RL model fit heirarchically in Stan
@@ -112,7 +112,7 @@ hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, choice=choice, red_choice
 hybrid1_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/hybrid1_rl.stan', data = hybrid_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid1_fit,file='~/Documents/Hybrid_RL/stanfit_hybridrl')
 log_lik2<-extract_log_lik(hybrid1_fit)
-looc2<-loo(log_lik2)
+looc2<-loo(log_lik2,cores=2)
 waic2<-waic(log_lik2)
 
 
