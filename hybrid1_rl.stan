@@ -135,8 +135,6 @@ generated quantities {
   //from cholesky factorization of correlation matrix
   matrix[K,K] Omega;
   matrix[K,K] Sigma;
-  real lik_inc[NS,MT];
-  real lik_ep[NS,MT];
   real log_lik_inc[NS,MT];
   real log_lik_ep[NS,MT];
   real log_lik[N];
@@ -144,7 +142,7 @@ generated quantities {
   
   log_lik_inc=rep_array(0,NS,MT);
   log_lik_ep=rep_array(0,NS,MT);
-  log_lik=rep_array(-.693147,N);
+  log_lik=rep_array(0,N);
   
   //get correlation matrix from cholesky
   Omega=multiply_lower_tri_self_transpose(Lcorr);
@@ -158,11 +156,9 @@ generated quantities {
       if (choice[s,t] > 0) {
         
         log_lik_ep[s,t] = bernoulli_logit_lpmf(red_choice[s,t] | 
-        beta[s,3]*old_red[s,t]+
         beta[s,4]*old_red_val[s,t]);
         
         log_lik_inc[s,t] = bernoulli_logit_lpmf(red_choice[s,t] |  
-        beta[s,1] +
         beta[s,2]*(Q[s,t,2]-Q[s,t,1]));
           
         log_lik[n]= bernoulli_logit_lpmf(red_choice[s,t] | 
