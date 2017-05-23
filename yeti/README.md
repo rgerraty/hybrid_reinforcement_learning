@@ -3,12 +3,12 @@ Slightly modified code for running fMRI analyses from the above directory on the
 
 
 ### Sync Yeti with local server
-```{.bash}
+```.bash
 rsync -az --exclude "TCST0*/*/dicoms/" --exclude "raw_comp" rgerraty@lovelace.psych.columbia.edu:/data/engine/rgerraty/hybrid_mri/ /vega/psych/users/rtg2116/hybrid_mri/
 ```
 
-###Run preprocessing (need to generate template .fsf file first)
-```{.bash}
+### Run preprocessing (need to generate template .fsf file first)
+```.bash
 for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
 do
 	qsub -v arg1=$i, arg2=/u/6/r/rtg2116/GitHub/hybrid_reinforcement_learning/yeti/preproc_6mm_6del_100s_mc.fsf,arg3=$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz
@@ -16,8 +16,8 @@ do
 done
 ```
 
-###Run 1st-Level GLM with Q-value, episodic value, and prediction error
-```{.bash}
+### Run 1st-Level GLM with Q-value, episodic value, and prediction error
+```.bash
 fsf=epvalue_newold.fsf
 for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
@@ -31,8 +31,8 @@ for i in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_
 	fi;
 done
 ```
-###Update 1st-level directories with registation files
-```{.bash}
+### Update 1st-level directories with registation files
+```.bash
 feat=inc_ep_lik.feat
 for s in /vega/psych/users/rtg2116/hybrid_mri/TCST0*/;
 	do
@@ -58,7 +58,7 @@ done
 ```
 
 ### Sync local server with yeti
-```{.bash}
+```.bash
 rsync -az --exclude "TCST0*/*/dicoms/" --exclude "raw_comp" /vega/psych/users/rtg2116/hybrid_mri/ rgerraty@lovelace.psych.columbia.edu:/data/engine/rgerraty/hybrid_mri/
 ```
 
