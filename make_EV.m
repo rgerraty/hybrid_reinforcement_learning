@@ -19,10 +19,10 @@ oldc_ind=find(not(cellfun('isempty', strfind(M,'"OldObjC"'))));
 opt_ind=find(not(cellfun('isempty', strfind(M,'"LuckyDeckC"'))));
 
 
-Inc_lik_ind=find(not(cellfun('isempty', strfind(M,'"Inc_lik_norm"'))));
-Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm"'))));
-Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_norm_enc"'))));
-IE_rat_ind=find(not(cellfun('isempty', strfind(M,'"Lik_rat_norm"'))));
+Inc_lik_ind=find(not(cellfun('isempty', strfind(M,'"Inc_lik"'))));
+Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik"'))));
+Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_enc"'))));
+IE_rat_ind=find(not(cellfun('isempty', strfind(M,'"Lik_rat"'))));
 
 
 
