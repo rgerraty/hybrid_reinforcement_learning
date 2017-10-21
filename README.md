@@ -126,22 +126,23 @@ done
 
 ### Update 1st-level directories with registation files
 ```.bash
+feat=qchose_epval_pe.feat
 for s in /data/engine/rgerraty/hybrid_mri/TCST0*/;
 	do
-	if [ -d $s/hybrid_r1/qchose_epval_pe.feat/ ]
+	if [ -d $s/hybrid_r1/$feat/ ]
 	then
 	for r in $s/hybrid_r?/preproc_6mm_6del_100s_mc.feat/reg/; 
 		do 
-		if [ ! -e $r/../../qchose_epval_pe.feat/reg/example_func2standard.mat ]
+		if [ ! -e $r/../../$feat/reg/example_func2standard.mat ]
 			then
-			if [ -d $r/../../qchose_epval_pe.feat/ ]
+			if [ -d $r/../../$feat/ ]
 				then
 					echo $r
-					cp -R $r $r/../../qchose_epval_pe.feat/;
-					cp $s/structural/bravo.anat/T1_to_MNI_lin.mat $r/../../qchose_epval_pe.feat/reg/highres2standard.mat
-					cp $s/structural/bravo.anat/T1_to_MNI_nonlin_field.nii.gz $r/../../qchose_epval_pe.feat/reg/highres2standard_warp.nii.gz
-					cp $FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz $r/../../qchose_epval_pe.feat/reg/standard.nii.gz
-					updatefeatreg $r/../../qchose_epval_pe.feat/
+					cp -R $r $r/../../$feat/;
+					cp $s/structural/bravo.anat/T1_to_MNI_lin.mat $r/../../$feat/reg/highres2standard.mat
+					cp $s/structural/bravo.anat/T1_to_MNI_nonlin_field.nii.gz $r/../../$feat/reg/highres2standard_warp.nii.gz
+					cp $FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz $r/../../$feat/reg/standard.nii.gz
+					updatefeatreg $r/../../$feat/
 			fi
 		fi
 	done
