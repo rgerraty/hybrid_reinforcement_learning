@@ -30,7 +30,7 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "/data/engine/rgerraty/hybrid_mri/TCST0XX/hybrid_rXXRUNXX/put_ppi_inc_ep_likrat"
+set fmri(outputdir) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/put_ppi_inc_ep_likrat"
 
 # TR(s)
 set fmri(tr) 2.000000
