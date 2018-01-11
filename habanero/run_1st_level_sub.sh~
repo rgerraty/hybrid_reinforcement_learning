@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Directives
 #SBATCH --jobname=1st_level_GLM
 #SBATCH --account=rtg2116

@@ -57,7 +57,7 @@ for s in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/;
 done
 ```
 
-### Sync local server with habanero
+### Sync local server with yeti
 ```.bash
 rsync -az /rigel/psych/users/rtg2116/hybrid_mri/ rgerraty@lovelace.psych.columbia.edu:/data/engine/engram/rgerraty/hybrid_mri/
 ```
