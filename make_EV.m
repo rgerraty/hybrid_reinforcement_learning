@@ -175,7 +175,8 @@ for r = runs
 		choice_ierat_run=[choice_time, choice_duration, choice_ierat_weight(valid_trials(Performance.cond.Run==r))];
 
 		FB_eplik_enc_run=[FB_time, FB_duration, choice_eplik_enc_weight(valid_trials(Performance.cond.Run==r))];
-
+		FB_eplik_run=[FB_time, FB_duration, choice_eplik_weight(valid_trials(Performance.cond.Run==r))];
+		FB_inclik_run=[FB_time, FB_duration, choice_inclik_weight(valid_trials(Performance.cond.Run==r))];
 
 		FB_pe_oldc=FB_pe_run(old_choice,:);
 		FB_pe_newc=FB_pe_run(new_choice,:);
@@ -208,6 +209,8 @@ for r = runs
 		choice_ierat_run(choice_ierat_run(:,1)<0 | isnan(choice_ierat_run(:,3)),:)=[];
 
 		FB_eplik_enc_run(FB_eplik_enc_run(:,1)<0 | isnan(FB_eplik_enc_run(:,3)),:)=[];
+		FB_eplik_run(FB_eplik_run(:,1)<0 | isnan(FB_eplik_run(:,3)),:)=[];
+		FB_inclik_run(FB_inclik_run(:,1)<0 | isnan(FB_inclik_run(:,3)),:)=[];
 
 		FB_pe_oldc(FB_pe_oldc(:,1)<0 | isnan(FB_pe_oldc(:,3)),:)=[];
 		FB_pe_newc(FB_pe_newc(:,1)<0 | isnan(FB_pe_newc(:,3)),:)=[];
@@ -237,7 +240,9 @@ for r = runs
 		dlmwrite(strcat('EV_files/choice_ierat_run',num2str(r),'.txt'),choice_ierat_run, 'delimiter',' ');
 
 		dlmwrite(strcat('EV_files/FB_eplik_enc_run',num2str(r),'.txt'),FB_eplik_enc_run, 'delimiter',' ');
-
+		dlmwrite(strcat('EV_files/FB_eplik_run',num2str(r),'.txt'),FB_eplik_run, 'delimiter',' ');
+		dlmwrite(strcat('EV_files/FB_inclik_run',num2str(r),'.txt'),FB_inclik_run, 'delimiter',' ');		
+		
 		dlmwrite(strcat('EV_files/FB_pe_oldc_run',num2str(r),'.txt'),FB_pe_oldc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_newc_run',num2str(r),'.txt'),FB_pe_newc, 'delimiter',' ');
 		dlmwrite(strcat('EV_files/FB_pe_noc_run',num2str(r),'.txt'),FB_pe_noc, 'delimiter',' ');

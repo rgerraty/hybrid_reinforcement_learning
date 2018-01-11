@@ -13,12 +13,9 @@ set fmri(level) 1
 # Which stages to run
 # 0 : No first-level analysis (registration and/or group stats only)
 # 7 : Full first-level analysis
-# 1 : Pre-Stats
-# 3 : Pre-Stats + Stats
-# 2 :             Stats
-# 6 :             Stats + Post-stats
-# 4 :                     Post-stats
-set fmri(analysis) 6
+# 1 : Pre-processing
+# 2 : Statistics
+set fmri(analysis) 2
 
 # Use relative filenames
 set fmri(relative_yn) 0
@@ -33,10 +30,10 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "/vega/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/inc-ep_ratio"
+set fmri(outputdir) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/eplikxpe.feat"
 
 # TR(s)
-set fmri(tr) 2.000000 
+set fmri(tr) 2.000000
 
 # Total volumes
 set fmri(npts) XXVOLSXX
@@ -53,7 +50,7 @@ set fmri(multiple) 1
 # Higher-level input type
 # 1 : Inputs are lower-level FEAT directories
 # 2 : Inputs are cope images from FEAT directories
-set fmri(inputtype) 1
+set fmri(inputtype) 2
 
 # Carry out pre-stats processing?
 set fmri(filtering_yn) 0
@@ -69,11 +66,6 @@ set fmri(noise) 0.66
 
 # Noise AR(1)
 set fmri(noisear) 0.34
-
-# Post-stats-only directory copying
-# 0 : Overwrite original post-stats results
-# 1 : Copy original FEAT directory for new Contrasts, Thresholding, Rendering
-set fmri(newdir_yn) 0
 
 # Motion correction
 # 0 : None
@@ -155,8 +147,8 @@ set fmri(robust_yn) 0
 set fmri(mixed_yn) 2
 
 # Number of EVs
-set fmri(evs_orig) 4
-set fmri(evs_real) 8
+set fmri(evs_orig) 6
+set fmri(evs_real) 12
 set fmri(evs_vox) 0
 
 # Number of contrasts
@@ -171,7 +163,7 @@ set fmri(nftests_real) 0
 set fmri(constcol) 0
 
 # Carry out post-stats steps?
-set fmri(poststats_yn) 1
+set fmri(poststats_yn) 0
 
 # Pre-threshold masking?
 set fmri(threshmask) ""
@@ -216,9 +208,6 @@ set fmri(bgimage) 1
 # Create time series plots
 set fmri(tsplot_yn) 0
 
-# Registration?
-set fmri(reg_yn) 1
-
 # Registration to initial structural
 set fmri(reginitial_highres_yn) 0
 
@@ -244,13 +233,13 @@ set fmri(reghighres_search) 90
 set fmri(reghighres_dof) BBR
 
 # Registration to standard image?
-set fmri(regstandard_yn) 0
+set fmri(regstandard_yn) 1
 
 # Use alternate reference images?
 set fmri(alternateReference_yn) 0
 
 # Standard image
-set fmri(regstandard) "/vega/psych/app/fsl/data/standard/MNI152_T1_2mm_brain"
+set fmri(regstandard) "/usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain"
 
 # Search space for registration to standard space
 # 0   : No search
@@ -278,16 +267,16 @@ set fmri(totalVoxels) 54607872
 set fmri(ncopeinputs) 0
 
 # 4D AVW data or FEAT directory (1)
-set feat_files(1) "/vega/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s_mc.feat/filtered_func_data"
+set feat_files(1) "XXINXX"
 
 # Add confound EVs text file
 set fmri(confoundevs) 1
 
 # Confound EVs text file for analysis 1
-set confoundev_files(1) "/vega/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s_mc.feat/mc/extended_confs_24par.txt"
+set confoundev_files(1) "/data/engine/rgerraty/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s_mc.feat/mc/prefiltered_func_data_mcf.par"
 
 # EV 1 title
-set fmri(evtitle1) "i-e_ratio"
+set fmri(evtitle1) "ep_lik_fb"
 
 # Basic waveform shape (EV 1)
 # 0 : Square
@@ -318,7 +307,7 @@ set fmri(tempfilt_yn1) 1
 set fmri(deriv_yn1) 1
 
 # Custom EV file (EV 1)
-set fmri(custom1) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_ierat_runXXRUNXX.txt"
+set fmri(custom1) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_eplik_runXXRUNXX.txt"
 
 # Orthogonalise EV 1 wrt EV 0
 set fmri(ortho1.0) 0
@@ -335,8 +324,14 @@ set fmri(ortho1.3) 0
 # Orthogonalise EV 1 wrt EV 4
 set fmri(ortho1.4) 0
 
+# Orthogonalise EV 1 wrt EV 5
+set fmri(ortho1.5) 0
+
+# Orthogonalise EV 1 wrt EV 6
+set fmri(ortho1.6) 0
+
 # EV 2 title
-set fmri(evtitle2) "old"
+set fmri(evtitle2) "pe"
 
 # Basic waveform shape (EV 2)
 # 0 : Square
@@ -367,7 +362,7 @@ set fmri(tempfilt_yn2) 1
 set fmri(deriv_yn2) 1
 
 # Custom EV file (EV 2)
-set fmri(custom2) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_oldt_runXXRUNXX.txt"
+set fmri(custom2) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_pe_runXXRUNXX.txt"
 
 # Orthogonalise EV 2 wrt EV 0
 set fmri(ortho2.0) 0
@@ -384,8 +379,14 @@ set fmri(ortho2.3) 0
 # Orthogonalise EV 2 wrt EV 4
 set fmri(ortho2.4) 0
 
+# Orthogonalise EV 2 wrt EV 5
+set fmri(ortho2.5) 0
+
+# Orthogonalise EV 2 wrt EV 6
+set fmri(ortho2.6) 0
+
 # EV 3 title
-set fmri(evtitle3) "fb"
+set fmri(evtitle3) "choice"
 
 # Basic waveform shape (EV 3)
 # 0 : Square
@@ -416,7 +417,7 @@ set fmri(tempfilt_yn3) 1
 set fmri(deriv_yn3) 1
 
 # Custom EV file (EV 3)
-set fmri(custom3) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXRUNXX.txt"
+set fmri(custom3) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXRUNXX.txt"
 
 # Orthogonalise EV 3 wrt EV 0
 set fmri(ortho3.0) 0
@@ -433,8 +434,14 @@ set fmri(ortho3.3) 0
 # Orthogonalise EV 3 wrt EV 4
 set fmri(ortho3.4) 0
 
+# Orthogonalise EV 3 wrt EV 5
+set fmri(ortho3.5) 0
+
+# Orthogonalise EV 3 wrt EV 6
+set fmri(ortho3.6) 0
+
 # EV 4 title
-set fmri(evtitle4) "inv"
+set fmri(evtitle4) "fb"
 
 # Basic waveform shape (EV 4)
 # 0 : Square
@@ -465,7 +472,7 @@ set fmri(tempfilt_yn4) 1
 set fmri(deriv_yn4) 1
 
 # Custom EV file (EV 4)
-set fmri(custom4) "/vega/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
+set fmri(custom4) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXRUNXX.txt"
 
 # Orthogonalise EV 4 wrt EV 0
 set fmri(ortho4.0) 0
@@ -482,6 +489,143 @@ set fmri(ortho4.3) 0
 # Orthogonalise EV 4 wrt EV 4
 set fmri(ortho4.4) 0
 
+# Orthogonalise EV 4 wrt EV 5
+set fmri(ortho4.5) 0
+
+# Orthogonalise EV 4 wrt EV 6
+set fmri(ortho4.6) 0
+
+# EV 5 title
+set fmri(evtitle5) "eplik x pe"
+
+# Basic waveform shape (EV 5)
+# 0 : Square
+# 1 : Sinusoid
+# 2 : Custom (1 entry per volume)
+# 3 : Custom (3 column format)
+# 4 : Interaction
+# 10 : Empty (all zeros)
+set fmri(shape5) 4
+
+# Convolution (EV 5)
+# 0 : None
+# 1 : Gaussian
+# 2 : Gamma
+# 3 : Double-Gamma HRF
+# 4 : Gamma basis functions
+# 5 : Sine basis functions
+# 6 : FIR basis functions
+set fmri(convolve5) 0
+
+# Convolve phase (EV 5)
+set fmri(convolve_phase5) 0
+
+# Apply temporal filtering (EV 5)
+set fmri(tempfilt_yn5) 1
+
+# Add temporal derivative (EV 5)
+set fmri(deriv_yn5) 1
+
+# Interactions (EV 5 with EV 1)
+set fmri(interactions5.1) 1
+
+# Demean before using in interactions (EV 5 with EV 1)
+set fmri(interactionsd5.1) 2
+
+# Interactions (EV 5 with EV 2)
+set fmri(interactions5.2) 1
+
+# Demean before using in interactions (EV 5 with EV 2)
+set fmri(interactionsd5.2) 2
+
+# Interactions (EV 5 with EV 3)
+set fmri(interactions5.3) 0
+
+# Demean before using in interactions (EV 5 with EV 3)
+set fmri(interactionsd5.3) 0
+
+# Interactions (EV 5 with EV 4)
+set fmri(interactions5.4) 0
+
+# Demean before using in interactions (EV 5 with EV 4)
+set fmri(interactionsd5.4) 0
+
+# Orthogonalise EV 5 wrt EV 0
+set fmri(ortho5.0) 0
+
+# Orthogonalise EV 5 wrt EV 1
+set fmri(ortho5.1) 0
+
+# Orthogonalise EV 5 wrt EV 2
+set fmri(ortho5.2) 0
+
+# Orthogonalise EV 5 wrt EV 3
+set fmri(ortho5.3) 0
+
+# Orthogonalise EV 5 wrt EV 4
+set fmri(ortho5.4) 0
+
+# Orthogonalise EV 5 wrt EV 5
+set fmri(ortho5.5) 0
+
+# Orthogonalise EV 5 wrt EV 6
+set fmri(ortho5.6) 0
+
+# EV 6 title
+set fmri(evtitle6) "inv"
+
+# Basic waveform shape (EV 6)
+# 0 : Square
+# 1 : Sinusoid
+# 2 : Custom (1 entry per volume)
+# 3 : Custom (3 column format)
+# 4 : Interaction
+# 10 : Empty (all zeros)
+set fmri(shape6) 3
+
+# Convolution (EV 6)
+# 0 : None
+# 1 : Gaussian
+# 2 : Gamma
+# 3 : Double-Gamma HRF
+# 4 : Gamma basis functions
+# 5 : Sine basis functions
+# 6 : FIR basis functions
+set fmri(convolve6) 3
+
+# Convolve phase (EV 6)
+set fmri(convolve_phase6) 0
+
+# Apply temporal filtering (EV 6)
+set fmri(tempfilt_yn6) 1
+
+# Add temporal derivative (EV 6)
+set fmri(deriv_yn6) 1
+
+# Custom EV file (EV 6)
+set fmri(custom6) "/data/engine/rgerraty/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
+
+# Orthogonalise EV 6 wrt EV 0
+set fmri(ortho6.0) 0
+
+# Orthogonalise EV 6 wrt EV 1
+set fmri(ortho6.1) 0
+
+# Orthogonalise EV 6 wrt EV 2
+set fmri(ortho6.2) 0
+
+# Orthogonalise EV 6 wrt EV 3
+set fmri(ortho6.3) 0
+
+# Orthogonalise EV 6 wrt EV 4
+set fmri(ortho6.4) 0
+
+# Orthogonalise EV 6 wrt EV 5
+set fmri(ortho6.5) 0
+
+# Orthogonalise EV 6 wrt EV 6
+set fmri(ortho6.6) 0
+
 # Contrast & F-tests mode
 # real : control real EVs
 # orig : control original EVs
@@ -492,7 +636,7 @@ set fmri(con_mode) orig
 set fmri(conpic_real.1) 1
 
 # Title for contrast_real 1
-set fmri(conname_real.1) "i-e_ratio"
+set fmri(conname_real.1) "ep_lik_fb"
 
 # Real contrast_real vector 1 element 1
 set fmri(con_real1.1) 1
@@ -518,11 +662,23 @@ set fmri(con_real1.7) 0
 # Real contrast_real vector 1 element 8
 set fmri(con_real1.8) 0
 
+# Real contrast_real vector 1 element 9
+set fmri(con_real1.9) 0
+
+# Real contrast_real vector 1 element 10
+set fmri(con_real1.10) 0
+
+# Real contrast_real vector 1 element 11
+set fmri(con_real1.11) 0
+
+# Real contrast_real vector 1 element 12
+set fmri(con_real1.12) 0
+
 # Display images for contrast_real 2
 set fmri(conpic_real.2) 1
 
 # Title for contrast_real 2
-set fmri(conname_real.2) "old"
+set fmri(conname_real.2) "pe"
 
 # Real contrast_real vector 2 element 1
 set fmri(con_real2.1) 0
@@ -548,11 +704,23 @@ set fmri(con_real2.7) 0
 # Real contrast_real vector 2 element 8
 set fmri(con_real2.8) 0
 
+# Real contrast_real vector 2 element 9
+set fmri(con_real2.9) 0
+
+# Real contrast_real vector 2 element 10
+set fmri(con_real2.10) 0
+
+# Real contrast_real vector 2 element 11
+set fmri(con_real2.11) 0
+
+# Real contrast_real vector 2 element 12
+set fmri(con_real2.12) 0
+
 # Display images for contrast_real 3
 set fmri(conpic_real.3) 1
 
 # Title for contrast_real 3
-set fmri(conname_real.3) "fb"
+set fmri(conname_real.3) "eplik x pe"
 
 # Real contrast_real vector 3 element 1
 set fmri(con_real3.1) 0
@@ -567,7 +735,7 @@ set fmri(con_real3.3) 0
 set fmri(con_real3.4) 0
 
 # Real contrast_real vector 3 element 5
-set fmri(con_real3.5) 1.0
+set fmri(con_real3.5) 0
 
 # Real contrast_real vector 3 element 6
 set fmri(con_real3.6) 0
@@ -578,11 +746,23 @@ set fmri(con_real3.7) 0
 # Real contrast_real vector 3 element 8
 set fmri(con_real3.8) 0
 
+# Real contrast_real vector 3 element 9
+set fmri(con_real3.9) 1.0
+
+# Real contrast_real vector 3 element 10
+set fmri(con_real3.10) 0
+
+# Real contrast_real vector 3 element 11
+set fmri(con_real3.11) 0
+
+# Real contrast_real vector 3 element 12
+set fmri(con_real3.12) 0
+
 # Display images for contrast_orig 1
 set fmri(conpic_orig.1) 1
 
 # Title for contrast_orig 1
-set fmri(conname_orig.1) "i-e_ratio"
+set fmri(conname_orig.1) "ep_lik_fb"
 
 # Real contrast_orig vector 1 element 1
 set fmri(con_orig1.1) 1
@@ -596,11 +776,17 @@ set fmri(con_orig1.3) 0
 # Real contrast_orig vector 1 element 4
 set fmri(con_orig1.4) 0
 
+# Real contrast_orig vector 1 element 5
+set fmri(con_orig1.5) 0
+
+# Real contrast_orig vector 1 element 6
+set fmri(con_orig1.6) 0
+
 # Display images for contrast_orig 2
 set fmri(conpic_orig.2) 1
 
 # Title for contrast_orig 2
-set fmri(conname_orig.2) "old"
+set fmri(conname_orig.2) "pe"
 
 # Real contrast_orig vector 2 element 1
 set fmri(con_orig2.1) 0
@@ -614,11 +800,17 @@ set fmri(con_orig2.3) 0
 # Real contrast_orig vector 2 element 4
 set fmri(con_orig2.4) 0
 
+# Real contrast_orig vector 2 element 5
+set fmri(con_orig2.5) 0
+
+# Real contrast_orig vector 2 element 6
+set fmri(con_orig2.6) 0
+
 # Display images for contrast_orig 3
 set fmri(conpic_orig.3) 1
 
 # Title for contrast_orig 3
-set fmri(conname_orig.3) "fb"
+set fmri(conname_orig.3) "eplik x pe"
 
 # Real contrast_orig vector 3 element 1
 set fmri(con_orig3.1) 0
@@ -627,10 +819,16 @@ set fmri(con_orig3.1) 0
 set fmri(con_orig3.2) 0
 
 # Real contrast_orig vector 3 element 3
-set fmri(con_orig3.3) 1.0
+set fmri(con_orig3.3) 0
 
 # Real contrast_orig vector 3 element 4
 set fmri(con_orig3.4) 0
+
+# Real contrast_orig vector 3 element 5
+set fmri(con_orig3.5) 1.0
+
+# Real contrast_orig vector 3 element 6
+set fmri(con_orig3.6) 0
 
 # Contrast masking - use >0 instead of thresholding?
 set fmri(conmask_zerothresh_yn) 0
