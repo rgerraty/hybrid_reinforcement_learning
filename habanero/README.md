@@ -11,8 +11,7 @@ rsync -azv --exclude "pilot/" --exclude group_analyses/ --exclude "TCST0*/*/dico
 ```.bash
 for i in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
 do
-	sbatch --export=arg1=$i,arg2=/rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/preproc_6mm_6del_100s_mc.fsf,arg3=$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz
-	/rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/run_preproc_sub.sh 
+	sbatch --export=arg1=$i,arg2=/rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/preproc_6mm_6del_100s_mc.fsf,arg3=$(dirname $i)/../structural/bravo.anat/T1_biascorr_brain.nii.gz /rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/run_preproc_sub.sh 
 done
 ```
 
