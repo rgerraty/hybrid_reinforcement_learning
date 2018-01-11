@@ -18,7 +18,7 @@ done
 
 ### Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```.bash
-fsf=preproc_6mm_6del_100s_mc.fsf
+fsf=qdiff_ep_val_ch_fb_pe_oldt.fsf
 for i in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
 	s=$(echo $i | cut -c44-45); 
