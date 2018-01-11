@@ -27,7 +27,7 @@ else
 			fi
 			nvols=$(fslinfo $input | grep dim4 | grep -v pix | awk '{ print $2 }');
 			
-			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'<$fsf>$(dirname $input)/$(basename $fsf);
+			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g'<$fsf>"$(dirname $input)/$(basename $fsf)";
 
 			feat $(dirname $input)/$(basename $fsf);
 			#rm -rf $(dirname $input)/$(basename $fsf);
