@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Directives
-#SBATCH --job-name=image_preprocessing
 #SBATCH --account=rtg2116
+#SBATCH --job-name=image_preprocessing
 #SBATCH -c 1
 #SBATCH --time=00:75:00
 #SBATCH --mem-per-cpu=8gb

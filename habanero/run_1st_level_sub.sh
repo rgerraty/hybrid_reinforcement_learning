@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Directives
-#SBATCH --job-name=1st_level_GLM
 #SBATCH --account=rtg2116
+#SBATCH --job-name=1st_level_GLM
 #SBATCH -c 1
 #SBATCH --time=00:100:00
 #SBATCH --mem-per-cpu=8gb
