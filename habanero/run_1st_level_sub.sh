@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directives
-#SBATCH --account=habapsych
+#SBATCH --account=psych
 #SBATCH --job-name=1st_level_GLM
 #SBATCH -c 1
 #SBATCH --time=00:100:00
