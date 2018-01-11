@@ -18,7 +18,7 @@ done
 
 ### Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```.bash
-fsf=epvalue_newold.fsf
+fsf=preproc_6mm_6del_100s_mc.fsf
 for i in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
 	s=$(echo $i | cut -c44-45); 
@@ -57,7 +57,7 @@ for s in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/;
 done
 ```
 
-### Sync local server with yeti
+### Sync local server with habanero
 ```.bash
 rsync -az /rigel/psych/users/rtg2116/hybrid_mri/ rgerraty@lovelace.psych.columbia.edu:/data/engine/engram/rgerraty/hybrid_mri/
 ```

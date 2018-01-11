@@ -8,5 +8,5 @@
 #SBATCH --mem-per-cpu=8gb
 
 
-/rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/run_preproc.sh $arg1 $arg2 $arg3
+bash /rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/run_preproc.sh $arg1 $arg2 $arg3
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directives
-#SBATCH --jobname=image_preprocessing
+#SBATCH --job-name=image_preprocessing
 #SBATCH --account=rtg2116
 #SBATCH -c 1
 #SBATCH --time=00:75:00
