@@ -30,6 +30,6 @@ else
 			sed -e 's:XXSUBXX:'$sub':g' -e 's:XXRUNXX:'$run':g' -e 's:XXVOLSXX:'$nvols':g' -e 's:XXINXX:'$input':g' $fsf >$(dirname $input)/$sub$run\_tmp.fsf;
 
 			feat $(dirname $input)/$sub$run\_tmp.fsf;
-			rm -rf $(dirname $input)/$sub$run\_tmp.fsf;
+			#rm -rf $(dirname $input)/$sub$run\_tmp.fsf;
 		fi
 fi
