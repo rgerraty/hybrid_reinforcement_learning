@@ -1,6 +1,10 @@
 # Habanero Scripts
 Slightly modified code for running fMRI analyses from the above directory on the habanero supercomputing cluster, in order to submit parallel jobs. Hopefully someday the scripts will be made general enough that this is unnecessary, but for now the following code will run with the directory structure present on Habanero. 
 
+### Mount engram SMB share on local server
+```.bash
+sudo mount -t cifs -o vers=2.1,username=rtg2116,domain=ADCU //labshare-smb.engram.rc.zi.columbia.edu/shohamy-labshare /data/engine/engram/
+```
 
 ### Sync local server with Habanero
 ```.bash
