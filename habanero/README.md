@@ -60,7 +60,7 @@ for s in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/;
 done
 ```
 
-### Sync local server with habanero
+### Sync habanero with local server
 ```.bash
 sudo rsync -avz --include "TCST*/hybrid_r?/*feat" rtg2116@habanero.rcs.columbia.edu:/rigel/psych/users/rtg2116/hybrid_mri/ /data/engine/engram/rgerraty/hybrid_mri/
 
