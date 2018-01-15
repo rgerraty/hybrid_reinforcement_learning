@@ -62,7 +62,7 @@ done
 
 ### Sync habanero with local server
 ```.bash
-sudo rsync -avz --include "TCST*/hybrid_r?/*feat" rtg2116@habanero.rcs.columbia.edu:/rigel/psych/users/rtg2116/hybrid_mri/ /data/engine/engram/rgerraty/hybrid_mri/
+sudo rsync -avz --include "TCST*" --include "/TCST*/hybrid_r?" --include "TCST*/hybrid_r?/*feat" --include "TCST/hybrid_r?/*feat/*" rtg2116@habanero.rcs.columbia.edu:/rigel/psych/users/rtg2116/hybrid_mri/ /data/engine/engram/rgerraty/hybrid_mri/
 
 ```
 
