@@ -30,7 +30,7 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "/rigel/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/inclik_eplik_encfbxpe_ch_fb_oldt"
+set fmri(outputdir) "/rigel/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/inclik_eplik_encfbxpe_ch_fb_oldt_nofbval"
 
 # TR(s)
 set fmri(tr) 2.000000
