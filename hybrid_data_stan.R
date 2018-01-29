@@ -33,7 +33,7 @@ hybrid_data$OldRed<-hybrid_data$OldRed/2
 hybrid_data$EncT<-hybrid_data$Trial-hybrid_data$Delay;
 
 #pre vs post reversal
-hybrid_data$pre_post_rev<- (hybrid_data$RevT>mean(hybrid_data$RevT))-.5
+hybrid_data$pre_post_rev<- (hybrid_data$RevT>median(hybrid_data$RevT))-.5
 
 #old objects were first seen pre vs post reversal
 hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>mean(hybrid_data$EncRevT,na.rm=T))-.5
@@ -76,6 +76,25 @@ hybrid_data_threeback<-rbind(rep(NaN,nsub),
                              hybrid_data_twoback[1:(nrow(hybrid_data_twoback)-1),])
 
 hybrid_data$threeback_outcome<-melt(hybrid_data_threeback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+m_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
+               (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
+             data=hybrid_data,family=binomial)
+
+m_lagxrev<-glmer(StayResp~I(RevT-12)+oneback_outcome+twoback_outcome+threeback_outcome+I(RevT-12):oneback_outcome+I(RevT-12):twoback_outcome+I(RevT-12):threeback_outcome+
+               (I(RevT-12)+oneback_outcome+twoback_outcome+threeback_outcome|Sub),
+             data=hybrid_data,family=binomial)
+
+m_prerev_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
+                      (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
+                    data=hybrid_data,family=binomial,subset=pre_post_rev==-.5)
+
+m_postrev_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
+                      (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
+                    data=hybrid_data,family=binomial,subset=pre_post_rev==.5)
+
+plot(c(1,2,3),fixef(m_postrev_lag)[2:4],'l',col='blue')
+lines(fixef(m_prerev_lag)[2:4],col='red')
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
