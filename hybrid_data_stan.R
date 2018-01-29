@@ -132,7 +132,7 @@ hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT,
                             red_choice_prev=red_choice_prev, rew=rew, 
                             old_red_val=old_red_val, old_red=old_red,
                             old_enc_trial=old_enc_trial)
-hybrid_rwph_fit <- stan(file = '~/Documents/Hybrid_RL/RW_PH_hyb.stan', 
+hybrid_rwph_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/RW_PH_hyb.stan', 
                         data = hybrid_rwph_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid_rwph_fit,file='~/Documents/Hybrid_RL/stanfit_hybrid_RWPH')
 log_lik3<-extract_log_lik(hybrid_rwph_fit)
@@ -147,7 +147,7 @@ hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT,
                             red_choice_prev=red_choice_prev, rew=rew, 
                             old_red_val=old_red_val, old_red=old_red,
                             old_enc_trial=old_enc_trial)
-hybrid_rwph_wkap_fit <- stan(file = '~/Documents/Hybrid_RL/RW_PH_hyb_wkap.stan', 
+hybrid_rwph_wkap_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/RW_PH_hyb_wkap.stan', 
                         data = hybrid_rwph_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid_rwph_wkap_fit,file='~/Documents/Hybrid_RL/stanfit_hybrid_RWPH_wkap')
 log_lik4<-extract_log_lik(hybrid_rwph_wkap_fit)
