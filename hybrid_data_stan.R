@@ -51,6 +51,30 @@ for(i in 1:length(hybrid_data$Delay)){
     }
   }
 }
+
+
+#Lagged outcome variables for regression model
+hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Outcome")
+
+
+nsub<-length(unique(hybrid_data$Sub))
+cutpoint<-which(hybrid_data$Sub==17 & hybrid_data$Trial==240)
+
+hybrid_data_oneback<-rbind(rep(NaN,nsub),
+                           hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
+
+hybrid_data$oneback_outcome<-melt(hybrid_data_oneback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_twoback<-rbind(rep(NaN,nsub),
+                           hybrid_data_oneback[1:(nrow(hybrid_data_oneback)-1),])
+
+hybrid_data$twoback_outcome<-melt(hybrid_data_twoback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_threeback<-rbind(rep(NaN,nsub),
+                             hybrid_data_twoback[1:(nrow(hybrid_data_twoback)-1),])
+
+hybrid_data$threeback_outcome<-melt(hybrid_data_threeback)$value[-(cutpoint+1):-(cutpoint+61)]
+
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
