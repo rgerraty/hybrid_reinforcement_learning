@@ -229,13 +229,36 @@ Q_diff_norm<-colNorm(Q_chosen_hyb-Q_unchosen_hyb)
 PE_norm<-colNorm(pe_hyb)
 Q_diff<-(Q_chosen_hyb-Q_unchosen_hyb)
 
+tmp_ep_norm<-tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Subject,
+                    function(x){(x-mean(na.omit(x)))/sd(na.omit(x))})
+
+tmp_inc_norm<-tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Subject,
+                     function(x){(x-mean(na.omit(x)))/sd(na.omit(x))})
+
+
+lik_norm<-NULL
+k<-1
+for(i in 1:dim(tmp_ep_norm)){
+  for(j in 1:length(tmp_ep_norm[[i]])){
+    lik_norm$Sub[k]<-i
+    lik_norm$Ep_lik_norm[k]<-tmp_ep_norm[[i]][j]
+    lik_norm$Inc_lik_norm[k]<-tmp_inc_norm[[i]][j]
+    k<-k+1
+  }
+}
+
+
 melted_vals<-cbind(melt(Q_chosen_norm),melt(Q_unchosen_norm)[,3],
                    melt(Q_diff_norm)[,3],melt(PE_norm)[,3],melt(Q_chosen_hyb)[,3],
                    melt(Q_unchosen_hyb)[,3],melt(Q_diff)[,3],
-                   melt(Q_red)[,3],melt(Q_blue)[,3],melt(pe_hyb)[,3])
+                   melt(Q_red)[,3],melt(Q_blue)[,3],melt(pe_hyb)[,3],
+                   lik_hyb_melt$Incrementalp,lik_hyb_melt$Episodicp,
+                   lik_norm$Inc_lik_norm,lik_norm$Ep_lik_norm,
+                   lik_hyb_melt$IE_rat,lik_norm$IE_rat_norm)
 names(melted_vals)<-c("Trial","Sub","Q_chosen_norm","Q_unchosen_norm",
                       "Q_diff_norm","PE_norm","Q_chosen","Q_unchosen",
-                      "Q_diff","Q_red","Q_blue","PE")
+                      "Q_diff","Q_red","Q_blue","PE","Inc_lik","Ep_lik",
+                      "Inc_lik_norm","Ep_lik_norm","Lik_rat","Lik_rat_norm")
 
 for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$Q_chosen_norm[i]<-
@@ -275,6 +298,46 @@ for(i in 1:dim(hybrid_data)[1]){
   hybrid_data$PE[i]<- 
     melted_vals$PE[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] & 
                           melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Inc_lik[i]<-
+    melted_vals$Inc_lik[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] &
+                          melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Ep_lik[i]<-
+    melted_vals$Ep_lik[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] &
+                         melted_vals$Trial==hybrid_data$Trial[i]]
+  
+  hybrid_data$Inc_lik_norm[i]<-
+    melted_vals$Inc_lik_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] &
+                               melted_vals$Trial==hybrid_data$Trial[i] ]
+  
+  hybrid_data$Ep_lik_norm[i]<-
+    melted_vals$Ep_lik_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] &
+                              melted_vals$Trial==hybrid_data$Trial[i]]
+  
+  
+  hybrid_data$Lik_rat[i]<-
+    hybrid_data$Inc_lik_norm[i]/hybrid_data$Ep_lik_norm[i]
+  
+  hybrid_data$Lik_rat_norm[i]<-
+    melted_vals$Lik_rat_norm[melted_vals$Sub==as.numeric(as.factor(hybrid_data$Sub))[i] &
+                               melted_vals$Trial==hybrid_data$Trial[i]]
+}
+
+enc_T<-as.numeric(row.names(hybrid_data))-hybrid_data$Delay
+
+hybrid_data$pe_enc<-0
+hybrid_data$encT<-0
+hybrid_data$Ep_lik_enc<-0
+hybrid_data$Ep_lik_norm_enc<-0
+
+for(i in 1:length(enc_T)){
+  if(!is.nan(enc_T[i])){
+    hybrid_data$Ep_lik_enc[enc_T[i]]<-hybrid_data$Ep_lik[i]
+    hybrid_data$Ep_lik_norm_enc[enc_T[i]]<-hybrid_data$Ep_lik_norm[i]
+    hybrid_data$pe_enc[]<-hybrid_data$PE[enc_T[i]]
+    hybrid_data$encT[enc_T[i]]<-1
+  }
 }
 
 write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.names = F)
@@ -282,7 +345,16 @@ write.csv(x = hybrid_data,file = "~/Documents/Hybrid_RL/hybrid_data.csv",row.nam
 #glmer likelihood approximation for comparison
 me_hybrid<-glmer(ChooseRed ~ LuckRed + OldRed + OldValRed + (LuckRed + OldRed + OldValRed | Sub),data=hybrid_data,family=binomial)
 
-me_hybrid
+summary(me_hybrid)
+
+me_old<-glmer(OldObjC ~ ObjPP + (ObjPP  | Sub),data=hybrid_data,family=binomial)
+
+me_old2<-glmer(OldObjC ~ I(log(ObjPP+.000001)) * I(pe_enc^2) +  
+                 (I(log(ObjPP+.000001))+I(pe_enc^2) | Sub),
+               data=hybrid_data,family=binomial)
+summary(me_old2)
+
+
 #compare bayesian heirarchical fit in stan to MAP approximation, using standard RL
 fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
 standard_fit_extract<-extract(standard_fit,permute=T)

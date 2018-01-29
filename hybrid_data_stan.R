@@ -1,4 +1,4 @@
-hybrid_data<-read.delim('~/Downloads/CardGame.txt')
+hybrid_data<-read.delim('https://raw.github.com/rgerraty/rl_flexibility/master/CardGame.txt')
 
 #fix subject 13 runs
 hybrid_data$Run[hybrid_data$Sub==13 & hybrid_data$Trial<121 & hybrid_data$Trial>60]<-2
@@ -13,38 +13,28 @@ options(mc.cores = parallel::detectCores())
 #abs(choice-3) is a hack to get unchosen from chosen [1,2];
 hybrid_data$DeckUnC<-abs(hybrid_data$DeckC-3)
 
-#hybrid_data$OldObjC[hybrid_data$OldObjC==0]<--1
-#hybrid_data$OldObjC[is.na(hybrid_data$OldObjC)]<-0
-
-hybrid_data$ObjPP_C=(hybrid_data$ObjPP-.5)*hybrid_data$OldObjC
-hybrid_data$ObjPP_C[is.na(hybrid_data$ObjPP)]<-0
-
-#.5/-.5 coding for interpreting regression coefficients
-#hybrid_data$OldObjC<-hybrid_data$OldObjC/2
-
-#Now changed coding to p(Choose Red) because the first model weirds people out and doesn't work in lme4
+#code choices in terms of red deck (choose red, lucky red &c.)
 hybrid_data$ChooseRed<-(hybrid_data$DeckC==2)+0
-
-hybrid_data$LuckRed<-((hybrid_data$LuckyDeck==2)-(hybrid_data$LuckyDeck==1))
+hybrid_data$LuckRed<-((hybrid_data$LuckyDeck==2)-(hybrid_data$LuckyDeck==1))/2
 hybrid_data$LuckRed[is.na(hybrid_data$LuckRed)]<-0
 
 hybrid_data$OldRed<-((hybrid_data$OldDeck==2)-(hybrid_data$OldDeck==1))
 hybrid_data$OldRed[is.na(hybrid_data$OldRed)]<-0
 
+#basically interacting OldRed with ep. value to get contribution of ep. value to choosing red
+#need to zero-center to make OldRed interpretable as main effect
 hybrid_data$OldValRed<-hybrid_data$OldRed*(hybrid_data$ObjPP-.5)
 hybrid_data$OldValRed[is.na(hybrid_data$OldValRed)]<-0
 
-#.5/-.5 coding for interpreting regression coefficients
-hybrid_data$LuckRed<-hybrid_data$LuckRed/2
 hybrid_data$OldRed<-hybrid_data$OldRed/2
 
-#encoding trial
+#trials old objects were first seen
 hybrid_data$EncT<-hybrid_data$Trial-hybrid_data$Delay;
 
 #pre vs post reversal
 hybrid_data$pre_post_rev<- (hybrid_data$RevT>mean(hybrid_data$RevT))-.5
 
-
+#old objects were first seen pre vs post reversal
 hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>mean(hybrid_data$EncRevT,na.rm=T))-.5
 
 
@@ -52,7 +42,15 @@ lagpad <- function(x, k=1) {
   c(rep(NA, k), x)[1 : length(x)] 
 }
 
-
+for(i in 1:length(hybrid_data$Delay)){
+  if(i>1 & !is.nan(hybrid_data$Delay[i])){
+    if(!is.nan(hybrid_data$Delay[i-1])){
+    if(hybrid_data$Delay[i]==hybrid_data$Delay[i-1]){
+      hybrid_data$old_pair[i]=1
+    }
+    }
+  }
+}
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
@@ -80,10 +78,6 @@ for (i in 1:NS) {
   unchoice[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$DeckUnC;
   rew[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$Outcome;
   
-  #based on choosing chosen 
-  old_choice[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$OldObjC;
-  old_choice_val[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$ObjPP_C;
-  
   #based on choosing red
   red_choice[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$ChooseRed;
   old_red[i,1:NT[i]] = subset(hybrid_data,Sub==subs[i])$OldRed;
@@ -94,7 +88,7 @@ for (i in 1:NS) {
   old_enc_trial[i,1:NT[i]]=subset(hybrid_data,Sub==subs[i])$EncT
 }
 
-#for skipping missed trials
+#for skipping missed trials in stan
 choice[is.na(choice)]<--1
 choice[choice==0]<--1
 unchoice[is.na(unchoice)]<--1
@@ -102,7 +96,6 @@ unchoice[choice==0]<--1
 rew[is.na(rew)]<--1
 red_choice[is.na(red_choice)]<--1
 red_choice_prev[is.na(red_choice_prev)]<-0
-
 old_enc_trial[is.nan(old_enc_trial)]<--1;
 
 
@@ -119,8 +112,8 @@ log_lik1<-extract_log_lik(standard_fit)
 looc1<-loo(log_lik1,cores=2)
 waic1<-waic(log_lik1)
 
-#"hybrid" RL model fit heirarchically in Stan
-hybrid_standata = list(NS=NS, NC=2,K=6, MT=MT, NT= NT, 
+#RL model with episodic value fit heirarchically in Stan
+hybrid_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, 
                        choice=choice, red_choice=red_choice, 
                        red_choice_prev=red_choice_prev, rew=rew, 
                        old_red_val=old_red_val, old_red=old_red)
@@ -134,7 +127,7 @@ waic2<-waic(log_lik2)
 
 
 #"hybrid" RW/PH RL model fit heirarchically in Stan
-hybrid_rwph_standata = list(NS=NS, NC=2,K=7, MT=MT, NT= NT, 
+hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, 
                             choice=choice, red_choice=red_choice, 
                             red_choice_prev=red_choice_prev, rew=rew, 
                             old_red_val=old_red_val, old_red=old_red,
@@ -147,3 +140,18 @@ looc3<-loo(log_lik3,cores=2)
 waic3<-waic(log_lik3)
 
 compare(waic1,waic2,waic3)
+
+#"hybrid" RW/PH RL model fit heirarchically in Stan
+hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT, 
+                            choice=choice, red_choice=red_choice, 
+                            red_choice_prev=red_choice_prev, rew=rew, 
+                            old_red_val=old_red_val, old_red=old_red,
+                            old_enc_trial=old_enc_trial)
+hybrid_rwph_wkap_fit <- stan(file = '~/Documents/Hybrid_RL/RW_PH_hyb_wkap.stan', 
+                        data = hybrid_rwph_standata, iter = 1250, warmup = 250, chains = 4)
+save(hybrid_rwph_wkap_fit,file='~/Documents/Hybrid_RL/stanfit_hybrid_RWPH_wkap')
+log_lik4<-extract_log_lik(hybrid_rwph_wkap_fit)
+looc4<-loo(log_lik4,cores=2)
+waic4<-waic(log_lik4)
+
+compare(waic1,waic2,waic3,waic4)

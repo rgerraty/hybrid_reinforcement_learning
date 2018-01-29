@@ -4,25 +4,33 @@ data {
 	int NC;//number of choices (2)
 	int NT[NS];//number of trials per subject
 	int K;//number of coefficients for glm
-	real<lower=-1,upper=1> rew[NS,MT];//subject x trial reward, -1 for missed
+	real rew[NS,MT];//subject x trial reward, -1 for missed
 	int choice[NS,MT];//chosen option, -1 for missed
 	int red_choice[NS,MT];//1=chose red,0=chose blue, -1 for missed
-	real<lower=-.5, upper=.5> red_choice_prev[NS,MT];//.5=chose red last, -.5=chose blue last, 0=missed last
+	real red_choice_prev[NS,MT];//.5=chose red last, -.5=chose blue last, 0=missed last
 }
 
 transformed data{
+  //get count of number of non-missed trials
   int N;
-  N = sum (NT);
+  N=0;
+  for (s in 1:NS) {
+    for (t in 1:NT[s]) {
+      if (choice[s,t] > 0) {
+        N=N+1;
+      }
+    }
+}
 }
 
 parameters {
   //hyperpriors on alpha distribution
-  real<lower=1> a1;
-  real<lower=1> a2;
+  real<lower=0> a1;
+  real<lower=0> a2;
   
   //hyperpriors on beta distribution
   vector[K] b_mean;
-  vector[K] b_sd;
+  vector<lower=0>[K] b_sd;
   
   //subject-level alpha and betas
   real<lower=0,upper=1> alpha[NS];
@@ -133,8 +141,8 @@ generated quantities {
         beta[s,1] + 
         beta[s,2]*(Q[s,t,2]-Q[s,t,1])+
         beta[s,3]*red_choice_prev[s,t]);
+        n = n+1;
       }
-      n = n+1;
     }
   }
 }
