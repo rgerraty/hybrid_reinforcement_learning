@@ -5,6 +5,7 @@ hybrid_data$Run[hybrid_data$Sub==13 & hybrid_data$Trial<121 & hybrid_data$Trial>
 
 library(rstan)
 library(loo)
+library(reshape2)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
@@ -42,6 +43,7 @@ lagpad <- function(x, k=1) {
   c(rep(NA, k), x)[1 : length(x)] 
 }
 
+hybrid_data$old_pair<-NaN
 for(i in 1:length(hybrid_data$Delay)){
   if(i>1 & !is.nan(hybrid_data$Delay[i])){
     if(!is.nan(hybrid_data$Delay[i-1])){
