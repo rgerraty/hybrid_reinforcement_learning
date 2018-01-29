@@ -51,6 +51,30 @@ for(i in 1:length(hybrid_data$Delay)){
     }
   }
 }
+
+
+#Lagged outcome variables for regression model
+hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Outcome")
+
+
+nsub<-length(unique(hybrid_data$Sub))
+cutpoint<-which(hybrid_data$Sub==17 & hybrid_data$Trial==240)
+
+hybrid_data_oneback<-rbind(rep(NaN,nsub),
+                           hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
+
+hybrid_data$oneback_outcome<-melt(hybrid_data_oneback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_twoback<-rbind(rep(NaN,nsub),
+                           hybrid_data_oneback[1:(nrow(hybrid_data_oneback)-1),])
+
+hybrid_data$twoback_outcome<-melt(hybrid_data_twoback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_threeback<-rbind(rep(NaN,nsub),
+                             hybrid_data_twoback[1:(nrow(hybrid_data_twoback)-1),])
+
+hybrid_data$threeback_outcome<-melt(hybrid_data_threeback)$value[-(cutpoint+1):-(cutpoint+61)]
+
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
@@ -132,7 +156,7 @@ hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT,
                             red_choice_prev=red_choice_prev, rew=rew, 
                             old_red_val=old_red_val, old_red=old_red,
                             old_enc_trial=old_enc_trial)
-hybrid_rwph_fit <- stan(file = '~/Documents/Hybrid_RL/RW_PH_hyb.stan', 
+hybrid_rwph_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/RW_PH_hyb.stan', 
                         data = hybrid_rwph_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid_rwph_fit,file='~/Documents/Hybrid_RL/stanfit_hybrid_RWPH')
 log_lik3<-extract_log_lik(hybrid_rwph_fit)
@@ -147,7 +171,7 @@ hybrid_rwph_standata = list(NS=NS, NC=2,K=5, MT=MT, NT= NT,
                             red_choice_prev=red_choice_prev, rew=rew, 
                             old_red_val=old_red_val, old_red=old_red,
                             old_enc_trial=old_enc_trial)
-hybrid_rwph_wkap_fit <- stan(file = '~/Documents/Hybrid_RL/RW_PH_hyb_wkap.stan', 
+hybrid_rwph_wkap_fit <- stan(file = '~/GitHub/hybrid_reinforcement_learning/RW_PH_hyb_wkap.stan', 
                         data = hybrid_rwph_standata, iter = 1250, warmup = 250, chains = 4)
 save(hybrid_rwph_wkap_fit,file='~/Documents/Hybrid_RL/stanfit_hybrid_RWPH_wkap')
 log_lik4<-extract_log_lik(hybrid_rwph_wkap_fit)
