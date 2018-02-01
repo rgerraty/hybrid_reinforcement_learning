@@ -6,6 +6,9 @@ hybrid_data$Run[hybrid_data$Sub==13 & hybrid_data$Trial<121 & hybrid_data$Trial>
 library(rstan)
 library(loo)
 library(reshape2)
+library(scales)
+library(ggplot2)
+library(gridExtra)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
@@ -36,27 +39,11 @@ hybrid_data$EncT<-hybrid_data$Trial-hybrid_data$Delay;
 hybrid_data$pre_post_rev<- (hybrid_data$RevT>median(hybrid_data$RevT))-.5
 
 #old objects were first seen pre vs post reversal
-hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>mean(hybrid_data$EncRevT,na.rm=T))-.5
-
-
-lagpad <- function(x, k=1) {
-  c(rep(NA, k), x)[1 : length(x)] 
-}
-
-hybrid_data$old_pair<-NaN
-for(i in 1:length(hybrid_data$Delay)){
-  if(i>1 & !is.nan(hybrid_data$Delay[i])){
-    if(!is.nan(hybrid_data$Delay[i-1])){
-    if(hybrid_data$Delay[i]==hybrid_data$Delay[i-1]){
-      hybrid_data$old_pair[i]=1
-    }
-    }
-  }
-}
+hybrid_data$pre_post_rev_enc<- (hybrid_data$EncRevT>median(hybrid_data$EncRevT,na.rm=T))-.5
 
 
 #Lagged outcome variables for regression model
-hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Outcome")
+hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Outcome")-.5
 
 
 nsub<-length(unique(hybrid_data$Sub))
@@ -77,24 +64,83 @@ hybrid_data_threeback<-rbind(rep(NaN,nsub),
 
 hybrid_data$threeback_outcome<-melt(hybrid_data_threeback)$value[-(cutpoint+1):-(cutpoint+61)]
 
-m_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
-               (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
-             data=hybrid_data,family=binomial)
 
-m_lagxrev<-glmer(StayResp~I(RevT-12)+oneback_outcome+twoback_outcome+threeback_outcome+I(RevT-12):oneback_outcome+I(RevT-12):twoback_outcome+I(RevT-12):threeback_outcome+
-               (I(RevT-12)+oneback_outcome+twoback_outcome+threeback_outcome|Sub),
-             data=hybrid_data,family=binomial)
+hybrid_data_fourback<-rbind(rep(NaN,nsub),
+                             hybrid_data_threeback[1:(nrow(hybrid_data_threeback)-1),])
 
-m_prerev_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
-                      (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
-                    data=hybrid_data,family=binomial,subset=pre_post_rev==-.5)
+hybrid_data$fourback_outcome<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-(cutpoint+61)]
 
-m_postrev_lag<-glmer(StayResp~oneback_outcome+twoback_outcome+threeback_outcome+
-                      (oneback_outcome+twoback_outcome+threeback_outcome|Sub),
-                    data=hybrid_data,family=binomial,subset=pre_post_rev==.5)
+#same but for choice
+hybrid_data_wide<-2*(dcast(hybrid_data,Trial~Sub,value.var = "ChooseRed")-.5)
 
-plot(c(1,2,3),fixef(m_postrev_lag)[2:4],'l',col='blue')
-lines(fixef(m_prerev_lag)[2:4],col='red')
+hybrid_data_oneback<-rbind(rep(NaN,nsub),
+                           hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
+
+hybrid_data$oneback_choosered<-melt(hybrid_data_oneback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_twoback<-rbind(rep(NaN,nsub),
+                           hybrid_data_oneback[1:(nrow(hybrid_data_oneback)-1),])
+
+hybrid_data$twoback_choosered<-melt(hybrid_data_twoback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_threeback<-rbind(rep(NaN,nsub),
+                             hybrid_data_twoback[1:(nrow(hybrid_data_twoback)-1),])
+
+hybrid_data$threeback_choosered<-melt(hybrid_data_threeback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+
+hybrid_data_fourback<-rbind(rep(NaN,nsub),
+                             hybrid_data_threeback[1:(nrow(hybrid_data_twoback)-1),])
+
+hybrid_data$fourback_choosered<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+
+                  (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered|Sub),
+                data=hybrid_data,family=binomial)
+
+
+m_rc_lagxrev<-glmer(ChooseRed~oneback_outcome:oneback_choosered*I(RevT-10)+twoback_outcome:twoback_choosered*I(RevT-10)+threeback_outcome:threeback_choosered*I(RevT-10)+fourback_outcome:fourback_choosered*I(RevT-10)+
+                  (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+I(RevT-10)|Sub),
+                data=hybrid_data,family=binomial)
+
+
+m_prerev_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+OldValRed+fourback_outcome:fourback_choosered+OldT+
+                      (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+OldValRed+OldT|Sub),
+                    data=hybrid_data,family=binomial,subset=pre_post_rev==-.5)# & OldT==0)
+
+m_postrev_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+OldValRed+fourback_outcome:fourback_choosered+OldT+
+                       (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+OldValRed+fourback_outcome:fourback_choosered+OldT|Sub),
+                     data=hybrid_data,family=binomial,subset=pre_post_rev==.5)# & OldT==0)
+
+ggdat_pre<-data.frame(Lag=c("1","2","3","4","Old"))
+ggdat_pre$Lag<-factor(ggdat_pre$Lag,c("1","2","3","4","Old"))
+ggdat_pre$Choice_Effect<-fixef(m_prerev_lag)[c(4:7,2)]
+ggdat_pre$SE<-sqrt(diag(vcov(m_prerev_lag)))[c(4:7,2)]
+
+
+g_pre<-ggplot(data=ggdat_pre,aes(x=Lag,y=Choice_Effect))+
+  geom_bar(stat = 'identity',aes(fill=Lag))+
+  geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(0,2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Greens")
+
+ggdat_post<-data.frame(Lag=c("1","2","3","4","Old"))
+ggdat_post$Lag<-factor(ggdat_post$Lag,c("1","2","3","4","Old"))
+ggdat_post$Choice_Effect<-fixef(m_postrev_lag)[c(4:7,2)]
+ggdat_post$SE<-sqrt(diag(vcov(m_postrev_lag)))[c(4:7,2)]
+
+
+g_post<-ggplot(data=ggdat_post,aes(x=Lag,y=Choice_Effect))+
+  geom_bar(stat = 'identity',aes(fill=Lag))+
+  geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(0,2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Oranges")
+
+
+grid.arrange(g_pre,g_post,ncol=2)
+
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
@@ -113,6 +159,9 @@ red_choice_prev = array(0.0,c(NS,MT));
 
 old_enc_trial= array(0.0,c(NS,MT));
 
+lagpad <- function(x, k=1) {
+  c(rep(NA, k), x)[1 : length(x)] 
+}
 
 #convert data to subjects by trials format for Stan
 for (i in 1:NS) {

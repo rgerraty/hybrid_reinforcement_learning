@@ -335,7 +335,7 @@ for(i in 1:length(enc_T)){
   if(!is.nan(enc_T[i])){
     hybrid_data$Ep_lik_enc[enc_T[i]]<-hybrid_data$Ep_lik[i]
     hybrid_data$Ep_lik_norm_enc[enc_T[i]]<-hybrid_data$Ep_lik_norm[i]
-    hybrid_data$pe_enc[]<-hybrid_data$PE[enc_T[i]]
+    hybrid_data$pe_enc[i]<-hybrid_data$PE[enc_T[i]]
     hybrid_data$encT[enc_T[i]]<-1
   }
 }
@@ -347,13 +347,13 @@ me_hybrid<-glmer(ChooseRed ~ LuckRed + OldRed + OldValRed + (LuckRed + OldRed + 
 
 summary(me_hybrid)
 
-me_old<-glmer(OldObjC ~ ObjPP + (ObjPP  | Sub),data=hybrid_data,family=binomial)
+me_old_pe<-glmer(OldObjC ~ ObjPP + I(pe_enc^2)+(ObjPP +I(pe_enc^2) | Sub),data=hybrid_data,family=binomial)
 
-me_old2<-glmer(OldObjC ~ I(log(ObjPP+.000001)) * I(pe_enc^2) +  
-                 (I(log(ObjPP+.000001))+I(pe_enc^2) | Sub),
+me_oldxpe<-glmer(OldObjC ~ ObjPP * I(pe_enc^2) +  
+                 (ObjPP*I(pe_enc^2) | Sub),
                data=hybrid_data,family=binomial)
-summary(me_old2)
-
+summary(me_old_pe)
+summary(me_oldxpe)
 
 #compare bayesian heirarchical fit in stan to MAP approximation, using standard RL
 fit<-load('~/Documents/Hybrid_RL/stanfit_rl')
@@ -377,3 +377,55 @@ plot(beta[,2],maps$V3,
      xlab="Stan Estimates (Beta)",ylab="Indiv. Map Estimates")
 
 
+#RT plots
+m_RT_noold<-lmer(log(RT)~Q_chosen+Q_unchosen+(Q_chosen+Q_unchosen|Sub),data=hybrid_data,subset=OldT==0)
+
+m_RT_Qxoldt<-lmer(log(RT)~Q_chosen*OldT+Q_unchosen*OldT+(Q_chosen+Q_unchosen+OldT|Sub),data=hybrid_data)
+
+m_RToldt_valxoldc<-lmer(log(RT)~Q_chosen*OldObjC+Q_unchosen*OldObjC+ObjPP*OldObjC+(Q_chosen+Q_unchosen+OldObjC+ObjPP|Sub),data=hybrid_data)
+
+m_RToldt_val_oldc<-lmer(log(RT)~Q_chosen+Q_unchosen+ObjPP+(Q_chosen+Q_unchosen+ObjPP|Sub),data=hybrid_data,subset=OldObjC==1)
+
+m_RToldt_val_newc<-lmer(log(RT)~Q_chosen+Q_unchosen+ObjPP+(Q_chosen+Q_unchosen+ObjPP|Sub),data=hybrid_data,subset=OldObjC==0)
+
+
+ggdat_no<-data.frame(New_v_New=c("Qch","Qunch"))
+ggdat_no$New_v_New<-factor(ggdat_no$New_v_New,c("Qch","Qunch"))
+ggdat_no$RT_Effect<-fixef(m_RT_noold)[2:3]
+ggdat_no$SE<-sqrt(diag(vcov(m_RT_noold)))[2:3]
+
+
+g_no<-ggplot(data=ggdat_no,aes(x=New_v_New,y=RT_Effect))+
+  geom_bar(stat = 'identity',aes(fill=New_v_New))+
+  geom_errorbar(aes(ymin=RT_Effect-SE,ymax=RT_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(-.2,.2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Greens")
+
+ggdat_oldc<-data.frame(Old_Ch=c("Qch","Qunch","Ep"))
+ggdat_oldc$Old_Ch<-factor(ggdat_oldc$Old_Ch,c("Qch","Qunch","Ep"))
+ggdat_oldc$RT_Effect<-fixef(m_RToldt_val_oldc)[2:4]
+ggdat_oldc$SE<-sqrt(diag(vcov(m_RToldt_val_oldc)))[2:4]
+
+
+g_oldc<-ggplot(data=ggdat_oldc,aes(x=Old_Ch,y=RT_Effect))+
+  geom_bar(stat = 'identity',aes(fill=Old_Ch))+
+  geom_errorbar(aes(ymin=RT_Effect-SE,ymax=RT_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(-.2,.2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Greens")
+
+ggdat_newc<-data.frame(New_Ch=c("Qch","Qunch","Ep"))
+ggdat_newc$New_Ch<-factor(ggdat_newc$New_Ch,c("Qch","Qunch","Ep"))
+ggdat_newc$RT_Effect<-fixef(m_RToldt_val_newc)[2:4]
+ggdat_newc$SE<-sqrt(diag(vcov(m_RToldt_val_newc)))[2:4]
+
+
+g_newc<-ggplot(data=ggdat_newc,aes(x=New_Ch,y=RT_Effect))+
+  geom_bar(stat = 'identity',aes(fill=New_Ch))+
+  geom_errorbar(aes(ymin=RT_Effect-SE,ymax=RT_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(-.2,.2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Greens")
+
+grid.arrange(g_no,g_oldc,g_newc,nrow=1)
