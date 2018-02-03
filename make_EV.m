@@ -109,7 +109,7 @@ for r = runs
 	enc_trial=N(N(:,1)==sub & N(:,2)==r,enct_ind);
 	enc_trial=enc_trial(valid_trials(Performance.cond.Run==r));
 	
-	revT=N(N(:,1)==sub & N(:2)==r,revT_ind);
+	revT=N(N(:,1)==sub & N(:,2)==r,revT_ind);
 	revT=revT(valid_trials(Performance.cond.Run==r));
 
     %combine into FSL-style 3col regs
