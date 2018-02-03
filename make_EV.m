@@ -110,7 +110,7 @@ for r = runs
 	enc_trial=enc_trial(valid_trials(Performance.cond.Run==r));
 	
 	revT=N(N(:,1)==sub & N(:2)==r,revT_ind);
-	revT=revT(valid_trials(Performance.cond.run==r));
+	revT=revT(valid_trials(Performance.cond.Run==r));
 
     %combine into FSL-style 3col regs
     choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
