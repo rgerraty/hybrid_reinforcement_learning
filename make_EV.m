@@ -24,7 +24,7 @@ Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik"'))));
 Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_enc"'))));
 IE_rat_ind=find(not(cellfun('isempty', strfind(M,'"Lik_rat"'))));
 
-revT_ind=find(not(cellfun('isempty', strfind(M,"RevT"))));
+revT_ind=find(not(cellfun('isempty', strfind(M,'"RevT"'))));
 
 [status,runs]=unix('ls Performance_?.mat | cut -c13');
 
