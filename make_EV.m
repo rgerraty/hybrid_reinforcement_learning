@@ -5,7 +5,9 @@ function [runs]=make_EV(dels)
 
 addpath /home/rgerraty/scripts/MATLAB/
 
-[M,N]=csvreadh('/data/engine/rgerraty/hybrid_mri/behavior/hybrid_data.csv',',');
+[M,N]=csvreadh('/data/engine/engram/rgerraty/hybrid_mri/behavior/hybrid_data.csv',',');
+
+N(N(:,1)==13 & N(:,3)<121 & N(:,3)>60,2)=2;
 
 
 Qdiff_ind=find(not(cellfun('isempty', strfind(M,'"Q_diff"'))));
@@ -31,7 +33,8 @@ revT_ind=find(not(cellfun('isempty', strfind(M,'"RevT"'))));
 %how many runs
 runs=str2num(runs);
 
-[status,sub]=unix('pwd | cut -c43-44');
+[status,sub]=unix('pwd | rev | cut -d/ -f1 | cut -d_ -f2 | rev');
+
 sub=str2num(sub);
 
 %only need last run .mat file which contains all performance ingo
