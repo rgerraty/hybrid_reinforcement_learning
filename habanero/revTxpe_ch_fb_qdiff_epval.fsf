@@ -313,7 +313,7 @@ set fmri(tempfilt_yn1) 1
 set fmri(deriv_yn1) 1
 
 # Custom EV file (EV 1)
-set fmri(custom1) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_revT_runXxRUNXX.txt"
+set fmri(custom1) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_revT_runXXRUNXX.txt"
 
 # Orthogonalise EV 1 wrt EV 0
 set fmri(ortho1.0) 0
