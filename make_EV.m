@@ -24,7 +24,7 @@ Ep_lik_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik"'))));
 Ep_lik_enc_ind=find(not(cellfun('isempty', strfind(M,'"Ep_lik_enc"'))));
 IE_rat_ind=find(not(cellfun('isempty', strfind(M,'"Lik_rat"'))));
 
-
+revT_ind=find(not(cellfun('isempty', strfind(M,"RevT"))));
 
 [status,runs]=unix('ls Performance_?.mat | cut -c13');
 
@@ -77,12 +77,12 @@ for r = runs
 	%get durations
 	choice_duration = Performance.time.startChoice(valid_trials & Performance.cond.Run==r)'- Performance.time.startTrial(valid_trials & Performance.cond.Run==r)';
 	response_duration = repmat(2,length(choice_time),1);
-	%choice_duration = Performance.time.startDelay(valid_trials(Performance.cond.Run==r))'- Performance.time.startChoice(valid_trials & Performance.cond.Run==r)';
 	FB_duration = Performance.time.startISI(valid_trials & Performance.cond.Run==r)'- Performance.time.startFB(valid_trials & Performance.cond.Run==r)';
 	inval_duration = Performance.time.startISI(isnan(Performance.choose.resp(Performance.cond.Run==r)))'- Performance.time.startTrial(isnan(Performance.choose.resp(Performance.cond.Run==r)))';
 
 	%get weights for parametric regressors
 	FB_weight = Performance.pay.outcome(valid_trials & Performance.cond.Run==r)';
+
 
 	%RL model regressors
 	FB_pe_weight=N(N(:,1)==sub & N(:,2)==r,PE_ind);
@@ -95,7 +95,7 @@ for r = runs
 	choice_eplik_enc_weight=N(N(:,1)==sub & N(:,2)==r,Ep_lik_enc_ind);
 	choice_ierat_weight=N(N(:,1)==sub & N(:,2)==r,IE_rat_ind);
 
-	%index old vs new choice
+	%Choice and trial regressors
 	old_choice=(N(N(:,1)==sub & N(:,2)==r,oldc_ind))==1;
 	old_choice=old_choice(valid_trials(Performance.cond.Run==r));
 	new_choice=(N(N(:,1)==sub & N(:,2)==r,oldc_ind))==0;
@@ -108,6 +108,9 @@ for r = runs
 	old_trial=old_trial(valid_trials(Performance.cond.Run==r));
 	enc_trial=N(N(:,1)==sub & N(:,2)==r,enct_ind);
 	enc_trial=enc_trial(valid_trials(Performance.cond.Run==r));
+	
+	revT=N(N(:,1)==sub & N(:2)==r,revT_ind);
+	revT=revT(valid_trials(Performance.cond.run==r));
 
     %combine into FSL-style 3col regs
     choice_run = [choice_time, choice_duration, ones(size(choice_time,1),1)];
@@ -115,6 +118,9 @@ for r = runs
     FBpay_run = [FB_time, FB_duration, FB_weight];
     FB_run = [FB_time, FB_duration, ones(size(FB_time,1),1)];
     inval_run = [inval_time, inval_duration, ones(size(inval_time,1),1)];
+
+    revT_choice_run= [choice_time, choice_duration, revT];
+    revT_fb_run= [FB_time, FB_duration, revT];
 
     choice_oldc=choice_run(old_choice,:);
     choice_newc=choice_run(new_choice,:);
@@ -273,6 +279,8 @@ for r = runs
 	FBpay_run(FBpay_run(:,1)<0,:)=[];
 	FB_run(FB_run(:,1)<0,:)=[];
 	inval_run(inval_run(:,1)<0,:)=[];
+	revT_choice_run(revT_choice_run(:,1)<0,:)=[];
+	revT_fb_run(revT_fb_run(:,1)<0,:)=[];
 
 	choice_oldc(choice_oldc(:,1)<0,:)=[];
     choice_newc(choice_newc(:,1)<0,:)=[];
@@ -317,6 +325,9 @@ for r = runs
     dlmwrite(strcat('EV_files/FBpay_oldc_run',num2str(r),'.txt'),FBpay_oldc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/FBpay_newc_run',num2str(r),'.txt'),FBpay_newc, 'delimiter',' ');
     dlmwrite(strcat('EV_files/FBpay_noc_run',num2str(r),'.txt'),FBpay_noc, 'delimiter',' ');
+
+    dlmwrite(strcat('EV_files/choice_revT_run',num2str(r),'.txt'),revT_choice_run,'delimiter',' ');
+    dlmwrite(strcat('EV_files/fb_revT_run',num2str(r),'.txt'),revT_fb_run,'delimiter',' ');
 catch
 	warning('something wrong loading data')
 end
