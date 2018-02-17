@@ -1158,10 +1158,10 @@ set fmri(interactions12.2) 0
 set fmri(interactionsd12.2) 0
 
 # Interactions (EV 12 with EV 3)
-set fmri(interactions12.3) 1
+set fmri(interactions12.3) 0
 
 # Demean before using in interactions (EV 12 with EV 3)
-set fmri(interactionsd12.3) 1
+set fmri(interactionsd12.3) 0
 
 # Interactions (EV 12 with EV 4)
 set fmri(interactions12.4) 0
@@ -1176,10 +1176,10 @@ set fmri(interactions12.5) 0
 set fmri(interactionsd12.5) 0
 
 # Interactions (EV 12 with EV 6)
-set fmri(interactions12.6) 0
+set fmri(interactions12.6) 1
 
 # Demean before using in interactions (EV 12 with EV 6)
-set fmri(interactionsd12.6) 0
+set fmri(interactionsd12.6) 1
 
 # Interactions (EV 12 with EV 7)
 set fmri(interactions12.7) 0
