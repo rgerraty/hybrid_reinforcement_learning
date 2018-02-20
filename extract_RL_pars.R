@@ -235,6 +235,8 @@ tmp_ep_norm<-tapply(lik_hyb_melt$Episodicp,lik_hyb_melt$Subject,
 tmp_inc_norm<-tapply(lik_hyb_melt$Incrementalp,lik_hyb_melt$Subject,
                      function(x){(x-mean(na.omit(x)))/sd(na.omit(x))})
 
+tmp_ierat_norm<-tapply(lik_hyb_melt$IE_rat,lik_hyb_melt$Subject,
+                     function(x){(x-mean(na.omit(x)))/sd(na.omit(x))})
 
 lik_norm<-NULL
 k<-1
@@ -243,6 +245,7 @@ for(i in 1:dim(tmp_ep_norm)){
     lik_norm$Sub[k]<-i
     lik_norm$Ep_lik_norm[k]<-tmp_ep_norm[[i]][j]
     lik_norm$Inc_lik_norm[k]<-tmp_inc_norm[[i]][j]
+    lik_norm$IE_rat_norm[k]<-tmp_ierat_norm[[i]][j]
     k<-k+1
   }
 }
@@ -429,3 +432,43 @@ g_newc<-ggplot(data=ggdat_newc,aes(x=New_Ch,y=RT_Effect))+
   scale_fill_brewer(palette = "Greens")
 
 grid.arrange(g_no,g_oldc,g_newc,nrow=1)
+
+###################
+library(lme4)
+m_eplik_oneback<-glmer(ChooseRed ~ oneback_outcome:oneback_choosered + Ep_lik + Ep_lik_enc+
+                         oneback_outcome:oneback_choosered:Ep_lik+oneback_outcome:oneback_choosered:Ep_lik_enc+  
+                         (oneback_outcome:oneback_choosered + Ep_lik + Ep_lik_enc+
+                            oneback_outcome:oneback_choosered:Ep_lik+oneback_outcome:oneback_choosered:Ep_lik_enc | Sub),
+                       data=hybrid_data,family=binomial)
+summary(m_eplik_oneback)
+
+#Lagged outcome variables for regression model
+hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Ep_lik")
+
+
+nsub<-length(unique(hybrid_data$Sub))
+cutpoint<-which(hybrid_data$Sub==17 & hybrid_data$Trial==240)
+
+hybrid_data_oneback<-rbind(rep(NaN,nsub),
+                           hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
+
+hybrid_data$oneback_eplik<-melt(hybrid_data_oneback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Ep_lik_enc")
+
+
+nsub<-length(unique(hybrid_data$Sub))
+cutpoint<-which(hybrid_data$Sub==17 & hybrid_data$Trial==240)
+
+hybrid_data_oneback<-rbind(rep(NaN,nsub),
+                           hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
+
+hybrid_data$oneback_eplik_enc<-melt(hybrid_data_oneback)$value[-(cutpoint+1):-(cutpoint+61)]
+
+m_eplik_qnext<-glmer(ChooseRed ~ oneback_eplik*Q_red+oneback_eplik_enc*Q_red+
+                       (oneback_eplik*Q_red+oneback_eplik_enc*Q_red|Sub),data=hybrid_data,family=binomial)
+
+m_revt_oldval_lastoutcome<-glmer(ChooseRed ~  oneback_outcome:oneback_choosered+RevT+EncRevT+OldValRed+
+                                   oneback_outcome:oneback_choosered:RevT+OldValRed:EncRevT+OldValRed:RevT+
+                                   (oneback_outcome:oneback_choosered+RevT+EncRevT+OldValRed|Sub),
+                                 data=hybrid_data,family=binomial)

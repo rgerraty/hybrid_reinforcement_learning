@@ -94,6 +94,8 @@ hybrid_data_fourback<-rbind(rep(NaN,nsub),
 
 hybrid_data$fourback_choosered<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-(cutpoint+61)]
 
+
+
 m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+
                   (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered|Sub),
                 data=hybrid_data,family=binomial)
