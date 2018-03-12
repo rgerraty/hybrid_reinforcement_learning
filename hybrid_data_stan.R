@@ -97,8 +97,8 @@ hybrid_data$fourback_choosered<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-
 
 
 
-m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+
-                  (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered|Sub),
+m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+OldValRed+
+                  (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+OldValRed|Sub),
                 data=hybrid_data,family=binomial)
 
 
@@ -144,7 +144,20 @@ g_post<-ggplot(data=ggdat_post,aes(x=Lag,y=Choice_Effect))+
 
 grid.arrange(g_pre,g_post,ncol=2)
 
+ggdat_all<-data.frame(Lag=c("1","2","3","4","Old"))
+ggdat_all$Lag<-factor(ggdat_all$Lag,c("1","2","3","4","Old"))
+ggdat_all$Choice_Effect<-fixef(m_rc_lag)[c(3:6,2)]
+ggdat_all$SE<-sqrt(diag(vcov(m_rc_lag)))[c(3:6,2)]
 
+
+g_all<-ggplot(data=ggdat_all,aes(x=Lag,y=Choice_Effect))+
+  geom_bar(stat = 'identity',aes(fill=Lag))+
+  geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
+  scale_y_continuous(limits = c(0,2),oob = squish)+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  scale_fill_brewer(palette = "Oranges")
+
+g_all
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
 NS = length(subs);
