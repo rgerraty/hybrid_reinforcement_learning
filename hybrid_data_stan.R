@@ -9,6 +9,7 @@ library(reshape2)
 library(scales)
 library(ggplot2)
 library(gridExtra)
+library(lme4)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
