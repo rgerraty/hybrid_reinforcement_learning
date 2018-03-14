@@ -155,7 +155,7 @@ g_all<-ggplot(data=ggdat_all,aes(x=Lag,y=Choice_Effect))+
   geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
   scale_y_continuous(limits = c(0,2),oob = squish)+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
-  scale_fill_brewer(palette = "Blues",direction=-1)
+  scale_fill_brewer(palette = "Blues",direction=-1)+xlab('Trials Back')+ylab('Choice Effect')
 
 g_all
 #set up variables in subjects by trials format for Stan
