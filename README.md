@@ -49,11 +49,14 @@ do
 		echo B0 field already generated \in $i
 		echo delete before proceeding
 	else
-		dwell=$(echo $(dicom_hdr $i/dicoms/$(ls $i/dicoms/ | 
-			head -n 1) | 
-			grep 0043\ 102c | 
-			awk 'BEGIN{ FS="//" }; { print $3 }') /1000000 | 
-			bc -l) 
+		#dwell=$(echo $(dicom_hdr $i/dicoms/$(ls $i/dicoms/ | 
+          #head -n 1) | 
+          #grep 0043\ 102c | 
+          #awk 'BEGIN{ FS="//" }; { print $3 }') /1000000 | 
+          #bc -l) 
+
+        #archived dicoms, but echo spacing always 464 ms (in s)
+        dwell=0.000464
 
 		fmap=$(ls $i/../B0_map/fieldmap_rads.nii.gz)
 
