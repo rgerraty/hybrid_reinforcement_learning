@@ -307,7 +307,7 @@ set fmri(tempfilt_yn1) 1
 set fmri(deriv_yn1) 1
 
 # Custom EV file (EV 1)
-set fmri(custom1) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_eplik_enc_runXXXRUNXX.txt"
+set fmri(custom1) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_eplik_enc_runXXRUNXX.txt"
 
 # Orthogonalise EV 1 wrt EV 0
 set fmri(ortho1.0) 0
@@ -392,7 +392,7 @@ set fmri(tempfilt_yn2) 1
 set fmri(deriv_yn2) 1
 
 # Custom EV file (EV 2)
-set fmri(custom2) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_00.txt"
+set fmri(custom2) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_00.txt"
 
 # Orthogonalise EV 2 wrt EV 0
 set fmri(ortho2.0) 0
@@ -477,7 +477,7 @@ set fmri(tempfilt_yn3) 1
 set fmri(deriv_yn3) 1
 
 # Custom EV file (EV 3)
-set fmri(custom3) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_02.txt"
+set fmri(custom3) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_02.txt"
 
 # Orthogonalise EV 3 wrt EV 0
 set fmri(ortho3.0) 0
@@ -562,7 +562,7 @@ set fmri(tempfilt_yn4) 1
 set fmri(deriv_yn4) 1
 
 # Custom EV file (EV 4)
-set fmri(custom4) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_04.txt"
+set fmri(custom4) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_04.txt"
 
 # Orthogonalise EV 4 wrt EV 0
 set fmri(ortho4.0) 0
@@ -647,7 +647,7 @@ set fmri(tempfilt_yn5) 1
 set fmri(deriv_yn5) 1
 
 # Custom EV file (EV 5)
-set fmri(custom5) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_06.txt"
+set fmri(custom5) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_06.txt"
 
 # Orthogonalise EV 5 wrt EV 0
 set fmri(ortho5.0) 0
@@ -732,7 +732,7 @@ set fmri(tempfilt_yn6) 1
 set fmri(deriv_yn6) 1
 
 # Custom EV file (EV 6)
-set fmri(custom6) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_08.txt"
+set fmri(custom6) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_08.txt"
 
 # Orthogonalise EV 6 wrt EV 0
 set fmri(ortho6.0) 0
@@ -817,7 +817,7 @@ set fmri(tempfilt_yn7) 1
 set fmri(deriv_yn7) 1
 
 # Custom EV file (EV 7)
-set fmri(custom7) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXXRUNXX_10.txt"
+set fmri(custom7) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_10.txt"
 
 # Orthogonalise EV 7 wrt EV 0
 set fmri(ortho7.0) 0
@@ -1736,7 +1736,7 @@ set fmri(tempfilt_yn14) 1
 set fmri(deriv_yn14) 1
 
 # Custom EV file (EV 14)
-set fmri(custom14) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXXRUNXX.txt"
+set fmri(custom14) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXRUNXX.txt"
 
 # Orthogonalise EV 14 wrt EV 0
 set fmri(ortho14.0) 0
@@ -1821,7 +1821,7 @@ set fmri(tempfilt_yn15) 1
 set fmri(deriv_yn15) 1
 
 # Custom EV file (EV 15)
-set fmri(custom15) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXXRUNXX.txt"
+set fmri(custom15) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_runXXRUNXX.txt"
 
 # Orthogonalise EV 15 wrt EV 0
 set fmri(ortho15.0) 0
@@ -1906,7 +1906,7 @@ set fmri(tempfilt_yn16) 1
 set fmri(deriv_yn16) 1
 
 # Custom EV file (EV 16)
-set fmri(custom16) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXXRUNXX.txt"
+set fmri(custom16) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
 
 # Orthogonalise EV 16 wrt EV 0
 set fmri(ortho16.0) 0
