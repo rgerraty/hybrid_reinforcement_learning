@@ -7,17 +7,17 @@ The code in hybrid_data_stan.R prepares data and fits heirarchical bayesian mode
 
 ### Generate field map for B0 correction
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/B0_map;  
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/B0_map;  
 do 
-	bo=$(ls $i/2*nii.gz);
+	bo=$(ls $i/B0*nii.gz);
 	echo $bo; 
-	bash /home/rgerraty/GitHub/NETPD/reversal_learning_pd/analysis/B0_unwarp.sh $bo; 
+	bash /home/rgerraty/GitHub/reversal_learning_pd/analysis/B0_unwarp.sh $bo; 
 done
 ```
 
 ### Run anatomical preprocessing
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/structural/;
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/structural/;
 do 
 	if [ -d $i/bravo.anat ]
 		then
@@ -35,15 +35,15 @@ done
 
 ### B0 field correction for EPI scans
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/
 do
 
 	unwarp=$(ls $i/*_unwarp.nii.gz 2>/dev/null)
-	epi=$(ls $i/*nii.gz | grep -v unwarp)
+	epi=$(ls $i/EPI*nii.gz | grep -v unwarp)
 
 	if [[ -z $epi ]]
-		then 
-		echo no niftis in $i\!
+	then 
+	echo no niftis in $i\!
 	elif [[ ! -z $unwarp ]]
 		then
 		echo B0 field already generated \in $i
@@ -60,15 +60,13 @@ do
 
 		fmap=$(ls $i/../B0_map/fieldmap_rads.nii.gz)
 
-		fugue -i $epi --dwell=$dwell \
-		--loadfmap=$fmap \
-		-u $(dirname $epi)/$(basename $epi .nii.gz)_unwarp.nii.gz
+		fugue -i $epi --dwell=$dwell --loadfmap=$fmap -u $(dirname $epi)/$(basename $epi .nii.gz)_unwarp.nii.gz
 	fi
 done
 ```
 ### Get partially saturated first volume from every 4D epi volume as reference image
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
 do
 	if [ ! -e $(dirname $i)/example_func.nii.gz ]
 		then
@@ -82,7 +80,7 @@ done
 
 ### Run preprocessing (need to generate template .fsf file first)
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/{hybrid_r?,rest*}/*unwarp.nii.gz
 do
 	/home/rgerraty/GitHub/hybrid_reinforcement_learning/run_preproc.sh $i \
 	/home/rgerraty/GitHub/hybrid_reinforcement_learning/preproc_6mm_6del_100s_mc.fsf \
@@ -92,7 +90,7 @@ done
 
 ### Make 3 column EV files for GLM from raw behavioral output
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/behavior/*output;
+for i in /data/engine/engram/rgerraty/hybrid_mri/behavior/*output;
 	do
 	cd $i
 	pwd
@@ -102,7 +100,7 @@ done
 
 ### Generated extended confounds from motion paramaters
 ```.bash
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc*feat/mc/; 
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc*feat/mc/; 
 	do 
 	cd $i; 
 	pwd
@@ -114,7 +112,7 @@ done
 ### Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```.bash
 fsf=epvalue_newold.fsf
-for i in /data/engine/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
+for i in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
 	do 
 	s=$(echo $i | cut -c39-40); 
 	r=$(echo $i | cut -c 50);
@@ -130,7 +128,7 @@ done
 ### Update 1st-level directories with registation files
 ```.bash
 feat=qchose_epval_pe.feat
-for s in /data/engine/rgerraty/hybrid_mri/TCST0*/;
+for s in /data/engine/engram/rgerraty/hybrid_mri/TCST0*/;
 	do
 	if [ -d $s/hybrid_r1/$feat/ ]
 	then
@@ -155,7 +153,7 @@ done
 
 ### Set up group design matrix for subject-level fixed-effects estimates
 ```.matlab
-[status,subs]=system('ls -d /data/engine/rgerraty/hybrid_mri/TCST*');
+[status,subs]=system('ls -d /data/engine/engram/rgerraty/hybrid_mri/TCST*');
 subs=strread(subs,'%s');
 subs2=[];
 design_mat=[];
@@ -178,14 +176,14 @@ for s=1:size(subs,1)
 	end
 end
 con_mat=eye(size(design_mat,2));
-dlmwrite('/data/engine/rgerraty/hybrid_mri/group_analyses/n31_fe_design.mat',design_mat, ' ')
-dlmwrite('/data/engine/rgerraty/hybrid_mri/group_analyses/n31_fe_con.mat',con_mat, ' ')
+dlmwrite('/data/engine/engram/rgerraty/hybrid_mri/group_analyses/n31_fe_design.mat',design_mat, ' ')
+dlmwrite('/data/engine/engram/rgerraty/hybrid_mri/group_analyses/n31_fe_con.mat',con_mat, ' ')
 
 for i=1:size(subs2,1)
 	if i==1
-		system(['echo ',subs2{i} ' > /data/engine/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
+		system(['echo ',subs2{i} ' > /data/engine/engram/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
 	else
-		system(['echo ',subs2{i} ' >> /data/engine/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
+		system(['echo ',subs2{i} ' >> /data/engine/engram/rgerraty/hybrid_mri/group_analyses/n31_subs.txt'])
 	end
 end
 
