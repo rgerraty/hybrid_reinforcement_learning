@@ -30,13 +30,13 @@ set fmri(featwatcher_yn) 0
 set fmri(sscleanup_yn) 0
 
 # Output directory
-set fmri(outputdir) "/data/engine/engram/rgerraty/hybrid_mri/TCST002/hybrid_r1/enclikxfbpayfact_ch_fb"
+set fmri(outputdir) "/rigel/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/enclikxfbpayfact_ch_fb"
 
 # TR(s)
 set fmri(tr) 2.000000 
 
 # Total volumes
-set fmri(npts) 303
+set fmri(npts) XXVOLSXX
 
 # Delete volumes
 set fmri(ndelete) 0
@@ -147,13 +147,13 @@ set fmri(robust_yn) 0
 set fmri(mixed_yn) 2
 
 # Number of EVs
-set fmri(evs_orig) 16
-set fmri(evs_real) 31
+set fmri(evs_orig) 15
+set fmri(evs_real) 30
 set fmri(evs_vox) 0
 
 # Number of contrasts
-set fmri(ncon_orig) 15
-set fmri(ncon_real) 15
+set fmri(ncon_orig) 14
+set fmri(ncon_real) 14
 
 # Number of F-tests
 set fmri(nftests_orig) 0
@@ -267,13 +267,13 @@ set fmri(totalVoxels) 54607872
 set fmri(ncopeinputs) 0
 
 # 4D AVW data or FEAT directory (1)
-set feat_files(1) "/data/engine/rgerraty/hybrid_mri/TCST002/hybrid_r1/preproc_6mm_6del_100s_mc.feat/filtered_func_data"
+set feat_files(1) "XXINXX"
 
 # Add confound EVs text file
 set fmri(confoundevs) 1
 
 # Confound EVs text file for analysis 1
-set confoundev_files(1) "/data/engine/engram/rgerraty/hybrid_mri/TCST002/hybrid_r1/preproc_6mm_6del_100s_mc.feat/mc/extended_confs_24par.txt"
+set confoundev_files(1) "/rigel/psych/users/rtg2116/hybrid_mri/TCST0XXSUBXX/hybrid_rXXRUNXX/preproc_6mm_6del_100s_mc.feat/mc/extended_confs_24par.txt"
 
 # EV 1 title
 set fmri(evtitle1) "enc_lik_fb"
@@ -307,7 +307,7 @@ set fmri(tempfilt_yn1) 1
 set fmri(deriv_yn1) 1
 
 # Custom EV file (EV 1)
-set fmri(custom1) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FB_eplik_enc_run1.txt"
+set fmri(custom1) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_eplik_enc_runXXRUNXX.txt"
 
 # Orthogonalise EV 1 wrt EV 0
 set fmri(ortho1.0) 0
@@ -357,8 +357,6 @@ set fmri(ortho1.14) 0
 # Orthogonalise EV 1 wrt EV 15
 set fmri(ortho1.15) 0
 
-# Orthogonalise EV 1 wrt EV 16
-set fmri(ortho1.16) 0
 
 # EV 2 title
 set fmri(evtitle2) "fbpay0"
@@ -392,7 +390,7 @@ set fmri(tempfilt_yn2) 1
 set fmri(deriv_yn2) 1
 
 # Custom EV file (EV 2)
-set fmri(custom2) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_00.txt"
+set fmri(custom2) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_00.txt"
 
 # Orthogonalise EV 2 wrt EV 0
 set fmri(ortho2.0) 0
@@ -442,8 +440,6 @@ set fmri(ortho2.14) 0
 # Orthogonalise EV 2 wrt EV 15
 set fmri(ortho2.15) 0
 
-# Orthogonalise EV 2 wrt EV 16
-set fmri(ortho2.16) 0
 
 # EV 3 title
 set fmri(evtitle3) "fbpay2"
@@ -477,7 +473,7 @@ set fmri(tempfilt_yn3) 1
 set fmri(deriv_yn3) 1
 
 # Custom EV file (EV 3)
-set fmri(custom3) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_02.txt"
+set fmri(custom3) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_02.txt"
 
 # Orthogonalise EV 3 wrt EV 0
 set fmri(ortho3.0) 0
@@ -527,9 +523,6 @@ set fmri(ortho3.14) 0
 # Orthogonalise EV 3 wrt EV 15
 set fmri(ortho3.15) 0
 
-# Orthogonalise EV 3 wrt EV 16
-set fmri(ortho3.16) 0
-
 # EV 4 title
 set fmri(evtitle4) "fbpay4"
 
@@ -562,7 +555,7 @@ set fmri(tempfilt_yn4) 1
 set fmri(deriv_yn4) 1
 
 # Custom EV file (EV 4)
-set fmri(custom4) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_04.txt"
+set fmri(custom4) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_04.txt"
 
 # Orthogonalise EV 4 wrt EV 0
 set fmri(ortho4.0) 0
@@ -612,9 +605,6 @@ set fmri(ortho4.14) 0
 # Orthogonalise EV 4 wrt EV 15
 set fmri(ortho4.15) 0
 
-# Orthogonalise EV 4 wrt EV 16
-set fmri(ortho4.16) 0
-
 # EV 5 title
 set fmri(evtitle5) "fbpay6"
 
@@ -647,7 +637,7 @@ set fmri(tempfilt_yn5) 1
 set fmri(deriv_yn5) 1
 
 # Custom EV file (EV 5)
-set fmri(custom5) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_06.txt"
+set fmri(custom5) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_06.txt"
 
 # Orthogonalise EV 5 wrt EV 0
 set fmri(ortho5.0) 0
@@ -697,8 +687,6 @@ set fmri(ortho5.14) 0
 # Orthogonalise EV 5 wrt EV 15
 set fmri(ortho5.15) 0
 
-# Orthogonalise EV 5 wrt EV 16
-set fmri(ortho5.16) 0
 
 # EV 6 title
 set fmri(evtitle6) "fbpay8"
@@ -732,7 +720,7 @@ set fmri(tempfilt_yn6) 1
 set fmri(deriv_yn6) 1
 
 # Custom EV file (EV 6)
-set fmri(custom6) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_08.txt"
+set fmri(custom6) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_08.txt"
 
 # Orthogonalise EV 6 wrt EV 0
 set fmri(ortho6.0) 0
@@ -782,8 +770,6 @@ set fmri(ortho6.14) 0
 # Orthogonalise EV 6 wrt EV 15
 set fmri(ortho6.15) 0
 
-# Orthogonalise EV 6 wrt EV 16
-set fmri(ortho6.16) 0
 
 # EV 7 title
 set fmri(evtitle7) "fbpay10"
@@ -817,7 +803,7 @@ set fmri(tempfilt_yn7) 1
 set fmri(deriv_yn7) 1
 
 # Custom EV file (EV 7)
-set fmri(custom7) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FBpay_run1_10.txt"
+set fmri(custom7) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FBpay_runXXRUNXX_10.txt"
 
 # Orthogonalise EV 7 wrt EV 0
 set fmri(ortho7.0) 0
@@ -866,9 +852,6 @@ set fmri(ortho7.14) 0
 
 # Orthogonalise EV 7 wrt EV 15
 set fmri(ortho7.15) 0
-
-# Orthogonalise EV 7 wrt EV 16
-set fmri(ortho7.16) 0
 
 # EV 8 title
 set fmri(evtitle8) "fb0xenclik"
@@ -991,8 +974,6 @@ set fmri(ortho8.14) 0
 # Orthogonalise EV 8 wrt EV 15
 set fmri(ortho8.15) 0
 
-# Orthogonalise EV 8 wrt EV 16
-set fmri(ortho8.16) 0
 
 # EV 9 title
 set fmri(evtitle9) "fb2xenclik"
@@ -1121,8 +1102,6 @@ set fmri(ortho9.14) 0
 # Orthogonalise EV 9 wrt EV 15
 set fmri(ortho9.15) 0
 
-# Orthogonalise EV 9 wrt EV 16
-set fmri(ortho9.16) 0
 
 # EV 10 title
 set fmri(evtitle10) "fb4xenclik"
@@ -1256,9 +1235,6 @@ set fmri(ortho10.14) 0
 
 # Orthogonalise EV 10 wrt EV 15
 set fmri(ortho10.15) 0
-
-# Orthogonalise EV 10 wrt EV 16
-set fmri(ortho10.16) 0
 
 # EV 11 title
 set fmri(evtitle11) "fb6xenclik"
@@ -1399,9 +1375,6 @@ set fmri(ortho11.14) 0
 # Orthogonalise EV 11 wrt EV 15
 set fmri(ortho11.15) 0
 
-# Orthogonalise EV 11 wrt EV 16
-set fmri(ortho11.16) 0
-
 # EV 12 title
 set fmri(evtitle12) "fblik8xenclik"
 
@@ -1431,7 +1404,7 @@ set fmri(convolve_phase12) 0
 set fmri(tempfilt_yn12) 1
 
 # Add temporal derivative (EV 12)
-set fmri(deriv_yn12) 0
+set fmri(deriv_yn12) 1
 
 # Interactions (EV 12 with EV 1)
 set fmri(interactions12.1) 1
@@ -1547,8 +1520,6 @@ set fmri(ortho12.14) 0
 # Orthogonalise EV 12 wrt EV 15
 set fmri(ortho12.15) 0
 
-# Orthogonalise EV 12 wrt EV 16
-set fmri(ortho12.16) 0
 
 # EV 13 title
 set fmri(evtitle13) "fb10xenclik"
@@ -1701,8 +1672,6 @@ set fmri(ortho13.14) 0
 # Orthogonalise EV 13 wrt EV 15
 set fmri(ortho13.15) 0
 
-# Orthogonalise EV 13 wrt EV 16
-set fmri(ortho13.16) 0
 
 # EV 14 title
 set fmri(evtitle14) "ch"
@@ -1736,7 +1705,7 @@ set fmri(tempfilt_yn14) 1
 set fmri(deriv_yn14) 1
 
 # Custom EV file (EV 14)
-set fmri(custom14) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/choice_run1.txt"
+set fmri(custom14) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/choice_runXXRUNXX.txt"
 
 # Orthogonalise EV 14 wrt EV 0
 set fmri(ortho14.0) 0
@@ -1786,11 +1755,8 @@ set fmri(ortho14.14) 0
 # Orthogonalise EV 14 wrt EV 15
 set fmri(ortho14.15) 0
 
-# Orthogonalise EV 14 wrt EV 16
-set fmri(ortho14.16) 0
-
 # EV 15 title
-set fmri(evtitle15) "fb"
+set fmri(evtitle15) "inval"
 
 # Basic waveform shape (EV 15)
 # 0 : Square
@@ -1821,7 +1787,7 @@ set fmri(tempfilt_yn15) 1
 set fmri(deriv_yn15) 1
 
 # Custom EV file (EV 15)
-set fmri(custom15) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/FB_run1.txt"
+set fmri(custom15) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/inval_runXXRUNXX.txt"
 
 # Orthogonalise EV 15 wrt EV 0
 set fmri(ortho15.0) 0
@@ -1870,94 +1836,6 @@ set fmri(ortho15.14) 0
 
 # Orthogonalise EV 15 wrt EV 15
 set fmri(ortho15.15) 0
-
-# Orthogonalise EV 15 wrt EV 16
-set fmri(ortho15.16) 0
-
-# EV 16 title
-set fmri(evtitle16) "inval"
-
-# Basic waveform shape (EV 16)
-# 0 : Square
-# 1 : Sinusoid
-# 2 : Custom (1 entry per volume)
-# 3 : Custom (3 column format)
-# 4 : Interaction
-# 10 : Empty (all zeros)
-set fmri(shape16) 3
-
-# Convolution (EV 16)
-# 0 : None
-# 1 : Gaussian
-# 2 : Gamma
-# 3 : Double-Gamma HRF
-# 4 : Gamma basis functions
-# 5 : Sine basis functions
-# 6 : FIR basis functions
-set fmri(convolve16) 3
-
-# Convolve phase (EV 16)
-set fmri(convolve_phase16) 0
-
-# Apply temporal filtering (EV 16)
-set fmri(tempfilt_yn16) 1
-
-# Add temporal derivative (EV 16)
-set fmri(deriv_yn16) 1
-
-# Custom EV file (EV 16)
-set fmri(custom16) "/data/engine/engram/rgerraty/hybrid_mri/behavior/02_output/EV_files/inval_run1.txt"
-
-# Orthogonalise EV 16 wrt EV 0
-set fmri(ortho16.0) 0
-
-# Orthogonalise EV 16 wrt EV 1
-set fmri(ortho16.1) 0
-
-# Orthogonalise EV 16 wrt EV 2
-set fmri(ortho16.2) 0
-
-# Orthogonalise EV 16 wrt EV 3
-set fmri(ortho16.3) 0
-
-# Orthogonalise EV 16 wrt EV 4
-set fmri(ortho16.4) 0
-
-# Orthogonalise EV 16 wrt EV 5
-set fmri(ortho16.5) 0
-
-# Orthogonalise EV 16 wrt EV 6
-set fmri(ortho16.6) 0
-
-# Orthogonalise EV 16 wrt EV 7
-set fmri(ortho16.7) 0
-
-# Orthogonalise EV 16 wrt EV 8
-set fmri(ortho16.8) 0
-
-# Orthogonalise EV 16 wrt EV 9
-set fmri(ortho16.9) 0
-
-# Orthogonalise EV 16 wrt EV 10
-set fmri(ortho16.10) 0
-
-# Orthogonalise EV 16 wrt EV 11
-set fmri(ortho16.11) 0
-
-# Orthogonalise EV 16 wrt EV 12
-set fmri(ortho16.12) 0
-
-# Orthogonalise EV 16 wrt EV 13
-set fmri(ortho16.13) 0
-
-# Orthogonalise EV 16 wrt EV 14
-set fmri(ortho16.14) 0
-
-# Orthogonalise EV 16 wrt EV 15
-set fmri(ortho16.15) 0
-
-# Orthogonalise EV 16 wrt EV 16
-set fmri(ortho16.16) 0
 
 # Contrast & F-tests mode
 # real : control real EVs
@@ -2061,9 +1939,6 @@ set fmri(con_real1.29) 0
 # Real contrast_real vector 1 element 30
 set fmri(con_real1.30) 0
 
-# Real contrast_real vector 1 element 31
-set fmri(con_real1.31) 0
-
 # Display images for contrast_real 2
 set fmri(conpic_real.2) 1
 
@@ -2160,8 +2035,6 @@ set fmri(con_real2.29) 0
 # Real contrast_real vector 2 element 30
 set fmri(con_real2.30) 0
 
-# Real contrast_real vector 2 element 31
-set fmri(con_real2.31) 0
 
 # Display images for contrast_real 3
 set fmri(conpic_real.3) 1
@@ -2259,8 +2132,6 @@ set fmri(con_real3.29) 0
 # Real contrast_real vector 3 element 30
 set fmri(con_real3.30) 0
 
-# Real contrast_real vector 3 element 31
-set fmri(con_real3.31) 0
 
 # Display images for contrast_real 4
 set fmri(conpic_real.4) 1
@@ -2358,9 +2229,6 @@ set fmri(con_real4.29) 0
 # Real contrast_real vector 4 element 30
 set fmri(con_real4.30) 0
 
-# Real contrast_real vector 4 element 31
-set fmri(con_real4.31) 0
-
 # Display images for contrast_real 5
 set fmri(conpic_real.5) 1
 
@@ -2457,8 +2325,6 @@ set fmri(con_real5.29) 0
 # Real contrast_real vector 5 element 30
 set fmri(con_real5.30) 0
 
-# Real contrast_real vector 5 element 31
-set fmri(con_real5.31) 0
 
 # Display images for contrast_real 6
 set fmri(conpic_real.6) 1
@@ -2556,9 +2422,6 @@ set fmri(con_real6.29) 0
 # Real contrast_real vector 6 element 30
 set fmri(con_real6.30) 0
 
-# Real contrast_real vector 6 element 31
-set fmri(con_real6.31) 0
-
 # Display images for contrast_real 7
 set fmri(conpic_real.7) 1
 
@@ -2655,8 +2518,6 @@ set fmri(con_real7.29) 0
 # Real contrast_real vector 7 element 30
 set fmri(con_real7.30) 0
 
-# Real contrast_real vector 7 element 31
-set fmri(con_real7.31) 0
 
 # Display images for contrast_real 8
 set fmri(conpic_real.8) 1
@@ -2754,9 +2615,6 @@ set fmri(con_real8.29) 0
 # Real contrast_real vector 8 element 30
 set fmri(con_real8.30) 0
 
-# Real contrast_real vector 8 element 31
-set fmri(con_real8.31) 0
-
 # Display images for contrast_real 9
 set fmri(conpic_real.9) 1
 
@@ -2853,8 +2711,6 @@ set fmri(con_real9.29) 0
 # Real contrast_real vector 9 element 30
 set fmri(con_real9.30) 0
 
-# Real contrast_real vector 9 element 31
-set fmri(con_real9.31) 0
 
 # Display images for contrast_real 10
 set fmri(conpic_real.10) 1
@@ -2952,8 +2808,6 @@ set fmri(con_real10.29) 0
 # Real contrast_real vector 10 element 30
 set fmri(con_real10.30) 0
 
-# Real contrast_real vector 10 element 31
-set fmri(con_real10.31) 0
 
 # Display images for contrast_real 11
 set fmri(conpic_real.11) 1
@@ -3051,8 +2905,6 @@ set fmri(con_real11.29) 0
 # Real contrast_real vector 11 element 30
 set fmri(con_real11.30) 0
 
-# Real contrast_real vector 11 element 31
-set fmri(con_real11.31) 0
 
 # Display images for contrast_real 12
 set fmri(conpic_real.12) 1
@@ -3150,8 +3002,6 @@ set fmri(con_real12.29) 0
 # Real contrast_real vector 12 element 30
 set fmri(con_real12.30) 0
 
-# Real contrast_real vector 12 element 31
-set fmri(con_real12.31) 0
 
 # Display images for contrast_real 13
 set fmri(conpic_real.13) 1
@@ -3249,8 +3099,6 @@ set fmri(con_real13.29) 0
 # Real contrast_real vector 13 element 30
 set fmri(con_real13.30) 0
 
-# Real contrast_real vector 13 element 31
-set fmri(con_real13.31) 0
 
 # Display images for contrast_real 14
 set fmri(conpic_real.14) 1
@@ -3348,107 +3196,7 @@ set fmri(con_real14.29) 0
 # Real contrast_real vector 14 element 30
 set fmri(con_real14.30) 0
 
-# Real contrast_real vector 14 element 31
-set fmri(con_real14.31) 0
 
-# Display images for contrast_real 15
-set fmri(conpic_real.15) 1
-
-# Title for contrast_real 15
-set fmri(conname_real.15) "fb"
-
-# Real contrast_real vector 15 element 1
-set fmri(con_real15.1) 0
-
-# Real contrast_real vector 15 element 2
-set fmri(con_real15.2) 0
-
-# Real contrast_real vector 15 element 3
-set fmri(con_real15.3) 0
-
-# Real contrast_real vector 15 element 4
-set fmri(con_real15.4) 0
-
-# Real contrast_real vector 15 element 5
-set fmri(con_real15.5) 0
-
-# Real contrast_real vector 15 element 6
-set fmri(con_real15.6) 0
-
-# Real contrast_real vector 15 element 7
-set fmri(con_real15.7) 0
-
-# Real contrast_real vector 15 element 8
-set fmri(con_real15.8) 0
-
-# Real contrast_real vector 15 element 9
-set fmri(con_real15.9) 0
-
-# Real contrast_real vector 15 element 10
-set fmri(con_real15.10) 0
-
-# Real contrast_real vector 15 element 11
-set fmri(con_real15.11) 0
-
-# Real contrast_real vector 15 element 12
-set fmri(con_real15.12) 0
-
-# Real contrast_real vector 15 element 13
-set fmri(con_real15.13) 0
-
-# Real contrast_real vector 15 element 14
-set fmri(con_real15.14) 0
-
-# Real contrast_real vector 15 element 15
-set fmri(con_real15.15) 0
-
-# Real contrast_real vector 15 element 16
-set fmri(con_real15.16) 0
-
-# Real contrast_real vector 15 element 17
-set fmri(con_real15.17) 0
-
-# Real contrast_real vector 15 element 18
-set fmri(con_real15.18) 0
-
-# Real contrast_real vector 15 element 19
-set fmri(con_real15.19) 0
-
-# Real contrast_real vector 15 element 20
-set fmri(con_real15.20) 0
-
-# Real contrast_real vector 15 element 21
-set fmri(con_real15.21) 0
-
-# Real contrast_real vector 15 element 22
-set fmri(con_real15.22) 0
-
-# Real contrast_real vector 15 element 23
-set fmri(con_real15.23) 0
-
-# Real contrast_real vector 15 element 24
-set fmri(con_real15.24) 0
-
-# Real contrast_real vector 15 element 25
-set fmri(con_real15.25) 0
-
-# Real contrast_real vector 15 element 26
-set fmri(con_real15.26) 0
-
-# Real contrast_real vector 15 element 27
-set fmri(con_real15.27) 0
-
-# Real contrast_real vector 15 element 28
-set fmri(con_real15.28) 1.0
-
-# Real contrast_real vector 15 element 29
-set fmri(con_real15.29) 0
-
-# Real contrast_real vector 15 element 30
-set fmri(con_real15.30) 0
-
-# Real contrast_real vector 15 element 31
-set fmri(con_real15.31) 0
 
 # Display images for contrast_orig 1
 set fmri(conpic_orig.1) 1
@@ -3501,8 +3249,6 @@ set fmri(con_orig1.14) 0
 # Real contrast_orig vector 1 element 15
 set fmri(con_orig1.15) 0
 
-# Real contrast_orig vector 1 element 16
-set fmri(con_orig1.16) 0
 
 # Display images for contrast_orig 2
 set fmri(conpic_orig.2) 1
@@ -3555,8 +3301,6 @@ set fmri(con_orig2.14) 0
 # Real contrast_orig vector 2 element 15
 set fmri(con_orig2.15) 0
 
-# Real contrast_orig vector 2 element 16
-set fmri(con_orig2.16) 0
 
 # Display images for contrast_orig 3
 set fmri(conpic_orig.3) 1
@@ -3609,8 +3353,6 @@ set fmri(con_orig3.14) 0
 # Real contrast_orig vector 3 element 15
 set fmri(con_orig3.15) 0
 
-# Real contrast_orig vector 3 element 16
-set fmri(con_orig3.16) 0
 
 # Display images for contrast_orig 4
 set fmri(conpic_orig.4) 1
@@ -3663,8 +3405,6 @@ set fmri(con_orig4.14) 0
 # Real contrast_orig vector 4 element 15
 set fmri(con_orig4.15) 0
 
-# Real contrast_orig vector 4 element 16
-set fmri(con_orig4.16) 0
 
 # Display images for contrast_orig 5
 set fmri(conpic_orig.5) 1
@@ -3717,8 +3457,6 @@ set fmri(con_orig5.14) 0
 # Real contrast_orig vector 5 element 15
 set fmri(con_orig5.15) 0
 
-# Real contrast_orig vector 5 element 16
-set fmri(con_orig5.16) 0
 
 # Display images for contrast_orig 6
 set fmri(conpic_orig.6) 1
@@ -3771,9 +3509,6 @@ set fmri(con_orig6.14) 0
 # Real contrast_orig vector 6 element 15
 set fmri(con_orig6.15) 0
 
-# Real contrast_orig vector 6 element 16
-set fmri(con_orig6.16) 0
-
 # Display images for contrast_orig 7
 set fmri(conpic_orig.7) 1
 
@@ -3825,8 +3560,6 @@ set fmri(con_orig7.14) 0
 # Real contrast_orig vector 7 element 15
 set fmri(con_orig7.15) 0
 
-# Real contrast_orig vector 7 element 16
-set fmri(con_orig7.16) 0
 
 # Display images for contrast_orig 8
 set fmri(conpic_orig.8) 1
@@ -3879,9 +3612,6 @@ set fmri(con_orig8.14) 0
 # Real contrast_orig vector 8 element 15
 set fmri(con_orig8.15) 0
 
-# Real contrast_orig vector 8 element 16
-set fmri(con_orig8.16) 0
-
 # Display images for contrast_orig 9
 set fmri(conpic_orig.9) 1
 
@@ -3933,8 +3663,6 @@ set fmri(con_orig9.14) 0
 # Real contrast_orig vector 9 element 15
 set fmri(con_orig9.15) 0
 
-# Real contrast_orig vector 9 element 16
-set fmri(con_orig9.16) 0
 
 # Display images for contrast_orig 10
 set fmri(conpic_orig.10) 1
@@ -3987,8 +3715,6 @@ set fmri(con_orig10.14) 0
 # Real contrast_orig vector 10 element 15
 set fmri(con_orig10.15) 0
 
-# Real contrast_orig vector 10 element 16
-set fmri(con_orig10.16) 0
 
 # Display images for contrast_orig 11
 set fmri(conpic_orig.11) 1
@@ -4041,9 +3767,6 @@ set fmri(con_orig11.14) 0
 # Real contrast_orig vector 11 element 15
 set fmri(con_orig11.15) 0
 
-# Real contrast_orig vector 11 element 16
-set fmri(con_orig11.16) 0
-
 # Display images for contrast_orig 12
 set fmri(conpic_orig.12) 1
 
@@ -4094,9 +3817,6 @@ set fmri(con_orig12.14) 0
 
 # Real contrast_orig vector 12 element 15
 set fmri(con_orig12.15) 0
-
-# Real contrast_orig vector 12 element 16
-set fmri(con_orig12.16) 0
 
 # Display images for contrast_orig 13
 set fmri(conpic_orig.13) 1
@@ -4149,9 +3869,6 @@ set fmri(con_orig13.14) 0
 # Real contrast_orig vector 13 element 15
 set fmri(con_orig13.15) 0
 
-# Real contrast_orig vector 13 element 16
-set fmri(con_orig13.16) 0
-
 # Display images for contrast_orig 14
 set fmri(conpic_orig.14) 1
 
@@ -4202,9 +3919,6 @@ set fmri(con_orig14.14) 1.0
 
 # Real contrast_orig vector 14 element 15
 set fmri(con_orig14.15) 0
-
-# Real contrast_orig vector 14 element 16
-set fmri(con_orig14.16) 0
 
 # Display images for contrast_orig 15
 set fmri(conpic_orig.15) 1
@@ -4257,9 +3971,6 @@ set fmri(con_orig15.14) 0
 # Real contrast_orig vector 15 element 15
 set fmri(con_orig15.15) 1.0
 
-# Real contrast_orig vector 15 element 16
-set fmri(con_orig15.16) 0
-
 # Contrast masking - use >0 instead of thresholding?
 set fmri(conmask_zerothresh_yn) 0
 
@@ -4302,9 +4013,6 @@ set fmri(conmask1_13) 0
 # Mask real contrast/F-test 1 with real contrast/F-test 14?
 set fmri(conmask1_14) 0
 
-# Mask real contrast/F-test 1 with real contrast/F-test 15?
-set fmri(conmask1_15) 0
-
 # Mask real contrast/F-test 2 with real contrast/F-test 1?
 set fmri(conmask2_1) 0
 
@@ -4344,8 +4052,6 @@ set fmri(conmask2_13) 0
 # Mask real contrast/F-test 2 with real contrast/F-test 14?
 set fmri(conmask2_14) 0
 
-# Mask real contrast/F-test 2 with real contrast/F-test 15?
-set fmri(conmask2_15) 0
 
 # Mask real contrast/F-test 3 with real contrast/F-test 1?
 set fmri(conmask3_1) 0
@@ -4386,8 +4092,6 @@ set fmri(conmask3_13) 0
 # Mask real contrast/F-test 3 with real contrast/F-test 14?
 set fmri(conmask3_14) 0
 
-# Mask real contrast/F-test 3 with real contrast/F-test 15?
-set fmri(conmask3_15) 0
 
 # Mask real contrast/F-test 4 with real contrast/F-test 1?
 set fmri(conmask4_1) 0
@@ -4428,9 +4132,6 @@ set fmri(conmask4_13) 0
 # Mask real contrast/F-test 4 with real contrast/F-test 14?
 set fmri(conmask4_14) 0
 
-# Mask real contrast/F-test 4 with real contrast/F-test 15?
-set fmri(conmask4_15) 0
-
 # Mask real contrast/F-test 5 with real contrast/F-test 1?
 set fmri(conmask5_1) 0
 
@@ -4469,9 +4170,6 @@ set fmri(conmask5_13) 0
 
 # Mask real contrast/F-test 5 with real contrast/F-test 14?
 set fmri(conmask5_14) 0
-
-# Mask real contrast/F-test 5 with real contrast/F-test 15?
-set fmri(conmask5_15) 0
 
 # Mask real contrast/F-test 6 with real contrast/F-test 1?
 set fmri(conmask6_1) 0
@@ -4512,9 +4210,6 @@ set fmri(conmask6_13) 0
 # Mask real contrast/F-test 6 with real contrast/F-test 14?
 set fmri(conmask6_14) 0
 
-# Mask real contrast/F-test 6 with real contrast/F-test 15?
-set fmri(conmask6_15) 0
-
 # Mask real contrast/F-test 7 with real contrast/F-test 1?
 set fmri(conmask7_1) 0
 
@@ -4553,9 +4248,6 @@ set fmri(conmask7_13) 0
 
 # Mask real contrast/F-test 7 with real contrast/F-test 14?
 set fmri(conmask7_14) 0
-
-# Mask real contrast/F-test 7 with real contrast/F-test 15?
-set fmri(conmask7_15) 0
 
 # Mask real contrast/F-test 8 with real contrast/F-test 1?
 set fmri(conmask8_1) 0
@@ -4596,9 +4288,6 @@ set fmri(conmask8_13) 0
 # Mask real contrast/F-test 8 with real contrast/F-test 14?
 set fmri(conmask8_14) 0
 
-# Mask real contrast/F-test 8 with real contrast/F-test 15?
-set fmri(conmask8_15) 0
-
 # Mask real contrast/F-test 9 with real contrast/F-test 1?
 set fmri(conmask9_1) 0
 
@@ -4637,9 +4326,6 @@ set fmri(conmask9_13) 0
 
 # Mask real contrast/F-test 9 with real contrast/F-test 14?
 set fmri(conmask9_14) 0
-
-# Mask real contrast/F-test 9 with real contrast/F-test 15?
-set fmri(conmask9_15) 0
 
 # Mask real contrast/F-test 10 with real contrast/F-test 1?
 set fmri(conmask10_1) 0
@@ -4680,9 +4366,6 @@ set fmri(conmask10_13) 0
 # Mask real contrast/F-test 10 with real contrast/F-test 14?
 set fmri(conmask10_14) 0
 
-# Mask real contrast/F-test 10 with real contrast/F-test 15?
-set fmri(conmask10_15) 0
-
 # Mask real contrast/F-test 11 with real contrast/F-test 1?
 set fmri(conmask11_1) 0
 
@@ -4721,9 +4404,6 @@ set fmri(conmask11_13) 0
 
 # Mask real contrast/F-test 11 with real contrast/F-test 14?
 set fmri(conmask11_14) 0
-
-# Mask real contrast/F-test 11 with real contrast/F-test 15?
-set fmri(conmask11_15) 0
 
 # Mask real contrast/F-test 12 with real contrast/F-test 1?
 set fmri(conmask12_1) 0
@@ -4764,9 +4444,6 @@ set fmri(conmask12_13) 0
 # Mask real contrast/F-test 12 with real contrast/F-test 14?
 set fmri(conmask12_14) 0
 
-# Mask real contrast/F-test 12 with real contrast/F-test 15?
-set fmri(conmask12_15) 0
-
 # Mask real contrast/F-test 13 with real contrast/F-test 1?
 set fmri(conmask13_1) 0
 
@@ -4806,9 +4483,6 @@ set fmri(conmask13_12) 0
 # Mask real contrast/F-test 13 with real contrast/F-test 14?
 set fmri(conmask13_14) 0
 
-# Mask real contrast/F-test 13 with real contrast/F-test 15?
-set fmri(conmask13_15) 0
-
 # Mask real contrast/F-test 14 with real contrast/F-test 1?
 set fmri(conmask14_1) 0
 
@@ -4847,51 +4521,6 @@ set fmri(conmask14_12) 0
 
 # Mask real contrast/F-test 14 with real contrast/F-test 13?
 set fmri(conmask14_13) 0
-
-# Mask real contrast/F-test 14 with real contrast/F-test 15?
-set fmri(conmask14_15) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 1?
-set fmri(conmask15_1) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 2?
-set fmri(conmask15_2) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 3?
-set fmri(conmask15_3) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 4?
-set fmri(conmask15_4) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 5?
-set fmri(conmask15_5) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 6?
-set fmri(conmask15_6) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 7?
-set fmri(conmask15_7) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 8?
-set fmri(conmask15_8) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 9?
-set fmri(conmask15_9) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 10?
-set fmri(conmask15_10) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 11?
-set fmri(conmask15_11) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 12?
-set fmri(conmask15_12) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 13?
-set fmri(conmask15_13) 0
-
-# Mask real contrast/F-test 15 with real contrast/F-test 14?
-set fmri(conmask15_14) 0
 
 # Do contrast masking at all?
 set fmri(conmask1_1) 0
