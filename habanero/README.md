@@ -19,6 +19,17 @@ do
 done
 ```
 
+### Generated extended confounds from motion paramaters
+```.bash
+for i in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc*feat/mc/; 
+do
+	cd $i;
+	pwd
+	mp_diffpow.sh prefiltered_func_data_mcf.par diff; 
+	paste prefiltered_func_data_mcf.par diff.dat>extended_confs_24par.txt;
+done
+```
+
 ### Run 1st-Level GLM with Q-value, episodic value, and prediction error
 ```.bash
 fsf=qdiff_ep_val_ch_fb_pe_oldt.fsf
