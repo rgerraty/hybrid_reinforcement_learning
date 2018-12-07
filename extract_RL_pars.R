@@ -442,6 +442,8 @@ m_eplik_oneback<-glmer(ChooseRed ~ oneback_outcome:oneback_choosered + Ep_lik + 
                        data=hybrid_data,family=binomial)
 summary(m_eplik_oneback)
 
+
+
 #Lagged outcome variables for regression model
 hybrid_data_wide<-dcast(hybrid_data,Trial~Sub,value.var = "Ep_lik")
 

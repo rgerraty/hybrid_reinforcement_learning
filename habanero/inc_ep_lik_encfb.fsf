@@ -612,7 +612,7 @@ set fmri(shape6) 10
 # 4 : Gamma basis functions
 # 5 : Sine basis functions
 # 6 : FIR basis functions
-set fmri(convolve6) 0
+set fmri(convolve6) 3
 
 # Convolve phase (EV 6)
 set fmri(convolve_phase6) 0
@@ -621,7 +621,10 @@ set fmri(convolve_phase6) 0
 set fmri(tempfilt_yn6) 1
 
 # Add temporal derivative (EV 6)
-set fmri(deriv_yn6) 0
+set fmri(deriv_yn6) 1
+
+# Custom EV file (EV 6)
+set fmri(custom6) "/rigel/psych/users/rtg2116/hybrid_mri/behavior/XXSUBXX_output/EV_files/FB_enct_runXXRUNXX.txt"
 
 # Orthogonalise EV 6 wrt EV 0
 set fmri(ortho6.0) 0

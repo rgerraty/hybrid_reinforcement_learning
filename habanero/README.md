@@ -34,11 +34,11 @@ done
 ```.bash
 fsf=qdiff_ep_val_ch_fb_pe_oldt.fsf
 for i in /rigel/psych/users/rtg2116/hybrid_mri/TCST0*/hybrid_r?/preproc_6mm_6del_100s_mc.feat/filtered_func_data.nii.gz; 
-	do 
+do 
 	s=$(echo $i | cut -c44-45); 
 	r=$(echo $i | cut -c 55);
 	if [ -e /rigel/psych/users/rtg2116/hybrid_mri/behavior/"$s"_output/EV_files/FB_pe_run"$r".txt ];
-		then 
+	then 
 		sbatch --export=arg1=$i,arg2=/rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/$fsf,arg3=$s,arg4=$r /rigel/home/rtg2116/GitHub/hybrid_reinforcement_learning/habanero/run_1st_level_sub.sh
 	else 
 		echo no RL behavioral files for $i ;
