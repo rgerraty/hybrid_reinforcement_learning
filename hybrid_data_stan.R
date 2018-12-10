@@ -95,6 +95,10 @@ hybrid_data_fourback<-rbind(rep(NaN,nsub),
 
 hybrid_data$fourback_choosered<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-(cutpoint+61)]
 
+hybrid_data$RevT_c<-hybrid_data$RevT-12
+hybrid_data$EncRevT_c<-hybrid_data$EncRevT-12
+
+hybrid_data$oneback_outcomexchred<-hybrid_data$oneback_choosered*hybrid_data$oneback_outcome
 
 
 m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+OldValRed+
@@ -102,8 +106,8 @@ m_rc_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome:twob
                 data=hybrid_data,family=binomial)
 
 
-m_rc_lagxrev<-glmer(ChooseRed~oneback_outcome:oneback_choosered*I(RevT-10)+twoback_outcome:twoback_choosered*I(RevT-10)+threeback_outcome:threeback_choosered*I(RevT-10)+fourback_outcome:fourback_choosered*I(RevT-10)+
-                  (oneback_outcome:oneback_choosered+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+I(RevT-10)|Sub),
+m_rc_lagxrev<-glmer(ChooseRed~oneback_outcomexchred*RevT_c+twoback_outcome:twoback_choosered*RevT_c+threeback_outcome:threeback_choosered*RevT_c+fourback_outcome:fourback_choosered*RevT_c+
+                  (oneback_outcomexchred+twoback_outcome:twoback_choosered+threeback_outcome:threeback_choosered+fourback_outcome:fourback_choosered+RevT_c|Sub),
                 data=hybrid_data,family=binomial)
 
 
@@ -179,10 +183,6 @@ m_mem<-glmer(OldObjC~ObjPP*EncRevT+(ObjPP*EncRevT|Sub),data=hybrid_data,family=b
 library(jtools)
 interact_plot(m_mem, ObjPP, EncRevT)
 
-hybrid_data$RevT_c<-hybrid_data$RevT-12
-hybrid_data$EncRevT_c<-hybrid_data$EncRevT-12
-
-hybrid_data$oneback_outcomexchred<-hybrid_data$oneback_choosered*hybrid_data$oneback_outcome
 
 m_rc_1backxrev<-glmer(ChooseRed~
                         oneback_outcomexchred*RevT_c+
@@ -196,16 +196,20 @@ m_epvalxrev<-glmer(OldObjC~ObjPP*EncRevT_c+(ObjPP*EncRevT_c|Sub),
 
 summary(m_epvalxrev)
 
+g_all
 
 library(interplot)
 interplot(m_epvalxrev,'ObjPP','EncRevT_c')+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
   #scale_fill_brewer(palette = "Blues",direction=-1)+
-  xlab('Trials Since Reversal (Encoding)')+ylab('Effect of Episodic Value')
+  xlab('Trials Since Reversal (Encoding)')+ylab('Effect of Episodic Value')+
+  scale_x_continuous(labels=c(2,7,12,17,25,30))
+  
 interplot(m_rc_1backxrev, 'oneback_outcomexchred','RevT_c')+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
   #scale_fill_brewer(palette = "Blues",direction=-1)+
-  xlab('Trials Since Reversal')+ylab('Effect of Previous Deck Feedback')
+  xlab('Trials Since Reversal')+ylab('Effect of Previous Deck Feedback')+
+  scale_x_continuous(labels=c(2,7,12,17,25,30))
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
