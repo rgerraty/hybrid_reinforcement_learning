@@ -72,7 +72,7 @@ hybrid_data_fourback<-rbind(rep(NaN,nsub),
 hybrid_data$fourback_outcome<-melt(hybrid_data_fourback)$value[-(cutpoint+1):-(cutpoint+61)]
 
 #same but for choice
-hybrid_data_wide-2*(dcast(hybrid_data,Trial~Sub,value.var = "ChooseRed")-.5)
+hybrid_data_wide<-2*(dcast(hybrid_data,Trial~Sub,value.var = "ChooseRed")-.5)
 
 hybrid_data_oneback<-rbind(rep(NaN,nsub),
                            hybrid_data_wide[1:(nrow(hybrid_data_wide)-1),2:ncol(hybrid_data_wide)])
@@ -117,16 +117,13 @@ m_postrev_lag<-glmer(ChooseRed~oneback_outcome:oneback_choosered+twoback_outcome
 
 summary(m_rc_lagxrev)
 
-
-m_epvalxrev<-lmer
-
 ggdat_pre<-data.frame(Lag=c("1","2","3","4"))
 ggdat_pre$Lag<-factor(ggdat_pre$Lag,c("1","2","3","4"))
 ggdat_pre$Choice_Effect<-fixef(m_prerev_lag)[c(4:7)]
 ggdat_pre$SE<-sqrt(diag(vcov(m_prerev_lag)))[c(4:7)]
 ggdat_pre$prepost<-"PRE"
 
-
+  
 g_pre<-ggplot(data=ggdat_pre,aes(x=Lag,y=Choice_Effect))+
   geom_bar(stat = 'identity',aes(fill=Lag))+
   geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
@@ -167,8 +164,9 @@ ggdat_all$SE<-sqrt(diag(vcov(m_rc_lag)))[c(3:6,2)]
 
 
 g_all<-ggplot(data=ggdat_all,aes(x=Lag,y=Choice_Effect,group=1))+
-  geom_line(stat = 'identity',position='identity')+
+  geom_line(stat = 'identity',position='identity',data=subset(ggdat_all,Lag != "Old Object"))+
   geom_errorbar(aes(ymin=Choice_Effect-SE,ymax=Choice_Effect+SE),width=.2)+
+  geom_point(stat = 'identity',position='identity',data=subset(ggdat_all,Lag == "Old Object"))+
   scale_y_continuous(limits = c(0,2),oob = squish)+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
   #scale_fill_brewer(palette = "Blues",direction=-1)+
@@ -180,8 +178,34 @@ m_mem<-glmer(OldObjC~ObjPP*EncRevT+(ObjPP*EncRevT|Sub),data=hybrid_data,family=b
 
 library(jtools)
 interact_plot(m_mem, ObjPP, EncRevT)
-interact_plot(m_rc_lagxrev, oneback_outcome:oneback_choosered,EncRevT,data=hybrid_data)
 
+hybrid_data$RevT_c<-hybrid_data$RevT-12
+hybrid_data$EncRevT_c<-hybrid_data$EncRevT-12
+
+hybrid_data$oneback_outcomexchred<-hybrid_data$oneback_choosered*hybrid_data$oneback_outcome
+
+m_rc_1backxrev<-glmer(ChooseRed~
+                        oneback_outcomexchred*RevT_c+
+                        (oneback_outcomexchred*RevT_c||Sub),
+                      data=hybrid_data,family=binomial)
+
+summary(m_rc_1backxrev)
+
+m_epvalxrev<-glmer(OldObjC~ObjPP*EncRevT_c+(ObjPP*EncRevT_c|Sub),
+                   family=binomial,data=hybrid_data)
+
+summary(m_epvalxrev)
+
+
+library(interplot)
+interplot(m_epvalxrev,'ObjPP','EncRevT_c')+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  #scale_fill_brewer(palette = "Blues",direction=-1)+
+  xlab('Trials Since Reversal (Encoding)')+ylab('Effect of Episodic Value')
+interplot(m_rc_1backxrev, 'oneback_outcomexchred','RevT_c')+
+  theme_classic()+theme(text=element_text(size=20),legend.position="none")+
+  #scale_fill_brewer(palette = "Blues",direction=-1)+
+  xlab('Trials Since Reversal')+ylab('Effect of Previous Deck Feedback')
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
