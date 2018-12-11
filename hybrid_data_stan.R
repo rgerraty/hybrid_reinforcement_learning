@@ -199,17 +199,18 @@ summary(m_epvalxrev)
 g_all
 
 library(interplot)
-interplot(m_epvalxrev,'ObjPP','EncRevT_c')+
+int_ep<-interplot(m_epvalxrev,'ObjPP','EncRevT_c')+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
   #scale_fill_brewer(palette = "Blues",direction=-1)+
   xlab('Trials Since Reversal (Encoding)')+ylab('Effect of Episodic Value')+
   scale_x_continuous(labels=c(2,7,12,17,25,30))
   
-interplot(m_rc_1backxrev, 'oneback_outcomexchred','RevT_c')+
+int_inc<-interplot(m_rc_1backxrev, 'oneback_outcomexchred','RevT_c')+
   theme_classic()+theme(text=element_text(size=20),legend.position="none")+
   #scale_fill_brewer(palette = "Blues",direction=-1)+
   xlab('Trials Since Reversal')+ylab('Effect of Previous Deck Feedback')+
   scale_x_continuous(labels=c(2,7,12,17,25,30))
+
 
 #set up variables in subjects by trials format for Stan
 subs = unique(hybrid_data$Sub);
